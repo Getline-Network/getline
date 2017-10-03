@@ -1,0 +1,19 @@
+{
+  "name": "common-contracts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Getline",
+  "devDependencies": {
+    "bluebird": "^3.5.0"
+  },
+  "dependencies": {
+    "parity": "^0.2.7",
+    "truffle": "^3.4.11",
+    "wallet.ts": "^0.2.5",
+    "web3": "0.20.1"
+  }
+}

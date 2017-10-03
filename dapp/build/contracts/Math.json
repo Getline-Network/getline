@@ -1,0 +1,38 @@
+{
+  "contract_name": "Math",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "a",
+          "type": "uint256"
+        },
+        {
+          "name": "b",
+          "type": "uint256"
+        }
+      ],
+      "name": "min",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    }
+  ],
+  "unlinked_binary": "0x60606040523415600e57600080fd5b5b609f8061001d6000396000f300606060405263ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416637ae2b5c78114603c575b600080fd5b6048600435602435605a565b60405190815260200160405180910390f35b6000818310156069575081606c565b50805b5b929150505600a165627a7a723058204f56863880d417c45b2777ea6d23dbdb55a8f2fd3919eed028abfb9590c6d7fc0029",
+  "networks": {
+    "42": {
+      "events": {},
+      "links": {},
+      "address": "0x251b1db51005c0edcc10120c2e79c9d667ad095c",
+      "updated_at": 1504652033422
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1504652033422
+}
