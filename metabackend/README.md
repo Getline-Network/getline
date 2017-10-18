@@ -20,17 +20,23 @@ Work in progress.
 Building
 ========
 
+System dependencies required:
+    Go 1.9 or later (with $GOPATH/bin in $PATH)
+    protoc (`apt install protobuf-compiler`)
+    protoc-gen-go (`go get -u -v github.com/golang/protobuf/protoc-gen-go`)
+
 TODO(q3k): Vendor dependencies.
 
-    go get github.com/getline-network/getline/metabackend
+    go get -u -d github.com/getline-network/getline/metabackend
     go generate github.com/getline-network/getline/metabackend/pb
-    go build github.com/getline-network/getline/metabackend
+    go install github.com/getline-network/getline/metabackend
+    metabackend -help
 
 Running
 =======
 
-    cd getline-network/getline/dapp/contracts
-    ./metabackend -logtostderr
+    cd dapp/contracts
+    metabackend -logtostderr
 
 And to test:
 
