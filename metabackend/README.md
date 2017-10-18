@@ -16,3 +16,24 @@ Loan metadata cache
 -------------------
 
 Work in progress.
+
+Building
+========
+
+TODO(q3k): Vendor dependencies.
+
+    go get github.com/getline-network/getline/metabackend
+    go generate github.com/getline-network/getline/metabackend/pb
+    go build github.com/getline-network/getline/metabackend
+
+Running
+=======
+
+    cd getline-network/getline/dapp/contracts
+    ./metabackend -logtostderr
+
+And to test:
+
+    alias grpc="docker run --rm -it --net=host returnpath/grpc_cli"
+    grpc call 127.0.0.1:2000 pb.Metabackend.GetDeployment 'network_id: "4"'
+
