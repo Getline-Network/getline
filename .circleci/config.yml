@@ -15,6 +15,10 @@ jobs:
                command: |
                    trap "go-junit-report <${TEST_RESULTS}/go-test.out > ${TEST_RESULTS}/go-test-report.xml" EXIT
                    go test github.com/getline-network/getline/metabackend/deployments | tee ${TEST_RESULTS}/go-test.out
+            - store_test_results:
+                path: $TEST_RESULTS
+            - store_artifacts:
+                path: $TEST_RESULTS
 
     dapp_lint:
         docker:
