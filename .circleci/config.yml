@@ -1,6 +1,6 @@
 version: 2
 jobs:
-    test_dapp:
+    prepare_dapp:
         docker:
             - image: node:8.7
         working_directory: ~/project/dapp
@@ -9,6 +9,24 @@ jobs:
                 path: ~/project
             - run: mkdir ~/project/dapp/junit
             - run: yarn
+
+    lint_dapp:
+        docker:
+            - image: node:8.7
+        working_directory: ~/project/dapp
+        steps:
+            - checkout:
+                path: ~/project
+            - run: yarn run solium --dir contracts/
+
+    test_dapp:
+        docker:
+            - image: node:8.7
+        working_directory: ~/project/dapp
+        steps:
+            - checkout:
+                path: ~/project
+            - run: mkdir ~/project/dapp/junit
             - run:
                 command: sh test.sh
                 environment:
@@ -19,6 +37,12 @@ jobs:
                 path: ~/project/dapp/junit
 workflows:
     version: 2
-    unit_test:
+    dapp:
         jobs:
-            - test_dapp
+            - prepare_dapp
+            - test_dapp:
+                requires:
+                    - prepare_dapp
+            - lint_dapp:
+                requires:
+                    - prepare_dapp
