@@ -7,16 +7,16 @@ jobs:
         steps:
             - checkout:
                 path: ~/project
-            - run: mkdir ~/junit
+            - run: mkdir ~/project/dapp/junit
             - run: yarn
             - run:
                 command: sh test.sh
                 environment:
-                    MOCHA_FILE: ~/junit/test-results.xml
+                    MOCHA_FILE: junit/test-results.xml
             - store_test_results:
-                path: ~/junit
+                path: ~/project/dapp/junit
             - store_artifacts:
-                path: ~/junit
+                path: ~/project/dapp/junit
 workflows:
     version: 2
     unit_test:
