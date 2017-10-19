@@ -1,3 +1,5 @@
+[![getline build status](https://circleci.com/gh/Getline-Network/getline.png?style=shield&circle-token=a181947a77d90d0b98e50a37438d462beaabae1c "getline build status")](https://circleci.com/gh/Getline-Network/getline)
+
 Getline Network
 ===============
 
