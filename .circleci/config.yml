@@ -7,8 +7,16 @@ jobs:
         steps:
             - checkout:
                 path: ~/project
+            - restore_cache:
+                keys:
+                    - dapp1-modules-{{ checksum "yarn.lock" }}
+                    - dapp1-modules
             - run: yarn
-            - run: yarn run solium --dir contracts/
+            - save_cache:
+                key: dapp1-modules-{{ checksum "yarn.lock" }}
+                paths:
+                    - node_modules/
+            - run: node_modules/.bin/solium --dir contracts/
 
     dapp_test:
         docker:
