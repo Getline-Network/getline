@@ -4,6 +4,7 @@ import "../tokens/IToken.sol";
 import "../tokens/PrintableToken.sol";
 import "../loans/Loan.sol";
 
+
 // Auto-invests total amount in loan by printing money
 contract AutoInvestor {
     PrintableToken private collateralToken;
