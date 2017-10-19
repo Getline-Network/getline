@@ -34,7 +34,7 @@ jobs:
                 key: dapp1-modules-{{ checksum "yarn.lock" }}
                 paths:
                     - node_modules/
-            - run: node_modules/.bin/solidity-coverage
+            - run: yarn run solidity-coverage
             - store_artifacts:
                 path: ~/project/dapp/coverage
 
