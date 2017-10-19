@@ -1,4 +1,7 @@
 module.exports = {
+  mocha: {
+    reporter: "mocha-junit-reporter"
+  },
   networks: {
     development: {
       host: "localhost",

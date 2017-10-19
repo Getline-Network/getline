@@ -6,9 +6,17 @@ jobs:
         working_directory: ~/project/dapp
         steps:
             - checkout:
-                  path: ~/project
+                path: ~/project
+            - run: mkdir ~/junit
             - run: yarn
-            - run: sh test.sh
+            - run:
+                command: sh test.sh
+                environment:
+                    MOCHA_FILE: ~/junit/test-results.xml
+            - store_test_results:
+                path: ~/junit
+            - store_artifacts:
+                path: ~/junit
 workflows:
     version: 2
     unit_test:
