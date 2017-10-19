@@ -18,6 +18,26 @@ jobs:
                     - node_modules/
             - run: node_modules/.bin/solium --dir contracts/
 
+    dapp_coverage:
+        docker:
+            - image: node:8.7
+        working_directory: ~/project/dapp
+        steps:
+            - checkout:
+                path: ~/project
+            - restore_cache:
+                keys:
+                    - dapp1-modules-{{ checksum "yarn.lock" }}
+                    - dapp1-modules
+            - run: yarn
+            - save_cache:
+                key: dapp1-modules-{{ checksum "yarn.lock" }}
+                paths:
+                    - node_modules/
+            - run: yarn run solidity-coverage
+            - store_artifacts:
+                path: ~/project/dapp/coverage
+
     dapp_test:
         docker:
             - image: node:8.7
@@ -43,9 +63,11 @@ jobs:
                 path: ~/project/dapp/junit
             - store_artifacts:
                 path: ~/project/dapp/junit
+
 workflows:
     version: 2
     dapp:
         jobs:
             - dapp_test
             - dapp_lint
+            - dapp_coverage
