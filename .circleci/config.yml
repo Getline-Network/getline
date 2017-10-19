@@ -14,7 +14,7 @@ jobs:
                name: "Run unit tests"
                command: |
                    trap "go-junit-report <${TEST_RESULTS}/go-test.out > ${TEST_RESULTS}/go-test-report.xml" EXIT
-                   go test github.com/getline-network/getline/metabackend/deployments | tee ${TEST_RESULTS}/go-test.out
+                   go test -v github.com/getline-network/getline/metabackend/deployments | tee ${TEST_RESULTS}/go-test.out
            - store_test_results:
                path: /tmp/gotests
            - store_artifacts:
