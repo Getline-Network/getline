@@ -1,25 +1,16 @@
 version: 2
 jobs:
-    prepare_dapp:
+    dapp_lint:
         docker:
             - image: node:8.7
         working_directory: ~/project/dapp
         steps:
             - checkout:
                 path: ~/project
-            - run: mkdir ~/project/dapp/junit
             - run: yarn
-
-    lint_dapp:
-        docker:
-            - image: node:8.7
-        working_directory: ~/project/dapp
-        steps:
-            - checkout:
-                path: ~/project
             - run: yarn run solium --dir contracts/
 
-    test_dapp:
+    dapp_test:
         docker:
             - image: node:8.7
         working_directory: ~/project/dapp
@@ -27,6 +18,16 @@ jobs:
             - checkout:
                 path: ~/project
             - run: mkdir ~/project/dapp/junit
+            - restore_cache:
+                keys:
+                    - dapp1-modules-{{ checksum "yarn.lock" }}
+                    - dapp1-modules
+            - run: yarn
+            - save_cache:
+                keys:
+                    - dapp1-modules-{{ checksum "yarn.lock" }}
+                paths:
+                    - node_modules/
             - run:
                 command: sh test.sh
                 environment:
@@ -39,10 +40,5 @@ workflows:
     version: 2
     dapp:
         jobs:
-            - prepare_dapp
-            - test_dapp:
-                requires:
-                    - prepare_dapp
-            - lint_dapp:
-                requires:
-                    - prepare_dapp
+            - dapp_test:
+            - dapp_lint:
