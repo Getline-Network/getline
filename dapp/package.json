@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "ethereumjs-testrpc": "^4.1.3",
+    "mocha-junit-reporter": "^1.15.0",
     "parity": "^0.2.7",
     "truffle": "^3.4.11",
     "wallet.ts": "^0.2.5",
