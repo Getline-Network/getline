@@ -40,5 +40,5 @@ workflows:
     version: 2
     dapp:
         jobs:
-            - dapp_test:
-            - dapp_lint:
+            - dapp_test
+            - dapp_lint
