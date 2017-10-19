@@ -1,5 +1,19 @@
 version: 2
 jobs:
+    metabackend_test:
+        docker:
+            - image: circleci/golang:1.9
+        working_directory: /go/src/github.com/getline-network/getline
+        steps:
+           - checkout
+           - run: mkdir -p $TEST_RESULTS
+           - run: go get github.com/jstemmer/go-junit-report
+           - run:
+               name: "Run unit tests"
+               command: |
+                   trap "go-junit-report <${TEST_RESULTS}/go-test.out > ${TEST_RESULTS}/go-test-report.xml"
+                   go test github.com/getline-network/getline/metabackend/deployments
+
     dapp_lint:
         docker:
             - image: node:8.7
@@ -71,3 +85,4 @@ workflows:
             - dapp_test
             - dapp_lint
             - dapp_coverage
+            - metabackend_test
