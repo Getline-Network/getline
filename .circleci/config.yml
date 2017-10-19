@@ -24,8 +24,7 @@ jobs:
                     - dapp1-modules
             - run: yarn
             - save_cache:
-                keys:
-                    - dapp1-modules-{{ checksum "yarn.lock" }}
+                key: dapp1-modules-{{ checksum "yarn.lock" }}
                 paths:
                     - node_modules/
             - run:
