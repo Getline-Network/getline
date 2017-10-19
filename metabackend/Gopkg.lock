@@ -3,6 +3,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/go-test/deep"
+  packages = ["."]
+  revision = "f49763a6ea0a91026be26f8213bebee726b4185f"
+
+[[projects]]
+  branch = "master"
   name = "github.com/golang/glog"
   packages = ["."]
   revision = "23def4e6c14b4da8ac2ed8007337bc5eb5007998"
@@ -40,6 +46,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "250cf1e0279030374e3d2e7eab35e2cee049ca6513e3c7429a5328ea4f7b1d25"
+  inputs-digest = "8c4cabe69ed47249e9f705b155f7232f22e1c6e8b97779098c5bd6066f3b0538"
   solver-name = "gps-cdcl"
   solver-version = 1
