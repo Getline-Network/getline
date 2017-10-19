@@ -5,7 +5,8 @@ jobs:
             - image: node:8.7
         working_directory: ~/project/dapp
         steps:
-            - checkout
+            - checkout:
+                  path: ~/project
             - run: yarn
             - run: sh test.sh
 workflows:
