@@ -25,7 +25,7 @@ System dependencies required:
     protoc (`apt install protobuf-compiler`)
     protoc-gen-go (`go get -u -v github.com/golang/protobuf/protoc-gen-go`)
 
-TODO(q3k): Vendor dependencies.
+To build:
 
     go get -u -d github.com/getline-network/getline/metabackend
     go generate github.com/getline-network/getline/metabackend/pb
