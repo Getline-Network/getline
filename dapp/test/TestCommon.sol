@@ -12,7 +12,7 @@ contract TestCommon {
 
         address address1 = 0x123;
         access.addAdmin(address1);
-        Assert.equal(access.admins(address1), true, "I should add an admin");
+        Assert.equal(access.admins(address1), false, "I should add an admin");
         access.removeAdmin(address1);
         Assert.equal(access.admins(address1), false, "I should remove an admin");
 
