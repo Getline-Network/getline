@@ -2,9 +2,14 @@ version: 2
 jobs:
     test_dapp:
         docker:
-            - image: desmart/truffle:3.2
+            - image: node:8.7
         working_directory: ~/project/dapp
         steps:
             - checkout
             - run: yarn
-            - run: yarn run truffle test
+            - run: sh test.sh
+workflows:
+    version: 2
+    unit_test:
+        jobs:
+            - test_dapp
