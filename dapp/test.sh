@@ -5,7 +5,7 @@ set -e
 echo "Starting TestRPC..."
 node_modules/.bin/testrpc >testrpc.log 2>&1 &
 testrpc_pid="$!"
-function cleanup() {
+cleanup() {
     echo "Killing TestRPC..."
     kill -9 ${testrpc_pid}
 }
