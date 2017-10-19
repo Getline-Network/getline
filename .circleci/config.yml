@@ -70,3 +70,4 @@ workflows:
         jobs:
             - dapp_test
             - dapp_lint
+            - dapp_coverage
