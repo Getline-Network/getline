@@ -3,6 +3,7 @@ pragma solidity ^0.4.11;
 import "../tokens/PrintableToken.sol";
 import "../common/AccessControl.sol";
 
+
 // Prints all printable tokens at once
 contract PrintableCollection is AccessControl {
     PrintableToken[] tokens = new PrintableToken[](0);

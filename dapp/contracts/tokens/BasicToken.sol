@@ -4,6 +4,7 @@ pragma solidity ^0.4.11;
 
 import "./IToken.sol";
 
+
 contract BasicToken is IToken {
     string public name;
     string public symbol;

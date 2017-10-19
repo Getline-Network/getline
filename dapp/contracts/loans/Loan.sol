@@ -4,6 +4,7 @@ import "./IAtestor.sol";
 import "./InvestorLedger.sol";
 import "../tokens/IToken.sol";
 
+
 contract Loan {
     // Set only during begining phases and not changed afterwards
     uint256 public fundraisingBlocksCount;
@@ -41,14 +42,14 @@ contract Loan {
     }
 
     function Loan(
-            //IAtestor _atestator,
-            IToken _collateralToken,
-            IToken _loanToken,
-            address _liege,
-            uint256 _amountWanted,
-            uint16  _interestPermil,
-            uint256 _fundraisingBlocksCount,
-            uint256 _paybackBlocksCount
+        //IAtestor _atestator,
+        IToken _collateralToken,
+        IToken _loanToken,
+        address _liege,
+        uint256 _amountWanted,
+        uint16  _interestPermil,
+        uint256 _fundraisingBlocksCount,
+        uint256 _paybackBlocksCount
     ) {
         //require(_atestator.isVerified(_liege));
         

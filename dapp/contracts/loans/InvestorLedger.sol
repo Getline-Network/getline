@@ -3,15 +3,17 @@ pragma solidity ^0.4.11;
 import "../tokens/IToken.sol";
 import "../common/Math.sol";
 
+
 library InvestorLedger {
     uint constant PERMIL = 1000;
 
     function openAccount(
-            IToken collateralToken,
-            IToken loanToken,
-            address liege,
-            uint256 totalLoanNeeded,
-            uint16 interestPermil) internal returns (Ledger account) {
+        IToken collateralToken,
+        IToken loanToken,
+        address liege,
+        uint256 totalLoanNeeded,
+        uint16 interestPermil) internal returns (Ledger account)
+    {
         account.collateralToken = collateralToken;
         account.loanToken = loanToken;
         account.totalLoanNeeded = totalLoanNeeded;
@@ -25,10 +27,13 @@ library InvestorLedger {
     function gatherCollateral(Ledger storage account) {
         var allowance = account.collateralToken.allowance(account.liege, this);
         account.totalCollateral += allowance;
-        require(account.collateralToken.transferFrom(
-            account.liege,
-            this,
-            allowance));
+        require(
+            account.collateralToken.transferFrom(
+                account.liege,
+                this,
+                allowance
+            )
+        );
     }
 
     function gatherInvestment(Ledger storage account, address trustee) {

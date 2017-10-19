@@ -1,5 +1,6 @@
 pragma solidity ^0.4.11;
 
+
 contract AccessControl {
     mapping(address => bool) public admins;
     mapping(address => bool) public managers;
