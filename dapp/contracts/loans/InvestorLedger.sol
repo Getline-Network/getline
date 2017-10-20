@@ -78,8 +78,6 @@ library InvestorLedger {
         require(!account.loanCancelled && !account.loanDefaulted);
 
         account.loanDefaulted = true;
-
-        collateralToLiege(account);
     }
 
     function collateralToLiege(Ledger storage account) {

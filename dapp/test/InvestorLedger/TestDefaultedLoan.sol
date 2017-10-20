@@ -21,7 +21,5 @@ contract TestDefaultedLoan {
         InvestorLedger.gatherCollateral(testLedger);
         InvestorLedger.markDefaulted(testLedger);
         Assert.equal(testLedger.loanDefaulted, true, "It should mark loan as defaulted");
-        Assert.equal(collateralToken.balanceOf(borrower), printValue, "It should send collateral back to borrower");
-        /* TODO why collateral is being sent back when the loan is marked as defaulted */
     }
 }
