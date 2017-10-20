@@ -41,10 +41,12 @@ library InvestorLedger {
             account.loanToken.allowance(trustee, this),
             account.totalLoanNeeded - account.totalAmountGathered
         );
-        require(account.loanToken.transferFrom(
-            trustee,
-            this,
-            investmentAmount));
+        require(
+            account.loanToken.transferFrom(
+                trustee,
+                this,
+                investmentAmount)
+        );
         var investmentPermil = investmentAmount * PERMIL / account.totalLoanNeeded;
         var collateralReseverved = investmentPermil * account.totalCollateral / PERMIL;
 
