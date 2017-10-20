@@ -2301,7 +2301,7 @@ lodash@^3.6.0:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
-lodash@^4.14.0, lodash@^4.14.2, lodash@^4.15.0, lodash@^4.17.4:
+lodash@^4.14.0, lodash@^4.14.2, lodash@^4.15.0, lodash@^4.16.4, lodash@^4.17.4:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -2448,6 +2448,15 @@ mocha-junit-reporter@^1.15.0:
     md5 "^2.1.0"
     mkdirp "~0.5.1"
     xml "^1.0.0"
+
+mocha-multi-reporters@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/mocha-multi-reporters/-/mocha-multi-reporters-1.1.6.tgz#b6cea62f419d2415fa77d48ed8590d4b99e9b72d"
+  dependencies:
+    debug "^2.2.0"
+    lodash "^4.16.4"
+    object-assign-deep "^0.0.4"
+    root-require "^0.3.1"
 
 mocha-wrap@^2.1.1:
   version "2.1.1"
@@ -2626,6 +2635,17 @@ oauth-sign@~0.8.1:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/oauth-sign/-/oauth-sign-0.8.2.tgz#46a6ab7f0aead8deae9ec0565780b7d4efeb9d43"
 
+object-assign-deep@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/object-assign-deep/-/object-assign-deep-0.0.4.tgz#2b336c86caab38ebac55eff39ff4df60947efbf3"
+  dependencies:
+    object-assign "2.0.x"
+    underscore "1.7.x"
+
+object-assign@2.0.x:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-2.0.0.tgz#f8309b09083b01261ece3ef7373f2b57b8dd7042"
+
 object-assign@^4.0.0, object-assign@^4.0.1, object-assign@^4.1.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
@@ -2728,6 +2748,10 @@ p-locate@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-locate/-/p-locate-2.0.0.tgz#20a0103b222a70c8fd39cc2e580680f3dde5ec43"
   dependencies:
     p-limit "^1.1.0"
+
+packpath@~0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/packpath/-/packpath-0.1.0.tgz#a521534222dfeaa9c612ef0c640ec399149ecdd8"
 
 pako@~0.2.0:
   version "0.2.9"
@@ -3175,6 +3199,12 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
 rlp@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/rlp/-/rlp-2.0.0.tgz#9db384ff4b89a8f61563d92395d8625b18f3afb0"
+
+root-require@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/root-require/-/root-require-0.3.1.tgz#95e1554d63cc869a2abde3e3bfc9bbaaa1edacd3"
+  dependencies:
+    packpath "~0.1.0"
 
 safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@^5.1.1, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.1"
@@ -3645,6 +3675,10 @@ uglifyjs-webpack-plugin@^0.4.6:
 uid-number@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/uid-number/-/uid-number-0.0.6.tgz#0ea10e8035e8eb5b8e4449f06da1c730663baa81"
+
+underscore@1.7.x:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.7.0.tgz#6bbaf0877500d36be34ecaa584e0db9fef035209"
 
 unzip-response@^1.0.0:
   version "1.0.2"
