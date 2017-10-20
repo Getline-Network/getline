@@ -7,9 +7,9 @@ import "../../contracts/tokens/PrintableToken.sol";
 import "../utils/MockPerson.sol";
 
 
-contract TestCancelledLoan {
+contract TestFullyRepaidLoan {
     uint256 totalLoanNeeded = 100;
-    uint16 interestPermil = 200;
+    uint16 interestPermil = 2000;
     uint256 printValue = 100;
     PrintableToken collateralToken = new PrintableToken("collateralToken", 0, "token_symbol", printValue);
     PrintableToken loanToken = new PrintableToken("loanToken", 0, "token_symbol", printValue);
@@ -18,19 +18,21 @@ contract TestCancelledLoan {
     InvestorLedger.Ledger testLedger = InvestorLedger.openAccount(
         collateralToken, loanToken, address(borrower), totalLoanNeeded, interestPermil);
 
-    function testMarkCancelled() {
+    function testFullyRepaidLoan() {
+        /* Testing pre-loan-release phase */
         borrower.printMeCollateralTokens();
         investor.printMeLoanTokens();
         InvestorLedger.gatherCollateral(testLedger);
         InvestorLedger.gatherInvestment(testLedger, address(investor));
-        InvestorLedger.markCancelled(testLedger);
-        Assert.equal(testLedger.loanCancelled, true, "It should mark loan as canceled");
-        Assert.equal(collateralToken.balanceOf(borrower), printValue, "It should send collateral back to borrower");
+        Assert.equal(loanToken.balanceOf(investor), 0, "It should transfer loan tokens to investorLedger");
+        InvestorLedger.releaseLoanToBorrower(testLedger);
 
-        /* Testing withdrawing investment */
-        Assert.equal(loanToken.balanceOf(investor), 0, "Investor should invest his loan tokens");
-        InvestorLedger.withdrawInvestment(testLedger, address(investor));
-        Assert.equal(loanToken.balanceOf(investor), printValue, "Investor should get back his invested money");
-
+        /* Testing post-loan-release phase */
+        Assert.equal(loanToken.balanceOf(borrower), printValue, "It should transfer loan tokens to borrower");
+        borrower.printMeLoanTokens();
+        borrower.printMeLoanTokens();
+        Assert.equal(testLedger.totalPaybackNeeded, 200, "It should mark loan as defaulted");
+        InvestorLedger.gatherPayback(testLedger);
+        Assert.equal(loanToken.balanceOf(this), 2 * printValue, "It should transfer loan tokens to investorLedger");
     }
 }

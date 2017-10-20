@@ -90,22 +90,23 @@ library InvestorLedger {
         require(account.collateralToken.transfer(account.liege, amountToTransfer));
     }
 
-    function withdrawInvestment(Ledger storage account, address trustee) {
+    function collateralToTrustee(Ledger storage account, address trustee) {
         var investor = account.investors[trustee];
-        
-        if (account.loanDefaulted) {
-            var reservedCollateral = investor.reservedCollateral;
-            investor.reservedCollateral = 0;
-            require(account.collateralToken.transfer(trustee, reservedCollateral));
-        } else {
-            var amountInvested = investor.amountInvested;
-            if (!account.loanCancelled) {
-                amountInvested += calculateInterest(account, amountInvested);
-            }
-            investor.amountInvested = 0;
-            require(account.loanToken.transfer(trustee, amountInvested));
-        }
+        var reservedCollateral = investor.reservedCollateral;
+        investor.reservedCollateral = 0;
+        require(account.collateralToken.transfer(trustee, reservedCollateral));
+        delete account.investors[trustee];
+    }
 
+    function withdrawInvestment(Ledger storage account, address trustee) {
+        require(!account.loanDefaulted);
+        var investor = account.investors[trustee];
+        var amountInvested = investor.amountInvested;
+        if (!account.loanCancelled) {
+            amountInvested += calculateInterest(account, amountInvested);
+        }
+        investor.amountInvested = 0;
+        require(account.loanToken.transfer(trustee, amountInvested));
         delete account.investors[trustee];
     }
 

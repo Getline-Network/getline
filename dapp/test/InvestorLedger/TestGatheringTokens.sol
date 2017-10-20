@@ -6,6 +6,7 @@ import "../../contracts/loans/InvestorLedger.sol";
 import "../../contracts/tokens/PrintableToken.sol";
 import "../utils/MockPerson.sol";
 
+
 contract TestGatheringTokens {
     uint256 totalLoanNeeded = 100;
     uint16 interestPermil = 200;
@@ -16,7 +17,7 @@ contract TestGatheringTokens {
     MockPerson borrower = new MockPerson(loanToken, collateralToken);
     InvestorLedger.Ledger testLedger = InvestorLedger.openAccount(
         collateralToken, loanToken, address(borrower), totalLoanNeeded, interestPermil);
-     InvestorLedger.InvestorData investorData;
+    InvestorLedger.InvestorData investorData;
 
     function testInitialization() {
         testLedger.loanToken = loanToken;

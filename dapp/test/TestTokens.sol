@@ -4,6 +4,7 @@ import "truffle/Assert.sol";
 import "truffle/DeployedAddresses.sol";
 import "../contracts/tokens/PrintableToken.sol";
 
+
 contract TestTokens {
     function testPrintableToken() {
         uint256 testPrintValue = 100;
