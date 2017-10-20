@@ -1,7 +1,9 @@
 module.exports = {
   mocha: {
     reporter: "mocha-multi-reporters",
-    reporterEnabled: "mocha-junit-reporter, spec",
+    reporterOptions: {
+      configFile: "mocha-multi-reporters.json",
+    },
   },
   networks: {
     development: {
