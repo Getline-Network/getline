@@ -22,6 +22,9 @@ export default {
   padding: 0;
   font-family: Montserrat;
 }
+body {
+  background-color: var(--color-white-smoke) !important;
+}
 :root {
   --color-black-cod: #101010;
   --color-blurple: #6847d6;
