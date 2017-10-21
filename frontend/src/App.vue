@@ -1,23 +1,33 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <top-panel></top-panel>
     <router-view/>
   </div>
 </template>
-
 <script>
+import TopPanel from '@/components/TopPanel';
+
 export default {
   name: 'app',
+  components: {
+    'top-panel': TopPanel,
+  },
 };
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="scss">
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Montserrat;
+}
+:root {
+  --color-black-cod: #101010;
+  --color-blurple: #6847d6;
+  --color-white-smoke: #f4f4f4;
+  --color-greyish: #b6b6b6;
+  --color-grey-warm: #707070;
+  --purpleish-blue: #7249f7;
 }
 </style>
