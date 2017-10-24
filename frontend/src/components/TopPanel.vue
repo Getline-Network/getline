@@ -7,8 +7,8 @@
       </div>
     </div>
     <div class="tp-menu-container">
-      <div class="tp-menu-text active"> SUMMARY </div>
-      <div class="tp-menu-text"> FUNDS </div>
+       <router-link class="tp-menu-text" to="/ " exact> SUMMARY</router-link>
+       <router-link class="tp-menu-text" to="/borrow"> BORROW</router-link>
     </div>
     <div class="tp-profile">
       <img class="tp-profile-photo" :src="require('../assets/stock-profile.jpg')" >
@@ -36,8 +36,8 @@ export default {
     }
   }
   .tp-menu-container { display: flex; align-items: center; width: 60%; height: 100%;
-    .tp-menu-text { display: flex; height: 100%; align-items: center; padding: 0 15px; font-size: 11px; font-weight: 600; text-align: center; color: #606060;
-      &.active { border-bottom: 3px solid var(--purpleish-blue); color: var(--purpleish-blue); }
+    a.tp-menu-text { display: flex; height: 100%; align-items: center; padding: 0 15px; font-size: 11px; font-weight: 600; text-align: center;  text-decoration: none; color: #606060;
+      &.router-link-active { border-bottom: 3px solid var(--purpleish-blue); color: var(--purpleish-blue); }
     }
   }
   .tp-profile { display: flex;
