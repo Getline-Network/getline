@@ -7,8 +7,9 @@
       </div>
     </div>
     <div class="tp-menu-container">
-       <router-link class="tp-menu-text" to="/ " exact> SUMMARY</router-link>
-       <router-link class="tp-menu-text" to="/borrow"> BORROW</router-link>
+       <router-link class="tp-menu-text" to="/ " exact> SUMMARY </router-link>
+        <router-link class="tp-menu-text" to="/invest"> INVEST </router-link>
+       <router-link class="tp-menu-text" to="/borrow"> BORROW </router-link>
     </div>
     <div class="tp-profile">
       <img class="tp-profile-photo" :src="require('../assets/stock-profile.jpg')" >
@@ -36,7 +37,7 @@ export default {
     }
   }
   .tp-menu-container { display: flex; align-items: center; width: 60%; height: 100%;
-    a.tp-menu-text { display: flex; height: 100%; align-items: center; padding: 0 15px; font-size: 11px; font-weight: 600; text-align: center;  text-decoration: none; color: #606060;
+    a.tp-menu-text { display: flex; height: 100%; align-items: center; padding: 0 15px; font-size: 11px; font-weight: 600; text-align: center; text-decoration: none; color: #606060;
       &.router-link-active { border-bottom: 3px solid var(--purpleish-blue); color: var(--purpleish-blue); }
     }
   }

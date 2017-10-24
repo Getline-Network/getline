@@ -49,6 +49,7 @@ export default {
     return {
       ethAmount: '0.01',
       petcentage: '5',
+      description: '',
     };
   },
 };
