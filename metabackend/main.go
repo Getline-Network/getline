@@ -24,7 +24,7 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/getline-network/getline/metabackend/deployments"
-	"github.com/getline-network/getline/metabackend/pb"
+	"github.com/getline-network/getline/pb"
 )
 
 var (

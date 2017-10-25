@@ -24,7 +24,7 @@ import (
 	"golang.org/x/net/context"
 
 	"github.com/getline-network/getline/metabackend/deployments"
-	"github.com/getline-network/getline/metabackend/pb"
+	"github.com/getline-network/getline/pb"
 )
 
 // protoAddress returns a proto address from a given 0x-prefixed string
