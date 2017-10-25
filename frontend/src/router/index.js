@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import RequestLoan from '@/components/RequestLoan';
 import InvestBar from '@/components/Invest/InvestBar';
-import LoanList from '@/components/Invest/LoanList';
+import LoanList from '@/components/Invest/LoanList/LoanList';
 import MyInvestments from '@/components/Invest/MyInvestments';
 
 Vue.use(Router);
@@ -18,8 +18,7 @@ export default new Router({
       component: InvestBar,
       children: [
         {
-          path: '',
-          component: LoanList,
+          path: '', redirect: '/invest/loan-list',
         },
         {
           path: 'loan-list',

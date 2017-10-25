@@ -7,9 +7,5 @@
 <script>
 export default {
   name: 'MyInvestments',
-  data() {
-    return {
-    };
-  },
 };
 </script>

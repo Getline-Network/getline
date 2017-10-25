@@ -11,10 +11,6 @@
 <script>
 export default {
   name: 'InvestBar',
-  data() {
-    return {
-    };
-  },
 };
 </script>
 
