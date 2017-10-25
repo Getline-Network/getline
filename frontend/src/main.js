@@ -8,6 +8,7 @@ import App from './App';
 import router from './router';
 
 Vue.use(VueMaterial);
+Vue.use(VueMaterial.MdIcon);
 
 Vue.material.registerPalette('app-color-pallete', {
   500: '#7249f7',
