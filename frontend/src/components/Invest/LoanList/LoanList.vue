@@ -15,7 +15,7 @@
             </md-table-row>
           </md-table-header>
           <md-table-body>
-            <md-table-row v-for="loan in loans" :key="loan.userName">
+            <md-table-row @click.native='goToLoan(loan.id)' v-for="loan in loans" :key="loan.id">
               <md-table-cell class="ll-td">{{ loan.userName }}</md-table-cell>
               <md-table-cell class="ll-td ll-score"> <user-score :value="loan.userScore"/> </md-table-cell>
               <md-table-cell class="ll-td">{{ loan.amountNeeded }}</md-table-cell>
@@ -34,8 +34,9 @@
 
 <script>
 import NoLoans from './NoLoans';
-import UserScore from './UserScore';
-import MockResponse from '../../../../server/mockResponse';
+import UserScore from '../UserScore';
+import loans from '../../../../server/getGatheringLoans';
+import { goToLoan } from '../../../router/index';
 
 export default {
   name: 'LoanList',
@@ -43,9 +44,12 @@ export default {
     'no-loans': NoLoans,
     'user-score': UserScore,
   },
+  methods: {
+    goToLoan,
+  },
   data() {
     return {
-      loans: MockResponse.gatheringLoans,
+      loans,
     };
   },
 };

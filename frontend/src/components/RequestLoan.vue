@@ -35,7 +35,7 @@
         <div class="rl-metamask-to-complete"> To complete process you need metamask account </div>
         <div class="rl-metamask-what-is"> What is metamask and how it works <a href="/"> Read here </a> </div>
         <div class="rl-metamask-button-container">
-          <div class="rl-metamask-button"> AUTHORIZE METAMASK </div>
+          <purple-button text="AUTHORIZE METAMASK" />
         </div>
       </div>
     </div>
@@ -43,6 +43,8 @@
 </template>
 
 <script>
+import PurpleButton from './common/PurpleButton';
+
 export default {
   name: 'RequestLoan',
   data() {
@@ -51,6 +53,9 @@ export default {
       petcentage: '5',
       description: '',
     };
+  },
+  components: {
+    'purple-button': PurpleButton,
   },
 };
 </script>
@@ -75,7 +80,7 @@ export default {
     .rl-metamask-what-is { display: flex; justify-content: center; font-size: 12px; font-weight: 300; line-height: 1.83; color: #858585;
       a { margin-left: 5px; color: #14b3ff; }
     }
-    .rl-metamask-button-container { display: flex; justify-content: center; margin: 30px 0;
+    .rl-metamask-button-container { display: flex; justify-content: center;
       .rl-metamask-button { padding: 15px 30px; border-radius: 2px; background-color: var(--purpleish-blue); font-size: 11px; font-weight: 600; color: #ffffff; }
      }
   }
