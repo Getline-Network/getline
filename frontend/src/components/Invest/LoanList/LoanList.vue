@@ -34,7 +34,7 @@
 
 <script>
 import NoLoans from './NoLoans';
-import UserScore from '../UserScore';
+import UserScore from '../../common/UserScore';
 import loans from '../../../../server/getGatheringLoans';
 import { goToLoan } from '../../../router/index';
 

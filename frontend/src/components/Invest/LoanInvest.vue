@@ -55,7 +55,7 @@
 
 <script>
 import loan from '../../../server/getLoan';
-import UserScore from './UserScore';
+import UserScore from '../common/UserScore';
 import PurpleButton from '../common/PurpleButton';
 
 export default {

@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import PurpleButton from './common/PurpleButton';
+import PurpleButton from '../common/PurpleButton';
 
 export default {
   name: 'RequestLoan',

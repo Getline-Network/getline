@@ -4,8 +4,9 @@
     <router-view/>
   </div>
 </template>
+
 <script>
-import TopPanel from '@/components/TopPanel';
+import TopPanel from '@/components/common/TopPanel';
 
 export default {
   name: 'app',

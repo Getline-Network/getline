@@ -12,7 +12,7 @@
        <router-link class="tp-menu-text" to="/borrow"> BORROW </router-link>
     </div>
     <div class="tp-profile">
-      <img class="tp-profile-photo" :src="require('../assets/stock-profile.jpg')" >
+      <img class="tp-profile-photo" :src="require('../../assets/stock-profile.jpg')" >
       <div class="tp-profile-text">
         <div class="tp-profile-text-name"> Pearl Curtis  ▾</div>
         <div class="tp-profile-text-settings"> Account settings </div>

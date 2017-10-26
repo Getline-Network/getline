@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import RequestLoan from '@/components/RequestLoan';
-import InvestBar from '@/components/Invest/InvestBar';
-import LoanList from '@/components/Invest/LoanList/LoanList';
-import MyInvestments from '@/components/Invest/MyInvestments';
-import LoanInvest from '@/components/Invest/LoanInvest';
+import RequestLoan from '@/components/borrow/RequestLoan';
+import InvestBar from '@/components/invest/InvestBar';
+import LoanList from '@/components/invest/LoanList/LoanList';
+import MyInvestments from '@/components/invest/MyInvestments';
+import LoanInvest from '@/components/invest/LoanInvest';
 
 Vue.use(Router);
 
