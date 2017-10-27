@@ -1,5 +1,5 @@
 <template>
-  <no-elements>
+  <no-elements class="no-investments">
     <span slot="message"> No investments yet </span>
     <span slot="description"> Maecenas lacinia ex at varius viverra. Phasellus bibendum semper quam et malesuada. Morbi ex dolor, pellentesque sed dictum sed, tincidunt ut erat. Integer pulvinar mauris non tempor scelerisque.t </span>
     <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="50" height="53" viewBox="0 0 50 53">
@@ -22,3 +22,7 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+.no-investments { margin-top: 100px; }
+</style>

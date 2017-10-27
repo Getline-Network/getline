@@ -1,6 +1,7 @@
 <template>
   <div class="my-investments">
-    <div class="mi-summary">
+    <no-investments v-if="displayNoElements" />
+    <div v-if="!displayNoElements" class="mi-summary">
       <div class="mi-invested">
         <div class="mi-label">CURRENTLY INVESTED </div>
         <div class="mi-amount-currency">
@@ -17,13 +18,13 @@
       </div>
     </div>
     <div class="mi-not-completed-container">
-      <my-investment-tile  v-for="investment in investments" :key="investment.id" :investment="investment" />
+      <my-investment-tile  v-for="investment in notCompletedInvestments" :key="investment.id" :investment="investment" />
     </div>
-      <div class="mi-completed-title">
+      <div v-if="displayCompleted" class="mi-completed-title">
       Completed investements
       </div>
       <div class="mi-completed-container">
-        <my-investment-tile  v-for="investment in investments" :key="investment.id" :investment="investment" />
+        <my-investment-tile  v-for="investment in completedInvestments" :key="investment.id" :investment="investment" />
       </div>
   </div>
 </template>
@@ -43,8 +44,22 @@ export default {
   },
   data() {
     return {
-      investments,
+      completedInvestments: investments,
+      notCompletedInvestments: [],
+      displayNoInvestments: !(this.completedInvestments && this.completedInvestments.length > 0
+        && this.notCompletedInvestments && this.notCompletedInvestments.length > 0),
     };
+  },
+  computed: {
+    displayCompleted: function displayCompleted() {
+      return this.completedInvestments && this.completedInvestments.length > 0;
+    },
+    displayNotCompleted: function displayNotCompleted() {
+      return this.notCompletedInvestments && this.notCompletedInvestments.length > 0;
+    },
+    displayNoElements: function displayNoElements() {
+      return !this.displayCompleted && !this.displayNotCompleted;
+    },
   },
 };
 </script>
