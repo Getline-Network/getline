@@ -2,33 +2,31 @@
   <div class="request-loan-container">
     <div class="rl-title"> Request loan </div>
     <div class="rl-form">
-      <div class="rl-amount-and-percentage">
-        Amount and percentage
-      </div>
+      <div class="rl-amount-and-percentage"> Amount and percentage </div>
       <div class="rl-amount-container">
         <div class="rl-amount">
           <md-input-container>
-            <label>AMOUNT</label>
-            <md-input v-model="ethAmount" type="number"></md-input>
-            <div class="rl-input-right-text">ETH</div>
+            <label> AMOUNT </label>
+            <md-input v-model="ethAmount" type="number" />
+            <div class="rl-input-right-text"> ETH </div>
           </md-input-container>
         </div>
         <div class="rl-token">
-            <md-input-container>
-              <label>PERCENTAGE</label>
-              <md-input type="number" v-model="petcentage"></md-input>
-              <div class="rl-input-right-text">%</div>
-            </md-input-container>
+          <md-input-container>
+            <label> PERCENTAGE </label>
+            <md-input type="number" v-model="petcentage" />
+            <div class="rl-input-right-text">%</div>
+          </md-input-container>
         </div>
       </div>
       <div class="rl-payback">
-          <div> Payback time period </div>
-          <div class="rl-payback-time"> 7 DAYS </div>
+        <div> Payback time period </div>
+        <div class="rl-payback-time"> 7 DAYS </div>
       </div>
       <div class="rl-description">
         <md-input-container>
-          <label>Description</label>
-          <md-textarea v-model="description" maxlength="800"></md-textarea>
+          <label> Description </label>
+          <md-textarea v-model="description" maxlength="800" />
         </md-input-container>
       </div>
       <div class="rl-metamask">

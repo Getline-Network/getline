@@ -1,7 +1,5 @@
 <template>
-  <div class="purple-button">
-    {{ text }}
-  </div>
+  <div class="purple-button">{{ text }}</div>
 </template>
 
 <script>

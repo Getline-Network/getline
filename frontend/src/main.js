@@ -10,11 +10,11 @@ import router from './router';
 Vue.use(VueMaterial);
 Vue.use(VueMaterial.MdIcon);
 
+/* Register default purple color */
 Vue.material.registerPalette('app-color-pallete', {
   500: '#7249f7',
   darkText: [500],
 });
-
 Vue.material.registerTheme('default', { primary: 'app-color-pallete' });
 
 Vue.config.productionTip = false;

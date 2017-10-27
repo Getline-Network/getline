@@ -4,16 +4,16 @@
       <div class="li-row-a">
         <div class="li-details-funded">
           <div class="li-details">
-            <user-score :value="loan.userScore"/>
+            <user-score :value="loan.userScore" />
             <div class="li-details-right">
-              <div class="li-short-desc"> {{ loan.shortDesc }} </div>
-              <div class="li-user"> {{ loan.userName }} </div>
+              <div class="li-short-desc">{{ loan.shortDesc }}</div>
+              <div class="li-user">{{ loan.userName }}</div>
             </div>
           </div>
           <div class="li-bar-container">
             <div class="li-bar">
-              <div class="li-bar-funded" :style="{ width: loan.procentFunded + '%' }"></div>
-              <div class="li-bar-remaining"></div>
+              <div class="li-bar-funded" :style="{ width: loan.procentFunded + '%' }" />
+              <div class="li-bar-remaining" />
             </div>
             <div class="li-bar-labels">
               <div> {{ loan.procentFunded }}% FUNDED </div>
@@ -24,16 +24,16 @@
         <div class="li-amount-rate-time">
           <div class="li-amount">
             <div class="li-title"> AMOUNT </div>
-            <div class="li-value"> {{ loan.amountNeeded }} </div>
+            <div class="li-value">{{ loan.amountNeeded }}</div>
           </div>
           <div class="li-rate-time">
             <div class="li-rate">
               <div class="li-title"> RATE </div>
-              <div class="li-value"> {{ loan.rate }} </div>
+              <div class="li-value">{{ loan.rate }}</div>
             </div>
             <div class="li-time">
               <div class="li-title"> TIME </div>
-              <div class="li-value"> {{ loan.paybackTime }} </div>
+              <div class="li-value">{{ loan.paybackTime }}</div>
             </div>
           </div>
         </div>
@@ -43,11 +43,13 @@
           <md-input-container>
             <label>AMOUNT</label>
             <md-input v-model="amount" type="number"></md-input>
-            <div class="li-input-text"> {{ loan.currency }} </div>
+            <div class="li-input-text">{{ loan.currency }}</div>
           </md-input-container>
-          <div class="li-amount-left"> {{ loan.available }}  {{ loan.currency }} available </div>
+          <div class="li-amount-left">{{ loan.available }} {{ loan.currency }} available </div>
         </div>
-        <div class="li-action"> <purple-button :text="'INVEST'" /> </div>
+        <div class="li-action">
+          <purple-button :text="'INVEST'" />
+        </div>
       </div>
     </div>
   </div>
@@ -102,7 +104,7 @@ export default {
     }
   }
   .li-row-b { margin: 32px 0 50px 0;  background-color: #ffffff;
-    .li-lent { padding: 30px;  border-bottom: 1px solid var(--color-white-smoke);
+    .li-lent { padding: 30px; border-bottom: 1px solid var(--color-white-smoke);
       input { font-size: 30px; }
       .li-input-text { font-size: 13px; font-weight: 600; color: var(--color-black-cod); }
       .li-amount-left { margin-top: -10px; font-size: 12px; font-weight: 300; line-height: 1.83; color: #858585; }

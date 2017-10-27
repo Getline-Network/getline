@@ -1,7 +1,5 @@
 <template>
-  <div class="user-score" :class="getClass()">
-    {{ value }}
-  </div>
+  <div class="user-score" :class="getClass()">{{ value }}</div>
 </template>
 
 <script>
@@ -10,8 +8,8 @@ export default {
   props: ['value'],
   methods: {
     getClass: function getClass() {
-      const style = 'style-score-';
-      const result = style + this.value;
+      const stylePrefix = 'style-score-';
+      const result = stylePrefix + this.value;
       return result.toLowerCase();
     },
   },
@@ -19,7 +17,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.user-score {  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #ffffff; border-radius: 2px;
+.user-score { display: flex; width: 32px; height: 32px; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #ffffff; border-radius: 2px;
   &.style-score-a { background-color: #20be2f; }
   &.style-score-b { background-color: #ffcd00; }
   &.style-score-c { background-color: #ffa438; }
