@@ -7,7 +7,6 @@
       </div>
     </div>
     <div class="tp-menu-container">
-       <router-link class="tp-menu-text" to="/ " exact> SUMMARY </router-link>
         <router-link class="tp-menu-text" to="/invest"> INVEST </router-link>
        <router-link class="tp-menu-text" to="/borrow"> BORROW </router-link>
     </div>
