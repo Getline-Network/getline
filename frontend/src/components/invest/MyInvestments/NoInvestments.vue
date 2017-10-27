@@ -21,5 +21,4 @@ export default {
     'no-elements': NoElements,
   },
 };
-
 </script>
