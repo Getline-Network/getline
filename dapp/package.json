@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "create-demo-loan": "ts-node create-demo-loan.ts"
   },
   "author": "Getline",
   "devDependencies": {
-    "bluebird": "^3.5.0"
+    "bluebird": "^3.5.0",
+    "web3-typescript-typings": "^0.7.1"
   },
   "dependencies": {
     "ethereumjs-testrpc": "^4.1.3",
@@ -18,6 +20,10 @@
     "solidity-coverage": "^0.2.7",
     "solium": "^0.5.5",
     "truffle": "^3.4.11",
+    "truffle-contract": "^3.0.0",
+    "ts-node": "^3.3.0",
+    "tsc": "^1.20150623.0",
+    "typescript": "^2.5.3",
     "wallet.ts": "^0.2.5",
     "web3": "0.20.1"
   }
