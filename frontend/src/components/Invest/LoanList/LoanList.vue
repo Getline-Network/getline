@@ -3,15 +3,15 @@
     <div class="ll-title"> Loan listing </div>
     <no-loans v-if="!loans" />
     <div v-else class="ll-container">
-      <md-table md-sort="procent-needed">
+      <md-table md-sort="percent-needed">
         <md-table-header>
           <md-table-row>
             <md-table-head md-sort-by="name" class="ll-th"> NAME </md-table-head>
             <md-table-head md-sort-by="score" class="ll-th"> SCORE </md-table-head>
             <md-table-head md-sort-by="amount-needed" class="ll-th"> AMOUNT NEEDED </md-table-head>
             <md-table-head md-sort-by="time" class="ll-th"> TIME </md-table-head>
-            <md-table-head md-sort-by="procent-funded" class="ll-th"> % FUNDED </md-table-head>
-            <md-table-head md-sort-by="procent-needed" class="ll-th"> % NEEDED </md-table-head>
+            <md-table-head md-sort-by="percent-funded" class="ll-th"> % FUNDED </md-table-head>
+            <md-table-head md-sort-by="percent-needed" class="ll-th"> % NEEDED </md-table-head>
           </md-table-row>
         </md-table-header>
         <md-table-body>
@@ -20,8 +20,8 @@
             <md-table-cell class="ll-td ll-score"> <user-score :value="loan.userScore"/> </md-table-cell>
             <md-table-cell class="ll-td">{{ loan.amountNeeded }}</md-table-cell>
             <md-table-cell class="ll-td ll-time">{{ loan.time }}</md-table-cell>
-            <md-table-cell class="ll-td">{{ loan.procentFunded }}</md-table-cell>
-            <md-table-cell class="ll-td">{{ loan.procentNeeded }}</md-table-cell>
+            <md-table-cell class="ll-td">{{ loan.percentFunded }}</md-table-cell>
+            <md-table-cell class="ll-td">{{ loan.percentNeeded }}</md-table-cell>
           </md-table-row>
         </md-table-body>
       </md-table>

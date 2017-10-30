@@ -12,11 +12,11 @@
           </div>
           <div class="li-bar-container">
             <div class="li-bar">
-              <div class="li-bar-funded" :style="{ width: loan.procentFunded + '%' }" />
+              <div class="li-bar-funded" :style="{ width: loan.percentFunded + '%' }" />
               <div class="li-bar-remaining" />
             </div>
             <div class="li-bar-labels">
-              <div> {{ loan.procentFunded }}% FUNDED </div>
+              <div> {{ loan.percentFunded }}% FUNDED </div>
               <div> {{ loan.gatheringTimeLeft }} LEFT </div>
             </div>
           </div>
