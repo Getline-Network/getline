@@ -30,10 +30,10 @@
 </template>
 
 <script>
+import UserScore from '@/components/common/UserScore';
+import loans from '@/server/getGatheringLoans';
+import { goToLoan } from '@/router/index';
 import NoLoans from './NoLoans';
-import UserScore from '../../common/UserScore';
-import loans from '../../../../server/getGatheringLoans';
-import { goToLoan } from '../../../router/index';
 
 export default {
   name: 'LoanList',

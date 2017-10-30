@@ -28,9 +28,9 @@
 </template>
 
 <script>
+import investments from '@/server/getNotCompletedInvestments'; // TODO remove mocks
 import NoInvestments from './NoInvestments';
 import MyInvestmentTile from './MyInvestmentTile';
-import investments from '../../../../server/getNotCompletedInvestments'; // TODO remove mocks
 
 export default {
   name: 'MyInvestments',

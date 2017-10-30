@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import UserScore from '../../common/UserScore';
+import UserScore from '@/components/common/UserScore';
 
 export default {
   name: 'MyInvestments',

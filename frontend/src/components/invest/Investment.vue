@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import loan from '../../../server/getLoan';
+import loan from '@/server/getLoan';
 import UserScore from '../common/UserScore';
 import PurpleButton from '../common/PurpleButton';
 

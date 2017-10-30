@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import NoElements from '../../common/NoElements';
+import NoElements from '@/components/common/NoElements';
 
 export default {
   name: 'NoInvestments',
