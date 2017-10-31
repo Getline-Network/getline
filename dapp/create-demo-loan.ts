@@ -10,7 +10,7 @@ let web3 = new Web3(provider);
 var contracts: { [key:string]:any } = {};
 let artifacts = [ LoanArtifacts, PrintableTokenArtifacts ];
 
-artifacts.forEach((artifact) => {
+artifacts.forEach(artifact => {
     let contract = Contract(artifact);
     contract.setProvider(provider)
     contract.defaults({
