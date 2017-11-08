@@ -3,6 +3,30 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/aristanetworks/goarista"
+  packages = ["monotime"]
+  revision = "5eb2971c4b1d78445db34cda7b2f36f41a1d018d"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/btcsuite/btcd"
+  packages = ["btcec"]
+  revision = "8cea3866d0f7fb12d567a20744942c0d078c7d15"
+
+[[projects]]
+  name = "github.com/ethereum/go-ethereum"
+  packages = [".","accounts","accounts/abi","accounts/abi/bind","accounts/keystore","common","common/hexutil","common/math","common/mclock","core/types","crypto","crypto/randentropy","crypto/secp256k1","crypto/sha3","ethclient","event","log","params","rlp","rpc","trie"]
+  revision = "1db4ecdc0b9e828ff65777fb466fc7c1d04e0de9"
+  version = "v1.7.2"
+
+[[projects]]
+  name = "github.com/go-stack/stack"
+  packages = ["."]
+  revision = "817915b46b97fd7bb80e8ab6b69f01a53ac3eebf"
+  version = "v1.6.0"
+
+[[projects]]
+  branch = "master"
   name = "github.com/golang/glog"
   packages = ["."]
   revision = "23def4e6c14b4da8ac2ed8007337bc5eb5007998"
@@ -14,16 +38,82 @@
   revision = "1643683e1b54a9e88ad26d98f81400c8c9d9f4f9"
 
 [[projects]]
+  name = "github.com/improbable-eng/grpc-web"
+  packages = ["go/grpcweb"]
+  revision = "7174732598544bdecfa12fb81ca2f1601cf1b587"
+  version = "0.3.0-beta"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/jmoiron/sqlx"
+  packages = [".","reflectx"]
+  revision = "3379e5993990b1f927fc8db926485e6f6becf2d2"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/lib/pq"
+  packages = [".","oid"]
+  revision = "b609790bd85edf8e9ab7e0f8912750a786177bcf"
+
+[[projects]]
+  name = "github.com/pborman/uuid"
+  packages = ["."]
+  revision = "e790cca94e6cc75c7064b1332e63811d4aae1a53"
+  version = "v1.1"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/rcrowley/go-metrics"
+  packages = ["."]
+  revision = "1f30fe9094a513ce4c700b9a54458bbb0c96996c"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/rjeczalik/notify"
+  packages = ["."]
+  revision = "767eb674ef14b09119b2fff3601e64558d530c47"
+
+[[projects]]
+  name = "github.com/rs/cors"
+  packages = ["."]
+  revision = "7af7a1e09ba336d2ea14b1ce73bf693c6837dbf6"
+  version = "v1.2"
+
+[[projects]]
+  name = "github.com/teris-io/shortid"
+  packages = ["."]
+  revision = "6c56cef5189ca1b3d5ef01dc07f4d611dfc0bb33"
+  version = "v1.0"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/crypto"
+  packages = ["pbkdf2","scrypt"]
+  revision = "6a293f2d4b14b8e6d3f0539e383f6d0d30fce3fd"
+
+[[projects]]
   branch = "master"
   name = "golang.org/x/net"
-  packages = ["context","http2","http2/hpack","idna","internal/timeseries","lex/httplex","trace"]
+  packages = ["context","http2","http2/hpack","idna","internal/timeseries","lex/httplex","trace","websocket"]
   revision = "4b14673ba32bee7f5ac0f990a48f033919fd418b"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/sys"
+  packages = ["unix"]
+  revision = "75813c647272dd855bda156405bf844a5414f5bf"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/text"
   packages = ["collate","collate/build","internal/colltab","internal/gen","internal/tag","internal/triegen","internal/ucd","language","secure/bidirule","transform","unicode/bidi","unicode/cldr","unicode/norm","unicode/rangetable"]
   revision = "6eab0e8f74e86c598ec3b6fad4888e0c11482d48"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/tools"
+  packages = ["go/ast/astutil","imports"]
+  revision = "05e91d06384e3a4eb0aba75560d254b8d5a7b431"
 
 [[projects]]
   branch = "master"
@@ -37,9 +127,27 @@
   revision = "f7bf885db0b7479a537ec317c6e48ce53145f3db"
   version = "v1.7.0"
 
+[[projects]]
+  name = "gopkg.in/fatih/set.v0"
+  packages = ["."]
+  revision = "57907de300222151a123d29255ed17f5ed43fad3"
+  version = "v0.1.0"
+
+[[projects]]
+  branch = "v2"
+  name = "gopkg.in/karalabe/cookiejar.v2"
+  packages = ["collections/prque"]
+  revision = "8dcd6a7f4951f6ff3ee9cbb919a06d8925822e57"
+
+[[projects]]
+  branch = "v2"
+  name = "gopkg.in/natefinch/npipe.v2"
+  packages = ["."]
+  revision = "c1b8fa8bdccecb0b8db834ee0b92fdbcfa606dd6"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "250cf1e0279030374e3d2e7eab35e2cee049ca6513e3c7429a5328ea4f7b1d25"
+  inputs-digest = "68ebc0b0513be650ab5c5baeaf3e4becc8d87f17d4b00ba06d2a667127a9d225"
   solver-name = "gps-cdcl"
   solver-version = 1

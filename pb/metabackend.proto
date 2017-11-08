@@ -41,8 +41,7 @@ message Address {
 // See contract Solidity source for more information. This is returned
 // unopinionated, straight from the blockchain.
 message LoanState {
-    bytes fundraising_blocks_count = 1;
-    bytes payback_blocks_count = 2;
+    reserved 1, 2;
     bytes fundraising_deadline = 3;
     bytes payback_deadline = 4;
 
@@ -62,10 +61,10 @@ message LoanParameters {
     Address collateral_token = 1;
     Address loan_token = 2;
     Address liege = 3;
-    bytes amount_wanted = 4;
+    string amount_wanted = 4;
     uint32 interest_permil = 5;
-    bytes fundraising_blocks_count = 6;
-    bytes payback_blocks_count = 7;
+    string fundraising_blocks_count = 6;
+    string payback_blocks_count = 7;
 }
 
 // The cache entry of the metabackend service - contains the parameters of the
@@ -74,6 +73,7 @@ message LoanParameters {
 message LoanCache {
     LoanParameters parameters = 1;
     LoanState blockchain_state = 2;
+    string short_id = 6;
 
     enum DeploymentState {
         INVALID = 0;
@@ -153,16 +153,55 @@ message Contract {
 /////////
 
 message GetDeploymentRequest {
+    // Network ID of the deployment.
     string network_id = 1;
 }
 
 message GetDeploymentResponse {
+    // Network ID of the deployment, for confirmation.
     string network_id = 1;
+    // Contract/Library code and ABIs that we know of in this deployment.
     repeated Contract contract = 2;
+}
+
+message GetLoansRequest {
+    // Network ID of the loans we want to get.
+    string network_id = 1;
+    // If set, filter by owner of contract.
+    Address owner = 2;
+    // If set, filter by contract short ID.
+    string short_id = 3;
+}
+
+message GetLoansResponse {
+    // Network ID of the loans, for confirmation.
+    string network_id = 1;
+    // Cached data of indexed loans.
+    repeated LoanCache loan_cache = 2;
+}
+
+message IndexLoanRequest {
+    // NetworkID in which the loan is deployed.
+    string network_id = 1;
+    // Address of the deployed loan.
+    Address loan = 2;
+    // Non-blockchain user data: description of loan.
+    string description = 3;
+}
+
+message IndexLoanResponse {
+    // Resulting short ID of the indexed loan.
+    string short_id = 1;
 }
 
 service Metabackend {
     // GetDeployment returns all GetLine Ethereum contracts deployed on a given
     // network ID.
     rpc GetDeployment(GetDeploymentRequest) returns (GetDeploymentResponse);
+    // GetLoans returns indexed Loan contracts according to a filter.
+    rpc GetLoans(GetLoansRequest) returns (GetLoansResponse);
+    // IndexLoan indexes a loan to be served from the metabackend.
+    // This method is idempotent - it will return the same indexed ShortID no
+    // matter how many times the contract is submitted.
+    rpc IndexLoan(IndexLoanRequest) returns (IndexLoanResponse);
 }

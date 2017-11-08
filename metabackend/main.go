@@ -17,24 +17,40 @@ package main
 import (
 	"flag"
 	"net"
+	"net/http"
 	"os"
 
 	"github.com/golang/glog"
+	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
 	"github.com/getline-network/getline/metabackend/deployments"
+	"github.com/getline-network/getline/metabackend/model"
+	"github.com/getline-network/getline/metabackend/server"
 	"github.com/getline-network/getline/pb"
 )
 
 var (
 	flagListen     string
+	flagListenHTTP string
 	flagReflection bool
+
+	flagDBDriver     string
+	flagDBDataSource string
+	flagDBInitSchema bool
+
+	flagEthRemote string
 )
 
 func main() {
 	flag.StringVar(&flagListen, "listen", "0.0.0.0:2000", "gRPC listen address")
+	flag.StringVar(&flagListenHTTP, "listen_http", "0.0.0.0:2080", "gRPCWeb (HTTP) listen address")
 	flag.BoolVar(&flagReflection, "reflection", true, "gRPC reflection")
+	flag.StringVar(&flagDBDriver, "db_driver", "postgres", "SQL driver name")
+	flag.StringVar(&flagDBDataSource, "db_data_source", "", "SQL driver data source")
+	flag.BoolVar(&flagDBInitSchema, "db_init_schema", false, "Initialize SQL database with empty schema")
+	flag.StringVar(&flagEthRemote, "eth_remote", "http://localhost:8545", "Ethereum IPC server address")
 	flag.Parse()
 	glog.Info("Starting...")
 
@@ -53,16 +69,50 @@ func main() {
 	if err != nil {
 		glog.Exit(err)
 	}
-	s := server{
-		deployment: deployment,
+	s := server.Server{
+		Deployment: deployment,
 	}
+	grpc.EnableTracing = true
 	grpcServer := grpc.NewServer()
-	pb.RegisterMetabackendServer(grpcServer, s)
+	pb.RegisterMetabackendServer(grpcServer, &s)
 	if flagReflection {
 		reflection.Register(grpcServer)
 	}
-
 	go grpcServer.Serve(lis)
 	glog.Infof("gRPC Listening on %q...", flagListen)
+
+	// Start gRPCWeb.
+	wrappedGrpc := grpcweb.WrapServer(grpcServer)
+	httpServer := http.Server{
+		Addr: flagListenHTTP,
+	}
+	httpServer.Handler = http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
+		if wrappedGrpc.IsGrpcWebRequest(req) {
+			wrappedGrpc.ServeHttp(resp, req)
+		}
+		http.DefaultServeMux.ServeHTTP(resp, req)
+	})
+	go func() {
+		err := httpServer.ListenAndServe()
+		if err != nil {
+			glog.Exit(err)
+		}
+	}()
+	glog.Infof("gRPCWeb (HTTP) Listening on %q...", flagListenHTTP)
+
+	// Start model.
+	model, err := model.New(flagDBDriver, flagDBDataSource, flagEthRemote, &s)
+	if err != nil {
+		glog.Exitf("Could not start model: %v", err)
+	}
+	if flagDBInitSchema {
+		err = model.InitializeSchema()
+		if err != nil {
+			glog.Exitf("Could not initialize model schema: %v", err)
+		}
+		return
+	}
+	s.Model = model
+
 	select {}
 }
