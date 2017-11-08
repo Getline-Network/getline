@@ -36,6 +36,8 @@ var (
 	flagDBDriver     string
 	flagDBDataSource string
 	flagDBInitSchema bool
+
+	flagEthRemote string
 )
 
 func main() {
@@ -44,6 +46,7 @@ func main() {
 	flag.StringVar(&flagDBDriver, "db_driver", "postgres", "SQL driver name")
 	flag.StringVar(&flagDBDataSource, "db_data_source", "", "SQL driver data source")
 	flag.BoolVar(&flagDBInitSchema, "db_init_schema", false, "Initialize SQL database with empty schema")
+	flag.StringVar(&flagEthRemote, "eth_remote", "http://localhost:8545", "Ethereum IPC server address")
 	flag.Parse()
 	glog.Info("Starting...")
 
@@ -74,7 +77,7 @@ func main() {
 	glog.Infof("gRPC Listening on %q...", flagListen)
 
 	// Start model.
-	model, err := model.New(flagDBDriver, flagDBDataSource, &s)
+	model, err := model.New(flagDBDriver, flagDBDataSource, flagEthRemote, &s)
 	if err != nil {
 		glog.Exitf("Could not start model: %v", err)
 	}

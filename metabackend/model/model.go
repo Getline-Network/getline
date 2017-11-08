@@ -79,8 +79,9 @@ type Model struct {
 	blockchain  *blockchainRemote
 }
 
-func New(driverName, dataSourceName string, server pb.MetabackendServer) (*Model, error) {
-	backend, err := ethclient.Dial("http://localhost:8545")
+func New(driverName, dataSourceName, ethRemote string, server pb.MetabackendServer) (*Model, error) {
+	// TODO(q3k): one eth backend per networkid.
+	backend, err := ethclient.Dial(ethRemote)
 	if err != nil {
 		return nil, fmt.Errorf("connecting to blockchain failed: %v", err)
 	}
