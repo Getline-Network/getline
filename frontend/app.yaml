@@ -2,6 +2,9 @@ runtime: python27
 api_version: 1
 threadsafe: true
 
+automatic_scaling:
+  min_idle_instances: 1
+
 handlers:
 - url: /
   static_files: dist/index.html
