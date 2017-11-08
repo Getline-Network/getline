@@ -24,17 +24,26 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/getline-network/getline/metabackend/deployments"
+	"github.com/getline-network/getline/metabackend/model"
+	"github.com/getline-network/getline/metabackend/server"
 	"github.com/getline-network/getline/pb"
 )
 
 var (
 	flagListen     string
 	flagReflection bool
+
+	flagDBDriver     string
+	flagDBDataSource string
+	flagDBInitSchema bool
 )
 
 func main() {
 	flag.StringVar(&flagListen, "listen", "0.0.0.0:2000", "gRPC listen address")
 	flag.BoolVar(&flagReflection, "reflection", true, "gRPC reflection")
+	flag.StringVar(&flagDBDriver, "db_driver", "postgres", "SQL driver name")
+	flag.StringVar(&flagDBDataSource, "db_data_source", "", "SQL driver data source")
+	flag.BoolVar(&flagDBInitSchema, "db_init_schema", false, "Initialize SQL database with empty schema")
 	flag.Parse()
 	glog.Info("Starting...")
 
@@ -53,16 +62,30 @@ func main() {
 	if err != nil {
 		glog.Exit(err)
 	}
-	s := server{
-		deployment: deployment,
+	s := server.Server{
+		Deployment: deployment,
 	}
 	grpcServer := grpc.NewServer()
-	pb.RegisterMetabackendServer(grpcServer, s)
+	pb.RegisterMetabackendServer(grpcServer, &s)
 	if flagReflection {
 		reflection.Register(grpcServer)
 	}
-
 	go grpcServer.Serve(lis)
 	glog.Infof("gRPC Listening on %q...", flagListen)
+
+	// Start model.
+	model, err := model.New(flagDBDriver, flagDBDataSource, &s)
+	if err != nil {
+		glog.Exitf("Could not start model: %v", err)
+	}
+	if flagDBInitSchema {
+		err = model.InitializeSchema()
+		if err != nil {
+			glog.Exitf("Could not initialize model schema: %v", err)
+		}
+		return
+	}
+	s.Model = model
+
 	select {}
 }
