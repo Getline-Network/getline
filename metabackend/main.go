@@ -16,6 +16,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"net"
 	"net/http"
 	"os"
@@ -86,9 +87,13 @@ func main() {
 	httpServer := http.Server{
 		Addr: flagListenHTTP,
 	}
+	http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
+		fmt.Fprintf(res, "Hello there. This is metabackend.")
+	})
 	httpServer.Handler = http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
 		if wrappedGrpc.IsGrpcWebRequest(req) {
 			wrappedGrpc.ServeHttp(resp, req)
+			return
 		}
 		http.DefaultServeMux.ServeHTTP(resp, req)
 	})
