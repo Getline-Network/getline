@@ -11,37 +11,37 @@ import * as pb from "./generated/metabackend_pb";
 import nodeHttpRequest from 'grpc-web-client/dist/transports/nodeHttp';
 
 export class Loan {
-	public parameters: {
-		collateralTokenAddress: string
-		loanTokenAddress: string
-		liegeAddress: string
-		fundraisingDeadline: moment.Moment
-		paybackDeadline: moment.Moment
-	}
-	public shortId: string
-	public description: string
-	public address: string
-	public owner: string
+    public parameters: {
+        collateralTokenAddress: string
+        loanTokenAddress: string
+        liegeAddress: string
+        fundraisingDeadline: moment.Moment
+        paybackDeadline: moment.Moment
+    }
+    public shortId: string
+    public description: string
+    public address: string
+    public owner: string
 
-	private blockToTime: (BigNumber) => moment.Moment
+    private blockToTime: (BigNumber) => moment.Moment
 
-	constructor(proto: pb.LoanCache, blockToTime: (BigNumber) => moment.Moment) {
-		this.blockToTime = blockToTime
+    constructor(proto: pb.LoanCache, blockToTime: (BigNumber) => moment.Moment) {
+        this.blockToTime = blockToTime
 
-		this.shortId = proto.getShortId();
-		this.description = proto.getDescription();
-		this.address = proto.getDeploymentAddress().getAscii();
-		this.owner = proto.getOwner().getAscii();
+        this.shortId = proto.getShortId();
+        this.description = proto.getDescription();
+        this.address = proto.getDeploymentAddress().getAscii();
+        this.owner = proto.getOwner().getAscii();
 
-		let params = proto.getParameters();
-		this.parameters = {
-			collateralTokenAddress: params.getCollateralToken().getAscii(),
-			loanTokenAddress: params.getLoanToken().getAscii(),
-			liegeAddress: params.getLiege().getAscii(),
-			fundraisingDeadline: this.blockToTime(new BigNumber(params.getFundraisingBlocksCount())),
-			paybackDeadline: this.blockToTime(new BigNumber(params.getPaybackBlocksCount()))
-		};
-	}
+        let params = proto.getParameters();
+        this.parameters = {
+            collateralTokenAddress: params.getCollateralToken().getAscii(),
+            loanTokenAddress: params.getLoanToken().getAscii(),
+            liegeAddress: params.getLiege().getAscii(),
+            fundraisingDeadline: this.blockToTime(new BigNumber(params.getFundraisingBlocksCount())),
+            paybackDeadline: this.blockToTime(new BigNumber(params.getPaybackBlocksCount()))
+        };
+    }
 }
 
 class MetabackendClient {
@@ -174,29 +174,29 @@ export class Client {
         this.metabackend = new MetabackendClient(metabackend, network);
         this.network = network;
         let provider = new Web3.providers.HttpProvider("http://localhost:8545")
-		if (typeof window !== 'undefined' && typeof window['web3'] !== 'undefined') {
-			console.log("getline.ts: using injected web3")
-			provider = window['web3'].currentProvider;
-		} else {
-			console.log("getline.ts: connecting to node running on localhost")
-		}
+        if (typeof window !== 'undefined' && typeof window['web3'] !== 'undefined') {
+            console.log("getline.ts: using injected web3")
+            provider = window['web3'].currentProvider;
+        } else {
+            console.log("getline.ts: connecting to node running on localhost")
+        }
         this.web3 = new Web3(provider);
-		if (this.web3.version.network != this.network) {
-			throw new Error("web3 is connected to wrong network")
-		}
+        if (this.web3.version.network != this.network) {
+            throw new Error("web3 is connected to wrong network")
+        }
     }
 
-	private blockToTime = (block: BigNumber): moment.Moment => {
-		if (this.network != "4") {
+    private blockToTime = (block: BigNumber): moment.Moment => {
+        if (this.network != "4") {
             throw new Error("getline.ts only supports rinkeby chains");
-		}
+        }
         let currentBlock = new BigNumber(this.web3.eth.blockNumber);
-		let secondsPerBlock = new BigNumber(15);
+        let secondsPerBlock = new BigNumber(15);
 
-		let seconds = block.minus(currentBlock).times(secondsPerBlock);
+        let seconds = block.minus(currentBlock).times(secondsPerBlock);
 
-		return moment(moment.now()).add(seconds.toNumber(), 'seconds');
-	}
+        return moment(moment.now()).add(seconds.toNumber(), 'seconds');
+    }
 
     public async addNewLoan(description: string, amount: BigNumber, interestPermil: number,
                             fundraisingDelta: number, paybackDelta: number): Promise<Loan> {
@@ -242,7 +242,7 @@ export class Client {
 
         let res = await this.metabackend.invoke(Metabackend.GetLoans, req);
         if (res.getNetworkId() != this.network) {
-			throw new Error("Invalid network ID in response.");
+            throw new Error("Invalid network ID in response.");
         }
 
         return new Loan(res.getLoanCacheList()[0], this.blockToTime);
@@ -257,13 +257,13 @@ export class Client {
 
         let res = await this.metabackend.invoke(Metabackend.GetLoans, req);
         if (res.getNetworkId() != this.network) {
-			throw new Error("Invalid network ID in response.");
+            throw new Error("Invalid network ID in response.");
         }
 
-		let loans : Array<Loan> = [];
-		res.getLoanCacheList().forEach((elem) => {
-			loans.push(new Loan(elem, this.blockToTime));
-		});
+        let loans : Array<Loan> = [];
+        res.getLoanCacheList().forEach((elem) => {
+            loans.push(new Loan(elem, this.blockToTime));
+        });
         return loans;
     }
 }
