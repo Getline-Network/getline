@@ -97,6 +97,7 @@ func main() {
 	httpServer.Handler = http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
 		if wrappedGrpc.IsGrpcWebRequest(req) {
 			wrappedGrpc.ServeHttp(resp, req)
+			return
 		}
 		http.DefaultServeMux.ServeHTTP(resp, req)
 	})
