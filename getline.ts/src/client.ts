@@ -1,14 +1,15 @@
 import * as jspb from 'google-protobuf';
 import {grpc, Code, Metadata, Transport} from 'grpc-web-client';
+import nodeHttpRequest from 'grpc-web-client/dist/transports/nodeHttp';
+import { DefaultTransportFactory } from 'grpc-web-client/dist/transports/Transport';
 import {BigNumber} from 'bignumber.js';
+import * as IsNode from 'is-node';
 import * as Web3 from 'web3';
 import * as encoding from 'text-encoding';
 import * as moment from 'moment';
 
 import {Metabackend} from "./generated/metabackend_pb_service";
 import * as pb from "./generated/metabackend_pb";
-
-import nodeHttpRequest from 'grpc-web-client/dist/transports/nodeHttp';
 
 export class Loan {
     public parameters: {
@@ -93,11 +94,17 @@ class MetabackendClient {
     public  async invoke<TReq extends jspb.Message, TRes extends jspb.Message>
                                    (method: grpc.MethodDefinition<TReq, TRes>, req: TReq): Promise<TRes> {
         return new Promise<TRes>((resolve, reject)=>{
+            let transport = DefaultTransportFactory.detectTransport();
+            // Are we running in Node? Force using nodeHttpRequest.
+            if (IsNode) {
+                console.log("getline.ts: forcing node.js transport for gRPC")
+                transport = nodeHttpRequest;
+            }
             grpc.invoke(method, {
                 request: req,
                 host: this.metabackendHost,
                 onMessage: resolve,
-                transport: nodeHttpRequest,
+                transport: transport,
                 onEnd: (code: Code, msg: string | undefined, trailers: Metadata) => {
                     if (code != Code.OK) {
                         reject(new Error("gRPC failed (" + code + "): " + msg));
