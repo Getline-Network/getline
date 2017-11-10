@@ -11,6 +11,10 @@ import * as moment from 'moment';
 import {Metabackend} from "./generated/metabackend_pb_service";
 import * as pb from "./generated/metabackend_pb";
 
+interface BlockToTime {
+    (current: BigNumber, target: BigNumber): moment.Moment
+}
+
 export class Loan {
     public parameters: {
         collateralTokenAddress: string
@@ -24,9 +28,9 @@ export class Loan {
     public address: string
     public owner: string
 
-    private blockToTime: (BigNumber) => moment.Moment
-
-    constructor(proto: pb.LoanCache, blockToTime: (BigNumber) => moment.Moment) {
+    private blockToTime: BlockToTime
+ 
+    constructor(proto: pb.LoanCache, currentBlock: BigNumber, blockToTime: BlockToTime) {
         this.blockToTime = blockToTime
 
         this.shortId = proto.getShortId();
@@ -39,8 +43,8 @@ export class Loan {
             collateralTokenAddress: params.getCollateralToken().getAscii(),
             loanTokenAddress: params.getLoanToken().getAscii(),
             liegeAddress: params.getLiege().getAscii(),
-            fundraisingDeadline: this.blockToTime(new BigNumber(params.getFundraisingBlocksCount())),
-            paybackDeadline: this.blockToTime(new BigNumber(params.getPaybackBlocksCount()))
+            fundraisingDeadline: this.blockToTime(currentBlock, new BigNumber(params.getFundraisingBlocksCount())),
+            paybackDeadline: this.blockToTime(currentBlock, new BigNumber(params.getPaybackBlocksCount()))
         };
     }
 }
@@ -193,14 +197,24 @@ export class Client {
         }
     }
 
-    private blockToTime = (block: BigNumber): moment.Moment => {
+    private getCurrentBlock(): Promise<number> {
+        return new Promise<number>((result, reject)=>{
+            this.web3.eth.getBlockNumber((err, block: number)=>{
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                result(block);
+            });
+        });
+    }
+
+    private blockToTime = (current: BigNumber, block: BigNumber): moment.Moment => {
         if (this.network != "4") {
             throw new Error("getline.ts only supports rinkeby chains");
         }
-        let currentBlock = new BigNumber(this.web3.eth.blockNumber);
         let secondsPerBlock = new BigNumber(15);
-
-        let seconds = block.minus(currentBlock).times(secondsPerBlock);
+        let seconds = block.minus(current).times(secondsPerBlock);
 
         return moment(moment.now()).add(seconds.toNumber(), 'seconds');
     }
@@ -221,7 +235,7 @@ export class Client {
             throw new Error("cannot place loan with payback deadline before fundraising deadline");
         }
 
-        let currentBlock = this.web3.eth.blockNumber;
+        let currentBlock = await this.getCurrentBlock();
         let blocksPerSecond = (1.0) / 15;
         let fundraisingEnd = currentBlock + blocksPerSecond * fundraisingDelta;
         let paybackEnd = currentBlock + blocksPerSecond * paybackDelta;
@@ -252,7 +266,8 @@ export class Client {
             throw new Error("Invalid network ID in response.");
         }
 
-        return new Loan(res.getLoanCacheList()[0], this.blockToTime);
+        let currentBlock = new BigNumber(await this.getCurrentBlock());
+        return new Loan(res.getLoanCacheList()[0], currentBlock, this.blockToTime);
     }
 
     public async getLoansByOwner(owner: string): Promise<Array<Loan>> {
@@ -268,8 +283,9 @@ export class Client {
         }
 
         let loans : Array<Loan> = [];
+        let currentBlock = new BigNumber(await this.getCurrentBlock());
         res.getLoanCacheList().forEach((elem) => {
-            loans.push(new Loan(elem, this.blockToTime));
+            loans.push(new Loan(elem, currentBlock, this.blockToTime));
         });
         return loans;
     }
