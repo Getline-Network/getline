@@ -3,7 +3,7 @@ import * as Web3 from 'web3';
 import * as moment from 'moment';
 
 import {MetabackendClient} from './metabackend';
-import {Loan, BlockToTime} from './loan';
+import {Loan} from './loan';
 
 import {Metabackend} from './generated/metabackend_pb_service';
 import * as pb from "./generated/metabackend_pb";
@@ -66,19 +66,20 @@ export class Client {
         }
     }
 
-    private getCurrentBlock(): Promise<number> {
-        return new Promise<number>((result, reject)=>{
+    public getCurrentBlock(): Promise<BigNumber> {
+        // TODO(q3k): Cache this?
+        return new Promise<BigNumber>((result, reject)=>{
             this.web3.eth.getBlockNumber((err, block: number)=>{
                 if (err) {
                     reject(err);
                     return;
                 }
-                result(block);
+                result(new BigNumber(block));
             });
         });
     }
 
-    private blockToTime = (current: BigNumber, block: BigNumber): moment.Moment => {
+    public blockToTime(current: BigNumber, block: BigNumber): moment.Moment {
         if (this.network != "4") {
             throw new Error("getline.ts only supports rinkeby chains");
         }
@@ -104,7 +105,7 @@ export class Client {
             throw new Error("cannot place loan with payback deadline before fundraising deadline");
         }
 
-        let currentBlock = await this.getCurrentBlock();
+        let currentBlock = (await this.getCurrentBlock()).toNumber();
         let blocksPerSecond = (1.0) / 15;
         let fundraisingEnd = currentBlock + blocksPerSecond * fundraisingDelta;
         let paybackEnd = currentBlock + blocksPerSecond * paybackDelta;
@@ -136,7 +137,9 @@ export class Client {
         }
 
         let currentBlock = new BigNumber(await this.getCurrentBlock());
-        return new Loan(res.getLoanCacheList()[0], currentBlock, this.blockToTime);
+        let loan = new Loan(this);
+        await loan.loadFromProto(res.getLoanCacheList()[0]);
+        return loan;
     }
 
     public async getLoansByOwner(owner: string): Promise<Array<Loan>> {
@@ -152,10 +155,14 @@ export class Client {
         }
 
         let loans : Array<Loan> = [];
+        let promises : Array<Promise<void>> = [];
         let currentBlock = new BigNumber(await this.getCurrentBlock());
         res.getLoanCacheList().forEach((elem) => {
-            loans.push(new Loan(elem, currentBlock, this.blockToTime));
+            let loan = new Loan(this);
+            promises.push(loan.loadFromProto(elem));
+            loans.push(loan);
         });
+        await Promise.all(promises);
         return loans;
     }
 }
