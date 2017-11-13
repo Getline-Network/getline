@@ -21,8 +21,8 @@
         }
       ],
       "payable": false,
-      "type": "function",
-      "stateMutability": "nonpayable"
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "constant": true,
@@ -30,13 +30,13 @@
       "name": "totalSupply",
       "outputs": [
         {
-          "name": "totalSupply",
+          "name": "_totalSupply",
           "type": "uint256"
         }
       ],
       "payable": false,
-      "type": "function",
-      "stateMutability": "view"
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "constant": false,
@@ -62,8 +62,8 @@
         }
       ],
       "payable": false,
-      "type": "function",
-      "stateMutability": "nonpayable"
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "constant": true,
@@ -81,8 +81,8 @@
         }
       ],
       "payable": false,
-      "type": "function",
-      "stateMutability": "view"
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "constant": false,
@@ -104,8 +104,8 @@
         }
       ],
       "payable": false,
-      "type": "function",
-      "stateMutability": "nonpayable"
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "constant": true,
@@ -127,8 +127,8 @@
         }
       ],
       "payable": false,
-      "type": "function",
-      "stateMutability": "view"
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "anonymous": false,
@@ -180,10 +180,10 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.4.11;\n\nimport \"./ERC/IERC20Token.sol\";\n\n\ncontract IToken is IERC20Token {}\n",
-  "sourcePath": "/home/q3k/Work/getline/getline-dapp/dapp/contracts/tokens/IToken.sol",
+  "sourcePath": "/home/q3k/Work/getline/getline/dapp/contracts/tokens/IToken.sol",
   "ast": {
     "attributes": {
-      "absolutePath": "/home/q3k/Work/getline/getline-dapp/dapp/contracts/tokens/IToken.sol",
+      "absolutePath": "/home/q3k/Work/getline/getline/dapp/contracts/tokens/IToken.sol",
       "exportedSymbols": {
         "IToken": [
           1634
@@ -207,7 +207,7 @@
       {
         "attributes": {
           "SourceUnit": 1629,
-          "absolutePath": "/home/q3k/Work/getline/getline-dapp/dapp/contracts/tokens/ERC/IERC20Token.sol",
+          "absolutePath": "/home/q3k/Work/getline/getline/dapp/contracts/tokens/ERC/IERC20Token.sol",
           "file": "./ERC/IERC20Token.sol",
           "scope": 1635,
           "symbolAliases": [
@@ -277,5 +277,5 @@
   },
   "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2017-11-13T17:53:27.307Z"
+  "updatedAt": "2017-11-13T20:05:27.400Z"
 }
