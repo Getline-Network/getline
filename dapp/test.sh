@@ -3,7 +3,7 @@
 set -e
 
 echo "Starting TestRPC..."
-node_modules/.bin/testrpc >testrpc.log 2>&1 &
+node_modules/.bin/testrpc --gasLimit 1000000000000 >testrpc.log 2>&1 &
 testrpc_pid="$!"
 cleanup() {
     echo "Killing TestRPC..."

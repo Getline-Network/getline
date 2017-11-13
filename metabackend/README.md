@@ -28,7 +28,7 @@ System dependencies required:
 To build:
 
     go get -u -d github.com/getline-network/getline/metabackend
-    go generate github.com/getline-network/getline/metabackend/pb
+    go generate github.com/getline-network/getline/pb
     go install github.com/getline-network/getline/metabackend
     metabackend -help
 

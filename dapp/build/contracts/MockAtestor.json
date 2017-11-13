@@ -1,5 +1,5 @@
 {
-  "contract_name": "MockAtestor",
+  "contractName": "MockAtestor",
   "abi": [
     {
       "constant": true,
@@ -17,7 +17,8 @@
         }
       ],
       "payable": false,
-      "type": "function"
+      "type": "function",
+      "stateMutability": "view"
     },
     {
       "inputs": [
@@ -27,11 +28,375 @@
         }
       ],
       "payable": false,
-      "type": "constructor"
+      "type": "constructor",
+      "stateMutability": "nonpayable"
     }
   ],
-  "unlinked_binary": "0x6060604052341561000f57600080fd5b6040516020806100f6833981016040528080519150505b6000805460ff19168215151790555b505b60b1806100456000396000f300606060405263ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663b9209e338114603c575b600080fd5b3415604657600080fd5b606573ffffffffffffffffffffffffffffffffffffffff600435166079565b604051901515815260200160405180910390f35b60005460ff165b9190505600a165627a7a7230582076263b2a002e7031fd9ec8097e78641117275c15ecce60974a8942768a37ccbb0029",
+  "bytecode": "0x6060604052341561000f57600080fd5b60405160208061012983398101604052808051906020019091905050806000806101000a81548160ff0219169083151502179055505060d6806100536000396000f300606060405260043610603f576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063b9209e33146044575b600080fd5b3415604e57600080fd5b6078600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506092565b604051808215151515815260200191505060405180910390f35b60008060009054906101000a900460ff1690509190505600a165627a7a72305820bfcd978c3a779a6422df9d90f5658622dea8e5d17b2ed180a765e88165018b0b0029",
+  "deployedBytecode": "0x606060405260043610603f576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063b9209e33146044575b600080fd5b3415604e57600080fd5b6078600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506092565b604051808215151515815260200191505060405180910390f35b60008060009054906101000a900460ff1690509190505600a165627a7a72305820bfcd978c3a779a6422df9d90f5658622dea8e5d17b2ed180a765e88165018b0b0029",
+  "sourceMap": "53:241:8:-;;;110:68;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;164:7;155:6;;:16;;;;;;;;;;;;;;;;;;110:68;53:241;;;;;;",
+  "deployedSourceMap": "53:241:8:-;;;;;;;;;;;;;;;;;;;;;;;;188:104;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;248:12;279:6;;;;;;;;;;;272:13;;188:104;;;:::o",
+  "source": "pragma solidity ^0.4.11;\n\nimport \"./IAtestor.sol\";\n\n\ncontract MockAtestor is IAtestor {\n    bool result;\n\n    function MockAtestor(bool _result) {\n        result = _result;\n    }\n    \n    function isVerified(address _checkedUser) constant returns (bool success) {\n        return result;\n    }\n}\n",
+  "sourcePath": "/home/q3k/Work/getline/getline-dapp/dapp/contracts/loans/MockAtestor.sol",
+  "ast": {
+    "attributes": {
+      "absolutePath": "/home/q3k/Work/getline/getline-dapp/dapp/contracts/loans/MockAtestor.sol",
+      "exportedSymbols": {
+        "MockAtestor": [
+          1306
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.4",
+            ".11"
+          ]
+        },
+        "id": 1280,
+        "name": "PragmaDirective",
+        "src": "0:24:8"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 388,
+          "absolutePath": "/home/q3k/Work/getline/getline-dapp/dapp/contracts/loans/IAtestor.sol",
+          "file": "./IAtestor.sol",
+          "scope": 1307,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 1281,
+        "name": "ImportDirective",
+        "src": "26:24:8"
+      },
+      {
+        "attributes": {
+          "contractDependencies": [
+            387
+          ],
+          "contractKind": "contract",
+          "documentation": null,
+          "fullyImplemented": true,
+          "linearizedBaseContracts": [
+            1306,
+            387
+          ],
+          "name": "MockAtestor",
+          "scope": 1307
+        },
+        "children": [
+          {
+            "attributes": {
+              "arguments": [
+                null
+              ]
+            },
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "IAtestor",
+                  "referencedDeclaration": 387,
+                  "type": "contract IAtestor"
+                },
+                "id": 1282,
+                "name": "UserDefinedTypeName",
+                "src": "77:8:8"
+              }
+            ],
+            "id": 1283,
+            "name": "InheritanceSpecifier",
+            "src": "77:8:8"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "result",
+              "scope": 1306,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "bool",
+              "value": null,
+              "visibility": "internal"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "bool",
+                  "type": "bool"
+                },
+                "id": 1284,
+                "name": "ElementaryTypeName",
+                "src": "92:4:8"
+              }
+            ],
+            "id": 1285,
+            "name": "VariableDeclaration",
+            "src": "92:11:8"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": true,
+              "modifiers": [
+                null
+              ],
+              "name": "MockAtestor",
+              "payable": false,
+              "scope": 1306,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_result",
+                      "scope": 1295,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 1286,
+                        "name": "ElementaryTypeName",
+                        "src": "131:4:8"
+                      }
+                    ],
+                    "id": 1287,
+                    "name": "VariableDeclaration",
+                    "src": "131:12:8"
+                  }
+                ],
+                "id": 1288,
+                "name": "ParameterList",
+                "src": "130:14:8"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1289,
+                "name": "ParameterList",
+                "src": "145:0:8"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "=",
+                          "type": "bool"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 1285,
+                              "type": "bool",
+                              "value": "result"
+                            },
+                            "id": 1290,
+                            "name": "Identifier",
+                            "src": "155:6:8"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 1287,
+                              "type": "bool",
+                              "value": "_result"
+                            },
+                            "id": 1291,
+                            "name": "Identifier",
+                            "src": "164:7:8"
+                          }
+                        ],
+                        "id": 1292,
+                        "name": "Assignment",
+                        "src": "155:16:8"
+                      }
+                    ],
+                    "id": 1293,
+                    "name": "ExpressionStatement",
+                    "src": "155:16:8"
+                  }
+                ],
+                "id": 1294,
+                "name": "Block",
+                "src": "145:33:8"
+              }
+            ],
+            "id": 1295,
+            "name": "FunctionDefinition",
+            "src": "110:68:8"
+          },
+          {
+            "attributes": {
+              "constant": true,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "isVerified",
+              "payable": false,
+              "scope": 1306,
+              "stateMutability": "view",
+              "superFunction": 386,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_checkedUser",
+                      "scope": 1305,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 1296,
+                        "name": "ElementaryTypeName",
+                        "src": "208:7:8"
+                      }
+                    ],
+                    "id": 1297,
+                    "name": "VariableDeclaration",
+                    "src": "208:20:8"
+                  }
+                ],
+                "id": 1298,
+                "name": "ParameterList",
+                "src": "207:22:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "success",
+                      "scope": 1305,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 1299,
+                        "name": "ElementaryTypeName",
+                        "src": "248:4:8"
+                      }
+                    ],
+                    "id": 1300,
+                    "name": "VariableDeclaration",
+                    "src": "248:12:8"
+                  }
+                ],
+                "id": 1301,
+                "name": "ParameterList",
+                "src": "247:14:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 1301
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "overloadedDeclarations": [
+                            null
+                          ],
+                          "referencedDeclaration": 1285,
+                          "type": "bool",
+                          "value": "result"
+                        },
+                        "id": 1302,
+                        "name": "Identifier",
+                        "src": "279:6:8"
+                      }
+                    ],
+                    "id": 1303,
+                    "name": "Return",
+                    "src": "272:13:8"
+                  }
+                ],
+                "id": 1304,
+                "name": "Block",
+                "src": "262:30:8"
+              }
+            ],
+            "id": 1305,
+            "name": "FunctionDefinition",
+            "src": "188:104:8"
+          }
+        ],
+        "id": 1306,
+        "name": "ContractDefinition",
+        "src": "53:241:8"
+      }
+    ],
+    "id": 1307,
+    "name": "SourceUnit",
+    "src": "0:295:8"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
+  },
   "networks": {},
-  "schema_version": "0.0.5",
-  "updated_at": 1508322386301
+  "schemaVersion": "1.0.1",
+  "updatedAt": "2017-11-13T17:53:27.304Z"
 }
