@@ -16,8 +16,10 @@ Vue.use(VueMaterial.MdIcon);
 setTimeout(async () => {
   // setTimeout because we are waiting for metamask extenion to inject the web3 object
   API.init(Client);
-  await API.addNewLoan();  // eslint-disable-line
+  const myAddress = window.web3.eth.accounts[0];
+  console.log(await API.instance().getLoansByOwner(myAddress));  // eslint-disable-line
 });
+
 /* Register default purple color */
 Vue.material.registerPalette('app-color-pallete', {
   500: '#7249f7',

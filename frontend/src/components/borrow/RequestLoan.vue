@@ -33,7 +33,7 @@
         <div class="rl-metamask-to-complete"> To complete process you need metamask account </div>
         <div class="rl-metamask-what-is"> What is metamask and how it works <a href="/"> Read here </a> </div>
         <div class="rl-metamask-button-container">
-          <purple-button text="AUTHORIZE METAMASK" />
+          <purple-button text="AUTHORIZE METAMASK"  @click.native='requestLoan' />
         </div>
       </div>
     </div>
@@ -42,6 +42,7 @@
 
 <script>
 import PurpleButton from '../common/PurpleButton';
+import API from '../../api';
 
 export default {
   name: 'RequestLoan',
@@ -54,6 +55,11 @@ export default {
   },
   components: {
     'purple-button': PurpleButton,
+  },
+  methods: {
+    requestLoan: async function requestLoan() {
+      await API.instance().addNewLoan('ttt', 1, 2, 3, 4);
+    },
   },
 };
 </script>
