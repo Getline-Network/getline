@@ -1,5 +1,5 @@
 {
-  "contract_name": "IToken",
+  "contractName": "IToken",
   "abi": [
     {
       "constant": false,
@@ -21,7 +21,8 @@
         }
       ],
       "payable": false,
-      "type": "function"
+      "type": "function",
+      "stateMutability": "nonpayable"
     },
     {
       "constant": true,
@@ -34,7 +35,8 @@
         }
       ],
       "payable": false,
-      "type": "function"
+      "type": "function",
+      "stateMutability": "view"
     },
     {
       "constant": false,
@@ -60,7 +62,8 @@
         }
       ],
       "payable": false,
-      "type": "function"
+      "type": "function",
+      "stateMutability": "nonpayable"
     },
     {
       "constant": true,
@@ -78,7 +81,8 @@
         }
       ],
       "payable": false,
-      "type": "function"
+      "type": "function",
+      "stateMutability": "view"
     },
     {
       "constant": false,
@@ -100,7 +104,8 @@
         }
       ],
       "payable": false,
-      "type": "function"
+      "type": "function",
+      "stateMutability": "nonpayable"
     },
     {
       "constant": true,
@@ -122,7 +127,8 @@
         }
       ],
       "payable": false,
-      "type": "function"
+      "type": "function",
+      "stateMutability": "view"
     },
     {
       "anonymous": false,
@@ -169,8 +175,107 @@
       "type": "event"
     }
   ],
-  "unlinked_binary": "0x",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity ^0.4.11;\n\nimport \"./ERC/IERC20Token.sol\";\n\n\ncontract IToken is IERC20Token {}\n",
+  "sourcePath": "/home/q3k/Work/getline/getline-dapp/dapp/contracts/tokens/IToken.sol",
+  "ast": {
+    "attributes": {
+      "absolutePath": "/home/q3k/Work/getline/getline-dapp/dapp/contracts/tokens/IToken.sol",
+      "exportedSymbols": {
+        "IToken": [
+          1634
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.4",
+            ".11"
+          ]
+        },
+        "id": 1630,
+        "name": "PragmaDirective",
+        "src": "0:24:11"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 1629,
+          "absolutePath": "/home/q3k/Work/getline/getline-dapp/dapp/contracts/tokens/ERC/IERC20Token.sol",
+          "file": "./ERC/IERC20Token.sol",
+          "scope": 1635,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 1631,
+        "name": "ImportDirective",
+        "src": "26:31:11"
+      },
+      {
+        "attributes": {
+          "contractDependencies": [
+            1628
+          ],
+          "contractKind": "contract",
+          "documentation": null,
+          "fullyImplemented": false,
+          "linearizedBaseContracts": [
+            1634,
+            1628
+          ],
+          "name": "IToken",
+          "nodes": [
+            null
+          ],
+          "scope": 1635
+        },
+        "children": [
+          {
+            "attributes": {
+              "arguments": [
+                null
+              ]
+            },
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "IERC20Token",
+                  "referencedDeclaration": 1628,
+                  "type": "contract IERC20Token"
+                },
+                "id": 1632,
+                "name": "UserDefinedTypeName",
+                "src": "79:11:11"
+              }
+            ],
+            "id": 1633,
+            "name": "InheritanceSpecifier",
+            "src": "79:11:11"
+          }
+        ],
+        "id": 1634,
+        "name": "ContractDefinition",
+        "src": "60:33:11"
+      }
+    ],
+    "id": 1635,
+    "name": "SourceUnit",
+    "src": "0:94:11"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
+  },
   "networks": {},
-  "schema_version": "0.0.5",
-  "updated_at": 1508322386302
+  "schemaVersion": "1.0.1",
+  "updatedAt": "2017-11-13T17:53:27.307Z"
 }
