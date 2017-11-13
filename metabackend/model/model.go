@@ -122,6 +122,8 @@ func (m *Model) GetLoanParameters(ctx context.Context, network string, address e
 	// TODO(q3k): Yes, this is a hack. This should disappear with the saveToDatabase
 	// refactor.
 	obj.model = m
+	obj.network = network
+	obj.address = address
 	err = obj.saveToDatabase(ctx)
 	if err != nil {
 		glog.Warningf("Saving loan to database failed: %v", err)
