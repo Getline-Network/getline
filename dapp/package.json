@@ -19,7 +19,7 @@
     "parity": "^0.2.7",
     "solidity-coverage": "^0.2.7",
     "solium": "^0.5.5",
-    "truffle": "^3.4.11",
+    "truffle": "4",
     "truffle-contract": "^3.0.0",
     "ts-node": "^3.3.0",
     "tsc": "^1.20150623.0",
