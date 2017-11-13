@@ -1,2 +1,2 @@
 export {Client} from './client'
-export {Loan} from './loan'
+export {Loan, LoanState} from './loan'
