@@ -173,6 +173,7 @@ func (s *Server) GetLoans(ctx context.Context, req *pb.GetLoansRequest) (*pb.Get
 				DeploymentAddress: util.ProtoAddress(loan.DeployedAddress.Hex()),
 				ShortId:           loan.ShortID,
 				Parameters:        parameters.Proto(),
+				Description:       loan.Description,
 				DeploymentState:   pb.LoanCache_DEPLOYED,
 			}
 			cache[i] = &c
