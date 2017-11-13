@@ -40,10 +40,10 @@ type JSONABIEntry struct {
 type JSONABI []JSONABIEntry
 
 type JSONContract struct {
-	Name           string                 `json:"contract_name"`
-	UnlinkedBinary string                 `json:"unlinked_binary"`
+	Name           string                 `json:"contractName"`
+	UnlinkedBinary string                 `json:"bytecode"`
 	Networks       map[string]JSONNetwork `json:"networks"`
-	SchemaVersion  string                 `json:"schema_version"`
+	SchemaVersion  string                 `json:"schemaVersion"`
 	ABI            JSONABI                `json:"abi"`
 }
 
@@ -127,7 +127,7 @@ func (a JSONABI) Valid() error {
 }
 
 func (c *JSONContract) Valid() error {
-	if want, got := "0.0.5", c.SchemaVersion; want != got {
+	if want, got := "1.0.1", c.SchemaVersion; want != got {
 		return fmt.Errorf("schema_version must be %q, is %q", want, got)
 	}
 	if c.Name == "" {
