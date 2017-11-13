@@ -88,6 +88,10 @@ func main() {
 		Addr: flagListenHTTP,
 	}
 	http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
+		if req.URL.Path != "/" {
+			http.NotFound(res, req)
+			return
+		}
 		fmt.Fprintf(res, "Hello there. This is metabackend.")
 	})
 	httpServer.Handler = http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
