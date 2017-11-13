@@ -21,7 +21,8 @@ contract BasicToken is IToken {
         string tokenName,
         uint256 decimalUnits,
         string tokenSymbol
-        ) public {
+        ) public
+    {
         totalSupplyField = initialSupply;                        // Update total supply
         name = tokenName;                                   // Set the name for display purposes
         symbol = tokenSymbol;                               // Set the symbol for display purposes
