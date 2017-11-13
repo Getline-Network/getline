@@ -28,11 +28,11 @@ export class Client {
 
             let opts = {
                 from: this.web3.eth.coinbase,
-                gas: 4612388,
+                gas: 4500000,
                 data: bytecode,
             };
             console.log("getline.ts: deploying contract " + contractName);
-            console.log("getline.ts: deploying bytecode " + bytecode);
+            console.log("getline.ts: deploying bytecode " + bytecode.substring(0, 64) + "...");
             console.log("getline.ts:    with parameters " + params);
             let instance: T = contractAny.new(...params, opts, (err, c: T) =>{
                 if (err) {
@@ -49,6 +49,15 @@ export class Client {
         });
     }
 
+    public async getContractInstance<T extends Web3.ContractInstance>(name: string, address: string): Promise<T> {
+        let abi = await this.metabackend.getABI(name);
+        let contract = this.web3.eth.contract(abi).at(address);
+        return contract;
+    }
+
+    public async getCoinbase(): Promise<string> {
+        return this.web3.eth.coinbase;
+    }
 
     constructor(metabackend: string, network: string) {
         this.metabackend = new MetabackendClient(metabackend, network);
@@ -64,6 +73,7 @@ export class Client {
         if (this.web3.version.network != this.network) {
             throw new Error("web3 is connected to wrong network")
         }
+        this.web3.eth.defaultAccount = this.web3.eth.accounts[0];
     }
 
     public getCurrentBlock(): Promise<BigNumber> {
