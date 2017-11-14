@@ -10,6 +10,15 @@ import nodeHttpRequest from 'grpc-web-client/dist/transports/nodeHttp';
 import { DefaultTransportFactory } from 'grpc-web-client/dist/transports/Transport';
 
 
+/**
+ * Client of a Getline metabackend service.
+ *
+ * The Metabackend service is used to:
+ *  - index loans and quickly retrieve them by ID, state or owner
+ *  - keep metadata that would be expensive to keep on-chain
+ *  - serve versioned smart contract information to clients
+ *
+ */
 export class MetabackendClient {
     private metabackendHost: string;
     private network: string;
@@ -20,42 +29,9 @@ export class MetabackendClient {
         this.network = network;
     }
 
-    private async getContractDefinitions(): Promise<Array<pb.Contract>> {
-        if (this.contractDefinitions != undefined) {
-            return this.contractDefinitions;
-        }
-        console.log("getline.ts: downloading contract definitions from metabackend...");
-        let req = new pb.GetDeploymentRequest();
-        req.setNetworkId(this.network);
-        let res = await this.invoke(Metabackend.GetDeployment, req);
-        if (res.getNetworkId() != this.network) {
-            throw new Error("getline.ts: metabackend responded with invalid network");
-        }
-        this.contractDefinitions = res.getContractList();
-        return this.contractDefinitions;
-    }
-
-    public async getABI(name: string): Promise<Array<Web3.AbiDefinition>> {
-        let pbContract: pb.Contract | undefined = undefined;
-        let allContracts = await this.getContractDefinitions();
-        for (let i = 0; i < allContracts.length; i++) {
-            let c = allContracts[i];
-            if (c.getName() == name) {
-                pbContract = c;
-                break
-            }
-        }
-        if (pbContract == undefined) {
-            throw new Error("getline.ts: no contract " + name + " found on metabackend");
-        }
-        if (!pbContract.hasAbi()) {
-            throw new Error("getline.ts: contract " + name + " has no ABI on metabackend");
-        }
-        let json = pbContract.getAbi().getJson_asU8();
-        let jsonString = new encoding.TextDecoder("utf-8").decode(json);
-        return JSON.parse(jsonString);
-    }
-
+    /**
+     * Invokes a gRPC method on the metabackend.
+     */
     public  async invoke<TReq extends jspb.Message, TRes extends jspb.Message>
                                    (method: grpc.MethodDefinition<TReq, TRes>, req: TReq): Promise<TRes> {
         return new Promise<TRes>((resolve, reject)=>{
@@ -79,6 +55,52 @@ export class MetabackendClient {
         });
     }
 
+    /**
+     * Loads all contract definitions for a given network from the metabackend.
+     */
+    private async getContractDefinitions(): Promise<Array<pb.Contract>> {
+        if (this.contractDefinitions != undefined) {
+            return this.contractDefinitions;
+        }
+        console.log("getline.ts: downloading contract definitions from metabackend...");
+        let req = new pb.GetDeploymentRequest();
+        req.setNetworkId(this.network);
+        let res = await this.invoke(Metabackend.GetDeployment, req);
+        if (res.getNetworkId() != this.network) {
+            throw new Error("getline.ts: metabackend responded with invalid network");
+        }
+        this.contractDefinitions = res.getContractList();
+        return this.contractDefinitions;
+    }
+
+
+    /**
+     * Returns a Web3 JSON ABI for a given contract name.
+     */
+    public async getABI(name: string): Promise<Array<Web3.AbiDefinition>> {
+        let pbContract: pb.Contract | undefined = undefined;
+        let allContracts = await this.getContractDefinitions();
+        for (let i = 0; i < allContracts.length; i++) {
+            let c = allContracts[i];
+            if (c.getName() == name) {
+                pbContract = c;
+                break
+            }
+        }
+        if (pbContract == undefined) {
+            throw new Error("getline.ts: no contract " + name + " found on metabackend");
+        }
+        if (!pbContract.hasAbi()) {
+            throw new Error("getline.ts: contract " + name + " has no ABI on metabackend");
+        }
+        let json = pbContract.getAbi().getJson_asU8();
+        let jsonString = new encoding.TextDecoder("utf-8").decode(json);
+        return JSON.parse(jsonString);
+    }
+
+    /**
+     * Gets the bytecode of a contract from the metabackend.
+     */
     public async getBytecode(name: string): Promise<string> {
         let pbContract: pb.Contract | undefined = undefined;
         let allContracts = await this.getContractDefinitions();
