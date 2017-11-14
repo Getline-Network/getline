@@ -23,6 +23,7 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
+	_ "golang.org/x/net/trace"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
@@ -95,7 +96,7 @@ func main() {
 		fmt.Fprintf(res, "Hello there. This is metabackend.")
 	})
 	httpServer.Handler = http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
-		if wrappedGrpc.IsGrpcWebRequest(req) {
+		if wrappedGrpc.IsGrpcWebRequest(req) || wrappedGrpc.IsAcceptableGrpcCorsRequest(req) {
 			wrappedGrpc.ServeHttp(resp, req)
 			return
 		}
