@@ -11,4 +11,8 @@ Structure is as follows:
   - `dapp/` - Solidity smart contracts for loans.
   - `frontend/` - Frontend library and client.
   - `metabackend/` - Loan metadata and bytecode cache server.
+  - `pb/` - Protobuf definitions for the metabackend API.
 
+We also have some supporting directories:
+  - `vendor/` - vendorified dependencies, currently for the metabackend only
+  - `production/` - Dockerfiles and Kubernetes description files for hosting the metabackend

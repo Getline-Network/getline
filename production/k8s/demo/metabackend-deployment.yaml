@@ -1,0 +1,97 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: demo-metabackend-deployment
+  labels:
+    app: metabackend
+    stratum: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metabackend
+      stratum: demo
+  template:
+    metadata:
+      labels:
+        app: metabackend
+        stratum: demo
+    spec:
+      containers:
+        - name: metabackend
+          image: gcr.io/third-hope-184611/metabackend:1510576655
+          command: ["./metabackend", "-logtostderr", "-db_data_source",
+                    "user=$(DB_USER) password=$(DB_PASSWORD) dbname=metabackend host=127.0.0.1 sslmode=disable",
+                    "-eth_remote", "http://demo-geth-service:8545"]
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: cloudsql-db-credentials
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cloudsql-db-credentials
+                  key: password
+        - name: cloudsql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.11
+          command: ["/cloud_sql_proxy", "--dir=/cloudsql",
+                    "-instances=third-hope-184611:europe-west3:master=tcp:5432",
+                    "-credential_file=/secrets/cloudsql/credentials.json"]
+          volumeMounts:
+            - name: cloudsql-instance-credentials
+              mountPath: /secrets/cloudsql
+              readOnly: true
+            - name: ssl-certs
+              mountPath: /etc/ssl/certs
+            - name: cloudsql
+              mountPath: /cloudsql
+      volumes:
+        - name: cloudsql-instance-credentials
+          secret:
+            secretName: cloudsql-instance-credentials
+        - name: cloudsql
+          emptyDir:
+        - name: ssl-certs
+          hostPath:
+            path: /etc/ssl/certs
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: metabackend
+    stratum: demo
+  name: demo-metabackend-service
+spec:
+  type: NodePort
+  ports:
+    - port: 2080
+      targetPort: 2080
+  selector:
+    app: metabackend
+    stratum: demo
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: demo-metabackend-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: demo-metabackend-static
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: "gce"
+spec:
+  tls:
+    - hosts:
+      - 0.api.getline.in
+      secretName: demo-metabackend-tls
+  rules:
+    - host: 0.api.getline.in
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: demo-metabackend-service
+              servicePort: 2080

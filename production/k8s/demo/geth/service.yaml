@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: demo-geth-service
+  labels:
+    app: geth
+    chain: rinkeby
+    stratum: demo
+spec:
+  selector:
+    app: geth
+    chain: rinkeby
+    stratum: demo
+  ports:
+  - protocol: TCP
+    port: 8545
+    targetPort: 8545
