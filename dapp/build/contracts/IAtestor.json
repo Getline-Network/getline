@@ -17,8 +17,8 @@
         }
       ],
       "payable": false,
-      "type": "function",
-      "stateMutability": "view"
+      "stateMutability": "view",
+      "type": "function"
     }
   ],
   "bytecode": "0x",
@@ -26,10 +26,10 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.4.11;\n\n\ncontract IAtestor {\n    function isVerified(address _checkedUser) constant returns (bool success);\n    // TODO: Maybe percentage of trust to collect it at the time of loan creation?\n}\n",
-  "sourcePath": "/home/q3k/Work/getline/getline-dapp/dapp/contracts/loans/IAtestor.sol",
+  "sourcePath": "/home/q3k/Work/getline/getline/dapp/contracts/loans/IAtestor.sol",
   "ast": {
     "attributes": {
-      "absolutePath": "/home/q3k/Work/getline/getline-dapp/dapp/contracts/loans/IAtestor.sol",
+      "absolutePath": "/home/q3k/Work/getline/getline/dapp/contracts/loans/IAtestor.sol",
       "exportedSymbols": {
         "IAtestor": [
           387
@@ -172,5 +172,5 @@
   },
   "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2017-11-13T17:53:27.292Z"
+  "updatedAt": "2017-11-13T20:05:27.398Z"
 }

@@ -23,6 +23,7 @@ Version management
 Currently version management is done manually.
 
 To build a new version of metabackend:
+
     TAG=gcr.io/third-hope-184611/metabackend:$(date +%s)
     docker build -f production/metabackend/Dockerfile -t ${TAG} .
     gcloud docker -- push ${TAG}

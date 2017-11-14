@@ -17,8 +17,8 @@
         }
       ],
       "payable": false,
-      "type": "function",
-      "stateMutability": "view"
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "inputs": [
@@ -28,19 +28,19 @@
         }
       ],
       "payable": false,
-      "type": "constructor",
-      "stateMutability": "nonpayable"
+      "stateMutability": "nonpayable",
+      "type": "constructor"
     }
   ],
-  "bytecode": "0x6060604052341561000f57600080fd5b60405160208061012983398101604052808051906020019091905050806000806101000a81548160ff0219169083151502179055505060d6806100536000396000f300606060405260043610603f576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063b9209e33146044575b600080fd5b3415604e57600080fd5b6078600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506092565b604051808215151515815260200191505060405180910390f35b60008060009054906101000a900460ff1690509190505600a165627a7a72305820bfcd978c3a779a6422df9d90f5658622dea8e5d17b2ed180a765e88165018b0b0029",
-  "deployedBytecode": "0x606060405260043610603f576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063b9209e33146044575b600080fd5b3415604e57600080fd5b6078600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506092565b604051808215151515815260200191505060405180910390f35b60008060009054906101000a900460ff1690509190505600a165627a7a72305820bfcd978c3a779a6422df9d90f5658622dea8e5d17b2ed180a765e88165018b0b0029",
+  "bytecode": "0x6060604052341561000f57600080fd5b60405160208061012983398101604052808051906020019091905050806000806101000a81548160ff0219169083151502179055505060d6806100536000396000f300606060405260043610603f576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063b9209e33146044575b600080fd5b3415604e57600080fd5b6078600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506092565b604051808215151515815260200191505060405180910390f35b60008060009054906101000a900460ff1690509190505600a165627a7a72305820c5b4f755f9667618fce5c248eea8e8928710faea685df7cc277e7386102f41300029",
+  "deployedBytecode": "0x606060405260043610603f576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063b9209e33146044575b600080fd5b3415604e57600080fd5b6078600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506092565b604051808215151515815260200191505060405180910390f35b60008060009054906101000a900460ff1690509190505600a165627a7a72305820c5b4f755f9667618fce5c248eea8e8928710faea685df7cc277e7386102f41300029",
   "sourceMap": "53:241:8:-;;;110:68;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;164:7;155:6;;:16;;;;;;;;;;;;;;;;;;110:68;53:241;;;;;;",
   "deployedSourceMap": "53:241:8:-;;;;;;;;;;;;;;;;;;;;;;;;188:104;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;248:12;279:6;;;;;;;;;;;272:13;;188:104;;;:::o",
   "source": "pragma solidity ^0.4.11;\n\nimport \"./IAtestor.sol\";\n\n\ncontract MockAtestor is IAtestor {\n    bool result;\n\n    function MockAtestor(bool _result) {\n        result = _result;\n    }\n    \n    function isVerified(address _checkedUser) constant returns (bool success) {\n        return result;\n    }\n}\n",
-  "sourcePath": "/home/q3k/Work/getline/getline-dapp/dapp/contracts/loans/MockAtestor.sol",
+  "sourcePath": "/home/q3k/Work/getline/getline/dapp/contracts/loans/MockAtestor.sol",
   "ast": {
     "attributes": {
-      "absolutePath": "/home/q3k/Work/getline/getline-dapp/dapp/contracts/loans/MockAtestor.sol",
+      "absolutePath": "/home/q3k/Work/getline/getline/dapp/contracts/loans/MockAtestor.sol",
       "exportedSymbols": {
         "MockAtestor": [
           1306
@@ -64,7 +64,7 @@
       {
         "attributes": {
           "SourceUnit": 388,
-          "absolutePath": "/home/q3k/Work/getline/getline-dapp/dapp/contracts/loans/IAtestor.sol",
+          "absolutePath": "/home/q3k/Work/getline/getline/dapp/contracts/loans/IAtestor.sol",
           "file": "./IAtestor.sol",
           "scope": 1307,
           "symbolAliases": [
@@ -398,5 +398,5 @@
   },
   "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2017-11-13T17:53:27.304Z"
+  "updatedAt": "2017-11-13T20:05:27.400Z"
 }

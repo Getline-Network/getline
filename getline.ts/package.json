@@ -1,0 +1,34 @@
+{
+  "name": "getline.ts",
+  "version": "1.0.0",
+  "description": "Client library for GetLine.in",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": "https://github.com/getline-network/getline",
+  "author": "Serge Bazanski",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-loader": "^3.1.1",
+    "ts-protoc-gen": "^0.4.0",
+    "typedoc": "^0.9.0",
+    "typescript": "^2.6.1",
+    "typings": "^2.1.1",
+    "web3-typescript-typings": "^0.7.1",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.4"
+  },
+  "scripts": {
+    "doc": "typedoc -out doc/ --ignoreCompilerErrors src",
+    "generate": "protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:src/generated --ts_out=service=true:src/generated -I ../pb/ ../pb/*.proto",
+    "tsc": "tsc"
+  },
+  "dependencies": {
+    "bignumber": "^1.1.0",
+    "google-protobuf": "^3.4.0",
+    "grpc-web-client": "^0.3.1",
+    "is-node": "^1.0.2",
+    "moment": "^2.19.1",
+    "typed-promisify": "^0.4.0",
+    "web3": "0.20.1"
+  }
+}

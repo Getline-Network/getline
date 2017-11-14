@@ -12,8 +12,8 @@
       "name": "upgrade",
       "outputs": [],
       "payable": false,
-      "type": "function",
-      "stateMutability": "nonpayable"
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "constant": true,
@@ -26,8 +26,8 @@
         }
       ],
       "payable": false,
-      "type": "function",
-      "stateMutability": "view"
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "constant": true,
@@ -40,8 +40,8 @@
         }
       ],
       "payable": false,
-      "type": "function",
-      "stateMutability": "view"
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "constant": false,
@@ -54,25 +54,25 @@
       "name": "setCompleted",
       "outputs": [],
       "payable": false,
-      "type": "function",
-      "stateMutability": "nonpayable"
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "inputs": [],
       "payable": false,
-      "type": "constructor",
-      "stateMutability": "nonpayable"
+      "stateMutability": "nonpayable",
+      "type": "constructor"
     }
   ],
-  "bytecode": "0x6060604052341561000f57600080fd5b336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506102e58061005e6000396000f300606060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680630900f01014610067578063445df0ac146100a05780638da5cb5b146100c9578063fdacd5761461011e575b600080fd5b341561007257600080fd5b61009e600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610141565b005b34156100ab57600080fd5b6100b3610229565b6040518082815260200191505060405180910390f35b34156100d457600080fd5b6100dc61022f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561012957600080fd5b61013f6004808035906020019091905050610254565b005b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561019e57600080fd5b8190508073ffffffffffffffffffffffffffffffffffffffff1663fdacd5766001546040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180828152602001915050600060405180830381600087803b151561021157600080fd5b6102c65a03f1151561022257600080fd5b5050505050565b60015481565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156102af57600080fd5b80600181905550505600a165627a7a7230582017386b2d4ecec1a91c4aee8f5054aa8c36fc5f6973bbcffd633171c17e7d3db80029",
-  "deployedBytecode": "0x606060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680630900f01014610067578063445df0ac146100a05780638da5cb5b146100c9578063fdacd5761461011e575b600080fd5b341561007257600080fd5b61009e600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610141565b005b34156100ab57600080fd5b6100b3610229565b6040518082815260200191505060405180910390f35b34156100d457600080fd5b6100dc61022f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561012957600080fd5b61013f6004808035906020019091905050610254565b005b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561019e57600080fd5b8190508073ffffffffffffffffffffffffffffffffffffffff1663fdacd5766001546040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180828152602001915050600060405180830381600087803b151561021157600080fd5b6102c65a03f1151561022257600080fd5b5050505050565b60015481565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156102af57600080fd5b80600181905550505600a165627a7a7230582017386b2d4ecec1a91c4aee8f5054aa8c36fc5f6973bbcffd633171c17e7d3db80029",
+  "bytecode": "0x6060604052341561000f57600080fd5b336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506102e58061005e6000396000f300606060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680630900f01014610067578063445df0ac146100a05780638da5cb5b146100c9578063fdacd5761461011e575b600080fd5b341561007257600080fd5b61009e600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610141565b005b34156100ab57600080fd5b6100b3610229565b6040518082815260200191505060405180910390f35b34156100d457600080fd5b6100dc61022f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561012957600080fd5b61013f6004808035906020019091905050610254565b005b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561019e57600080fd5b8190508073ffffffffffffffffffffffffffffffffffffffff1663fdacd5766001546040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180828152602001915050600060405180830381600087803b151561021157600080fd5b6102c65a03f1151561022257600080fd5b5050505050565b60015481565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156102af57600080fd5b80600181905550505600a165627a7a72305820bc218f462427ee80d4cd23e7b2ca1ad3bc5485da1459b0040f5be06098d6112c0029",
+  "deployedBytecode": "0x606060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680630900f01014610067578063445df0ac146100a05780638da5cb5b146100c9578063fdacd5761461011e575b600080fd5b341561007257600080fd5b61009e600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610141565b005b34156100ab57600080fd5b6100b3610229565b6040518082815260200191505060405180910390f35b34156100d457600080fd5b6100dc61022f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561012957600080fd5b61013f6004808035906020019091905050610254565b005b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561019e57600080fd5b8190508073ffffffffffffffffffffffffffffffffffffffff1663fdacd5766001546040518263ffffffff167c010000000000000000000000000000000000000000000000000000000002815260040180828152602001915050600060405180830381600087803b151561021157600080fd5b6102c65a03f1151561022257600080fd5b5050505050565b60015481565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156102af57600080fd5b80600181905550505600a165627a7a72305820bc218f462427ee80d4cd23e7b2ca1ad3bc5485da1459b0040f5be06098d6112c0029",
   "sourceMap": "26:526:0:-;;;209:57;;;;;;;;249:10;241:5;;:18;;;;;;;;;;;;;;;;;;26:526;;;;;;",
   "deployedSourceMap": "26:526:0:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;384:166;;;;;;;;;;;;;;;;;;;;;;;;;;;;78:36;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;52:20;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;274:102;;;;;;;;;;;;;;;;;;;;;;;;;;384:166;442:19;177:5;;;;;;;;;;;163:19;;:10;:19;;;155:28;;;;;;;;475:10;442:44;;496:8;:21;;;518:24;;496:47;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;384:166;;:::o;78:36::-;;;;:::o;52:20::-;;;;;;;;;;;;;:::o;274:102::-;177:5;;;;;;;;;;;163:19;;:10;:19;;;155:28;;;;;;;;360:9;333:24;:36;;;;274:102;:::o",
   "source": "pragma solidity ^0.4.4;\n\n\ncontract Migrations {\n    address public owner;\n    uint public last_completed_migration;\n  \n    modifier restricted() {\n        require(msg.sender == owner);\n        _;\n    }\n  \n    function Migrations() {\n        owner = msg.sender;\n    }\n  \n    function setCompleted(uint completed) restricted {\n        last_completed_migration = completed;\n    }\n  \n    function upgrade(address newAddress) restricted {\n        Migrations upgraded = Migrations(newAddress);\n        upgraded.setCompleted(last_completed_migration);\n    }\n}\n",
-  "sourcePath": "/home/q3k/Work/getline/getline-dapp/dapp/contracts/Migrations.sol",
+  "sourcePath": "/home/q3k/Work/getline/getline/dapp/contracts/Migrations.sol",
   "ast": {
     "attributes": {
-      "absolutePath": "/home/q3k/Work/getline/getline-dapp/dapp/contracts/Migrations.sol",
+      "absolutePath": "/home/q3k/Work/getline/getline/dapp/contracts/Migrations.sol",
       "exportedSymbols": {
         "Migrations": [
           58
@@ -855,16 +855,9 @@
     "4": {
       "events": {},
       "links": {},
-      "address": "0xd0dd1836311a6560417aab7216b5e75720063c07",
-      "updated_at": 1508322955470
-    },
-    "42": {
-      "events": {},
-      "links": {},
-      "address": "0xab894e368d0bfe27d525af1b8b9eb70c567b8a3f",
-      "updated_at": 1504652177220
+      "address": "0x094fcb549345bb934e257f5bbdd3f0fc77320d9c"
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2017-11-13T17:53:27.286Z"
+  "updatedAt": "2017-11-13T20:26:32.600Z"
 }
