@@ -16,6 +16,43 @@ export class Client {
 
     public TEST_TOKEN = "0x02c9ccaa1034a64e3a83df9ddce30e6d4bc40515";
 
+    private waitTxReceipt<T extends Web3.ContractInstance>
+                         (contract: T, resolve: (c: T)=>void, reject: (e: Error)=>void) {
+        let retries = 20;
+        let interval = setInterval(()=>{
+            console.log("getline.ts: checking for deployed contract " + contract.transactionHash + " ...");
+            retries -= 1;
+            if (retries <= 0) {
+                clearInterval(interval);
+                reject(new Error("Contract not deployed on time"));
+                return;
+            }
+
+            this.web3.eth.getTransactionReceipt(contract.transactionHash, (e, receipt)=>{
+                if (!receipt) {
+                    return;
+                }
+
+                this.web3.eth.getCode(receipt.contractAddress, (e, code)=>{
+                    if (!code) {
+                        return;
+                    }
+
+                    if (code.length > 3) {
+                        clearInterval(interval);
+
+                        contract.address = receipt.contractAddress;
+                        resolve(contract);
+                    } else {
+                        clearInterval(interval);
+
+                        reject(new Error("contract did not get stored"));
+                    }
+                });
+            });
+        }, 5000);
+    }
+
     private async deployContract<T extends Web3.ContractInstance>
                           (contractName: string, ...params: Array<any>): Promise<T> {
         let abi = await this.metabackend.getABI(contractName);
@@ -36,15 +73,15 @@ export class Client {
             console.log("getline.ts:    with parameters " + params);
             let instance: T = contractAny.new(...params, opts, (err, c: T) =>{
                 if (err) {
+                    console.log("getline.ts: deployment failed: " + err.stack);
                     reject(new Error("deployment failed: " + err));
                     return;
                 }
                 if (!c.address) {
                     console.log("getline.ts: deploying...");
+                    this.waitTxReceipt(c, (res: T) => { resolve(res) }, reject);
                     return;
                 }
-                console.log("getline.ts: deployed at " + c.address);
-                resolve(contractAny.at(c.address));
             });
         });
     }
