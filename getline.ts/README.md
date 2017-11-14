@@ -18,9 +18,8 @@ testnet** - this is by design until we go out of demo.
 Documentation
 -------------
 
-Documentation is available in the `doc/` directory.
+Documentation is available in the `doc/` directory or [online](https://getline-network.github.io/getline/getline.ts/doc/);
 
-TODO(q3k): Host this on github pages?
 
 Sample usage
 ------------
