@@ -6,7 +6,7 @@ import "../contracts/common/AccessControl.sol";
 import "../contracts/common/Math.sol";
 
 contract TestCommon {
-    function testAccessControl() {
+    function testAccessControl() public {
         AccessControl access = new AccessControl();
         Assert.equal(access.admins(this), true, "I should be an admin by default");
 
@@ -23,7 +23,7 @@ contract TestCommon {
         Assert.equal(access.managers(addresss2), false, "I should remove a manager");
     }
 
-    function testMath() {
+    function testMath() public {
         Assert.equal(Math.min(2, 6), 2, "The min function is not working");
         Assert.equal(Math.min(12, 6), 6, "The min function is not working");
     }

@@ -13,12 +13,12 @@ contract PrintableToken is BasicToken {
         uint256 decimalUnits,
         string tokenSymbol,
         uint256 howMuchToPrint
-    ) BasicToken(0, tokenName, decimalUnits, tokenSymbol)
+    ) public BasicToken(0, tokenName, decimalUnits, tokenSymbol)
     {
         printValue = howMuchToPrint;
     }
 
-    function print(address _who) {
+    function print(address _who) public {
         require(_who != 0x0);
         require(totalSupplyField + printValue >= totalSupplyField);
         require(balanceOfField[_who] + printValue >= balanceOfField[_who]);

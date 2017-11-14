@@ -17,29 +17,29 @@ contract AccessControl {
         _;
     }
 
-    function AccessControl() {
+    function AccessControl() public {
         admins[msg.sender] = true;
     }
 
-    function addAdmin(address newAdmin) adminOnly {
+    function addAdmin(address newAdmin) public adminOnly {
         if (managers[newAdmin] == true)
             removeManager(newAdmin);
             
         admins[newAdmin] = true;
     }
 
-    function addManager(address newManager) adminOnly {
+    function addManager(address newManager) public adminOnly {
         if (admins[newManager] == true)
             removeAdmin(newManager);
         
         managers[newManager] = true;
     }
 
-    function removeAdmin(address oldAdmin) adminOnly {
+    function removeAdmin(address oldAdmin) public adminOnly {
         delete admins[oldAdmin];
     }
 
-    function removeManager(address oldManager) adminOnly {
+    function removeManager(address oldManager) public adminOnly {
         delete managers[oldManager];
     }
 }

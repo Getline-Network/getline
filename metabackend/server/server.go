@@ -156,7 +156,7 @@ func (s *Server) GetLoans(ctx context.Context, req *pb.GetLoansRequest) (*pb.Get
 	}
 
 	cache := make([]*pb.LoanCache, len(loans))
-	errors := make(chan error, len(loans))
+	errors := make([]error, len(loans))
 	wg := sync.WaitGroup{}
 	for i, loan := range loans {
 		wg.Add(1)
@@ -165,7 +165,7 @@ func (s *Server) GetLoans(ctx context.Context, req *pb.GetLoansRequest) (*pb.Get
 
 			parameters, err := s.Model.GetLoanParameters(ctx, network.ID, *loan.DeployedAddress)
 			if err != nil {
-				errors <- err
+				errors[i] = fmt.Errorf("when getting loan %v: %v", loan.DeployedAddress.Hex(), err)
 				return
 			}
 			c := pb.LoanCache{
@@ -180,21 +180,25 @@ func (s *Server) GetLoans(ctx context.Context, req *pb.GetLoansRequest) (*pb.Get
 		}(&loan)
 	}
 	wg.Wait()
-	close(errors)
 
-	failed := false
-	for err := range errors {
+	for _, err := range errors {
+		if err == nil {
+			continue
+		}
 		glog.Error("Could not get loan parameters: %v", err)
-		failed = true
 	}
 
-	if failed {
-		return nil, fmt.Errorf("internal error")
+	cacheNoErrors := []*pb.LoanCache{}
+	for _, cacheElem := range cache {
+		if cacheElem == nil {
+			continue
+		}
+		cacheNoErrors = append(cacheNoErrors, cacheElem)
 	}
 
 	res := &pb.GetLoansResponse{
 		NetworkId: network.ID,
-		LoanCache: cache,
+		LoanCache: cacheNoErrors,
 	}
 	return res, nil
 }

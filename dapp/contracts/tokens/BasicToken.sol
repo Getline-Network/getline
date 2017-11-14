@@ -21,26 +21,27 @@ contract BasicToken is IToken {
         string tokenName,
         uint256 decimalUnits,
         string tokenSymbol
-        ) {
+        ) public
+    {
         totalSupplyField = initialSupply;                        // Update total supply
         name = tokenName;                                   // Set the name for display purposes
         symbol = tokenSymbol;                               // Set the symbol for display purposes
         decimals = decimalUnits;                            // Amount of decimals for display purposes
     }
 
-    function totalSupply() constant returns (uint) {
+    function totalSupply() constant public returns (uint) {
         return totalSupplyField;
     }
 
-    function balanceOf(address _owner) constant returns (uint256 balance) {
+    function balanceOf(address _owner) constant public returns (uint256 balance) {
         return balanceOfField[_owner];
     }
 
-    function allowance(address _owner, address _spender) constant returns (uint256 allowance) {
+    function allowance(address _owner, address _spender) constant public returns (uint256 _allowance) {
         return allowanceField[_owner][_spender];
     }
 
-    function transfer(address _to, uint256 _value) returns (bool success) {
+    function transfer(address _to, uint256 _value) public returns (bool success) {
         require(_to != 0x0);                               // Prevent transfer to 0x0 address. Use burn() instead
         require(balanceOfField[msg.sender] >= _value);           // Check if the sender has enough
         require(balanceOfField[_to] + _value >= balanceOfField[_to]); // Check for overflows
@@ -52,14 +53,14 @@ contract BasicToken is IToken {
     }
 
     /* Allow another contract to spend some tokens in your behalf */
-    function approve(address _spender, uint256 _value) returns (bool success) {
+    function approve(address _spender, uint256 _value) public returns (bool success) {
         allowanceField[msg.sender][_spender] = _value;
         Approval(msg.sender, _spender, _value);
         return true;
     }      
 
     /* A contract attempts to get the coins */
-    function transferFrom(address _from, address _to, uint256 _value) returns (bool success) {
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
         require(_to != 0x0);                                // Prevent transfer to 0x0 address. Use burn() instead
         require(balanceOfField[_from] >= _value);                 // Check if the sender has enough
         require(balanceOfField[_to] + _value >= balanceOfField[_to]);  // Check for overflows

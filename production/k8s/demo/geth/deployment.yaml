@@ -1,0 +1,40 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: demo-geth-deployment
+  labels:
+    app: geth
+    chain: rinkeby
+    stratum: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geth
+      chain: rinkeby
+      stratum: demo
+  template:
+    metadata:
+      labels:
+        app: geth
+        chain: rinkeby
+        stratum: demo
+    spec:
+      containers:
+        - name: geth
+          image: gcr.io/third-hope-184611/geth/rinkeby:1510257021
+          ports: 
+            - containerPort: 8545
+          volumeMounts:
+            - mountPath: /app/geth
+              name: geth-rinkeby-demo
+          resources:
+            requests:
+              memory: "1000Mi"
+            limits:
+              memory: "2500Mi"
+      volumes:
+        - name: geth-rinkeby-demo
+          gcePersistentDisk:
+            pdName: geth-rinkeby-demo
+            fsType: ext4

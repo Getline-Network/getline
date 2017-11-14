@@ -74,6 +74,7 @@ message LoanCache {
     LoanParameters parameters = 1;
     LoanState blockchain_state = 2;
     string short_id = 6;
+    string description = 7;
 
     enum DeploymentState {
         INVALID = 0;
