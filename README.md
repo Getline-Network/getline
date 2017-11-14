@@ -37,10 +37,17 @@ Otherwise, you are free to call smart contract methods and the metabackend via g
 Versioning
 ----------
 
-**As Getline is currently in proof-of-concept phase, we do not plan on keeping any stable API.**
+**As Getline is currently in proof-of-concept phase on Rinkeby, we do not plan on keeping any stable API before a mainnet release.**
 
 Once we reach version 1.0.0, we will provide API versioning at the following levels:
 
  - `getline.ts` - Forwards and backwards compatible API for all externel objects, semver major bump otherwise.
  - Smart contracts - Versioned by ABI, with all versions of smart contracts sources, bytecode and ABI definitions provided by the metabackend.
  - Protobufs - Forwards and backwards compatible wire format for all messages and RPC calls, semver major bump otherwise.
+
+Development
+-----------
+
+All development and issue tracking happens on this repository. Pull requests are welcome, but keep in mind that this is a very fast moving codebase.
+
+For dev chat, please join our [rocketchat](https://rocket.getline.in/) on #dev.
