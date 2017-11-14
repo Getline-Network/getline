@@ -1,0 +1,37 @@
+runtime: python27
+api_version: 1
+threadsafe: true
+
+automatic_scaling:
+  min_idle_instances: 1
+
+handlers:
+- url: /
+  static_files: dist/index.html
+  upload: dist/index.html
+
+- url: /(.*)
+  static_files: dist/\1
+  upload: dist/(.*)
+
+skip_files:
+- ^(.*/)?app\.yaml
+- ^(.*/)?app\.yml
+- ^(.*/)?#.*#
+- ^(.*/)?.*~
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?.*/RCS/.*
+- ^(.*/)?\..*
+- ^(.*/)?tests$
+- ^(.*/)?test$
+- ^test/(.*/)?
+- ^src/(.*/)?
+- ^COPYING.LESSER
+- ^README\..*
+- \.gitignore
+- ^\.git/.*
+- \.*\.lint$
+- ^fabfile\.py
+- ^testrunner\.py
+- ^grunt\.js
+- ^node_modules/(.*/)?
