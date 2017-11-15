@@ -68,7 +68,7 @@ export class Token extends Address {
      */
     public async balanceOf(address: Address): Promise<BigNumber> {
         let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
-        return token.call('balanceOf', address.ascii);
+        return token.call<BigNumber>('balanceOf', address.ascii);
     }
 
     /**
@@ -79,7 +79,7 @@ export class Token extends Address {
      */
     public async allowance(owner: Address, spender: Address): Promise<BigNumber> {
         let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
-        return token.call('allowance', owner.ascii, spender.ascii);
+        return token.call<BigNumber>('allowance', owner.ascii, spender.ascii);
     }
 
     /**
@@ -90,7 +90,7 @@ export class Token extends Address {
      */
     public async approve(spender: Address, value: BigNumber): Promise<void> {
         let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
-        return token.call('approve', spender.ascii, value);
+        return token.call<void>('approve', spender.ascii, value);
     }
 }
 
