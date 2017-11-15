@@ -53,6 +53,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import * as moment from 'moment';
 
 import PurpleButton from '../common/PurpleButton.vue';
 import Spinner from '../common/Spinner.vue';
@@ -80,13 +81,14 @@ const Component = Vue.extend({
     },
     requestLoan: async function requestLoan() {
       this.loading = true;
-      const daysToSeconds = seconds => seconds * 24 * 60 * 60;
-      const loan: Loan = await API.instance().addNewLoan(
+      const fundraisingEnd: moment.Moment = moment().add(7, 'days');
+      const paybackEnd: moment.Moment = moment().add(7 + this.paybackTime, 'days');
+      const loan: Loan = await API.instance().newLoan(
         this.description,
         this.amount,
         this.interestPermil,
-        daysToSeconds(7),
-        daysToSeconds(this.paybackTime),
+        fundraisingEnd,
+        paybackEnd
       );
       goToLoan.call(this, loan.shortId);
     },
@@ -115,6 +117,7 @@ export default Component;
     .rl-metamask { margin: 30px 100px 60px;
       .rl-metamask-text { display: flex; justify-content: center; font-size: 18px; font-weight: 300; line-height: 1.22; letter-spacing: -0.2px; color: var(--color-black-cod); text-align: center; }
       .rl-loader { display: none; }
+      .rl-request-button { max-width: 200px; margin: 20px auto; }
     }
     .rl-metamask.rl-loading {
       .rl-request-button { display: none; }
