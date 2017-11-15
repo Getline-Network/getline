@@ -105,25 +105,19 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_client_.client.html#test_token" class="tsd-kind-icon">TEST_<wbr>TOKEN</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_client_.client.html#contractdefinitions" class="tsd-kind-icon">contract<wbr>Definitions</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_client_.client.html#blockchain" class="tsd-kind-icon">blockchain</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_client_.client.html#metabackend" class="tsd-kind-icon">metabackend</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_client_.client.html#network" class="tsd-kind-icon">network</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_client_.client.html#web3" class="tsd-kind-icon">web3</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_client_.client.html#test_token" class="tsd-kind-icon">test_<wbr>token</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_client_.client.html#addnewloan" class="tsd-kind-icon">add<wbr>New<wbr>Loan</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_client_.client.html#blocktotime" class="tsd-kind-icon">block<wbr>ToTime</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private"><a href="_client_.client.html#deploycontract" class="tsd-kind-icon">deploy<wbr>Contract</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_client_.client.html#getcoinbase" class="tsd-kind-icon">get<wbr>Coinbase</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_client_.client.html#getcontractinstance" class="tsd-kind-icon">get<wbr>Contract<wbr>Instance</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_client_.client.html#getcurrentblock" class="tsd-kind-icon">get<wbr>Current<wbr>Block</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_client_.client.html#getloanbyshortid" class="tsd-kind-icon">get<wbr>Loan<wbr>ByShort<wbr>Id</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_client_.client.html#getloansbyowner" class="tsd-kind-icon">get<wbr>Loans<wbr>ByOwner</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private"><a href="_client_.client.html#waittxreceipt" class="tsd-kind-icon">wait<wbr>TxReceipt</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_client_.client.html#currentuser" class="tsd-kind-icon">current<wbr>User</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_client_.client.html#loan" class="tsd-kind-icon">loan</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_client_.client.html#loansbyowner" class="tsd-kind-icon">loans<wbr>ByOwner</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_client_.client.html#newloan" class="tsd-kind-icon">new<wbr>Loan</a></li>
 							</ul>
 						</section>
 					</div>
@@ -141,7 +135,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4357d06/getline.ts/src/client.ts#L148">client.ts:148</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L32">client.ts:32</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -177,28 +171,13 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="test_token" class="tsd-anchor"></a>
-					<h3>TEST_<wbr>TOKEN</h3>
-					<div class="tsd-signature tsd-kind-icon">TEST_<wbr>TOKEN<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;0x02c9ccaa1034a64e3a83df9ddce30e6d4bc40515&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4357d06/getline.ts/src/client.ts#L35">client.ts:35</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Token that is used for collateral and loans in the demo.</p>
-						</div>
-					</div>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="contractdefinitions" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> contract<wbr>Definitions</h3>
-					<div class="tsd-signature tsd-kind-icon">contract<wbr>Definitions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">pb.Contract</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
+					<a name="blockchain" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> blockchain</h3>
+					<div class="tsd-signature tsd-kind-icon">blockchain<span class="tsd-signature-symbol">:</span> <a href="_blockchain_.getlineblockchain.html" class="tsd-signature-type">GetlineBlockchain</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4357d06/getline.ts/src/client.ts#L30">client.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L27">client.ts:27</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -208,7 +187,7 @@
 					<div class="tsd-signature tsd-kind-icon">metabackend<span class="tsd-signature-symbol">:</span> <a href="_metabackend_.metabackendclient.html" class="tsd-signature-type">MetabackendClient</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4357d06/getline.ts/src/client.ts#L27">client.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L25">client.ts:25</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -218,34 +197,121 @@
 					<div class="tsd-signature tsd-kind-icon">network<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4357d06/getline.ts/src/client.ts#L28">client.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L26">client.ts:26</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="web3" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> web3</h3>
-					<div class="tsd-signature tsd-kind-icon">web3<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Web3</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="test_token" class="tsd-anchor"></a>
+					<h3>test_<wbr>token</h3>
+					<div class="tsd-signature tsd-kind-icon">test_<wbr>token<span class="tsd-signature-symbol">:</span> <a href="_common_.token.html" class="tsd-signature-type">Token</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4357d06/getline.ts/src/client.ts#L29">client.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L32">client.ts:32</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Token that is used for collateral and loans in the demo.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="addnewloan" class="tsd-anchor"></a>
-					<h3>add<wbr>New<wbr>Loan</h3>
+					<a name="currentuser" class="tsd-anchor"></a>
+					<h3>current<wbr>User</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>New<wbr>Loan<span class="tsd-signature-symbol">(</span>description<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, amount<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">BigNumber</span>, interestPermil<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, fundraisingDelta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, paybackDelta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_loan_.loan.html" class="tsd-signature-type">Loan</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">current<wbr>User<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_common_.address.html" class="tsd-signature-type">Address</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4357d06/getline.ts/src/client.ts#L232">client.ts:232</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L49">client.ts:49</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_common_.address.html" class="tsd-signature-type">Address</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="loan" class="tsd-anchor"></a>
+					<h3>loan</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">loan<span class="tsd-signature-symbol">(</span>shortId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_loan_.loan.html" class="tsd-signature-type">Loan</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L118">client.ts:118</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns loan identifier by a given short identifier.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>shortId: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Short identifier of loan (<code>shortId</code> member of a <code>Loan</code>
+										object).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_loan_.loan.html" class="tsd-signature-type">Loan</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Loan identifier by shortId.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="loansbyowner" class="tsd-anchor"></a>
+					<h3>loans<wbr>ByOwner</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">loans<wbr>ByOwner<span class="tsd-signature-symbol">(</span>owner<span class="tsd-signature-symbol">: </span><a href="_common_.address.html" class="tsd-signature-type">Address</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="_loan_.loan.html" class="tsd-signature-type">Loan</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L139">client.ts:139</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns all loans owned by a given address, regardless of their state.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>owner: <a href="_common_.address.html" class="tsd-signature-type">Address</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Ethereum address of owner/liege.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="_loan_.loan.html" class="tsd-signature-type">Loan</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Loans owned by <code>owner</code>.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="newloan" class="tsd-anchor"></a>
+					<h3>new<wbr>Loan</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new<wbr>Loan<span class="tsd-signature-symbol">(</span>description<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, amount<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">BigNumber</span>, interestPermil<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, fundraisingEnd<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Moment</span>, paybackEnd<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Moment</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_loan_.loan.html" class="tsd-signature-type">Loan</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L70">client.ts:70</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -277,360 +343,14 @@
 									</div>
 								</li>
 								<li>
-									<h5>fundraisingDelta: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Number of seconds from loan creation until
-										fundraising ends.</p>
-									</div>
+									<h5>fundraisingEnd: <span class="tsd-signature-type">Moment</span></h5>
 								</li>
 								<li>
-									<h5>paybackDelta: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Number of seconds from loan creation until loan
-											must be paid back. This cannot be earlier than
-										<code>fundraisingDelta</code>.</p>
-									</div>
+									<h5>paybackEnd: <span class="tsd-signature-type">Moment</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_loan_.loan.html" class="tsd-signature-type">Loan</a><span class="tsd-signature-symbol">&gt;</span></h4>
 							<p>Newly created loan.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="blocktotime" class="tsd-anchor"></a>
-					<h3>block<wbr>ToTime</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">block<wbr>ToTime<span class="tsd-signature-symbol">(</span>current<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">BigNumber</span>, block<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">BigNumber</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Moment</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4357d06/getline.ts/src/client.ts#L205">client.ts:205</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Converts a given block number (with current highest block number) to a
-									timestamp of when that block will occur.</p>
-								</div>
-								<p>This only really works in Rinkeby, and is only used with the current
-									smart contract code that is based on block numbers. This will be removed
-								in the future.</p>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>current: <span class="tsd-signature-type">BigNumber</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Current block number.</p>
-									</div>
-								</li>
-								<li>
-									<h5>block: <span class="tsd-signature-type">BigNumber</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Block number in the future that we want to get timestamp of.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Moment</span></h4>
-							<p>timestamp of <code>block</code>.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private">
-					<a name="deploycontract" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> deploy<wbr>Contract</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">deploy<wbr>Contract&lt;T&gt;<span class="tsd-signature-symbol">(</span>contractName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, <span class="tsd-signature-symbol">...</span>params<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4357d06/getline.ts/src/client.ts#L95">client.ts:95</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Deploys a Web3 contract loaded from the metabackend on the blockchain.</p>
-								</div>
-								<p>This will block until the contract is confirmed deployed.</p>
-							</div>
-							<h4 class="tsd-type-parameters-title">Type parameters</h4>
-							<ul class="tsd-type-parameters">
-								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Web3.ContractInstance</span></h4>
-									<div class="tsd-comment tsd-typography">
-										<p>Web3 contract instance type.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>contractName: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Name of the contract to load from the metabackend.</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>params: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Arguments passsed to the contract constructor.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Web3 contract object.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getcoinbase" class="tsd-anchor"></a>
-					<h3>get<wbr>Coinbase</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Coinbase<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4357d06/getline.ts/src/client.ts#L146">client.ts:146</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns coinbase of API client.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Ethereum address of coinbase.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-					<a name="getcontractinstance" class="tsd-anchor"></a>
-					<h3>get<wbr>Contract<wbr>Instance</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Contract<wbr>Instance&lt;T&gt;<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, address<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4357d06/getline.ts/src/client.ts#L135">client.ts:135</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns a metabackend contract as a Web3 contract object at a given address.</p>
-								</div>
-							</div>
-							<h4 class="tsd-type-parameters-title">Type parameters</h4>
-							<ul class="tsd-type-parameters">
-								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Web3.ContractInstance</span></h4>
-								</li>
-							</ul>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>name: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Name of the contract on the metabackend.</p>
-									</div>
-								</li>
-								<li>
-									<h5>address: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Address at which the contract runs.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Instantiated Web3 contract.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getcurrentblock" class="tsd-anchor"></a>
-					<h3>get<wbr>Current<wbr>Block</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Current<wbr>Block<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">BigNumber</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4357d06/getline.ts/src/client.ts#L180">client.ts:180</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns highest block number on blockchain.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">BigNumber</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Block number.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getloanbyshortid" class="tsd-anchor"></a>
-					<h3>get<wbr>Loan<wbr>ByShort<wbr>Id</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Loan<wbr>ByShort<wbr>Id<span class="tsd-signature-symbol">(</span>shortId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_loan_.loan.html" class="tsd-signature-type">Loan</a><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4357d06/getline.ts/src/client.ts#L276">client.ts:276</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns loan identifier by a given short identifier.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>shortId: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Short identifier of loan (<code>shortId</code> member of a <code>Loan</code>
-										object).</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_loan_.loan.html" class="tsd-signature-type">Loan</a><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Loan identifier by shortId.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getloansbyowner" class="tsd-anchor"></a>
-					<h3>get<wbr>Loans<wbr>ByOwner</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Loans<wbr>ByOwner<span class="tsd-signature-symbol">(</span>owner<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="_loan_.loan.html" class="tsd-signature-type">Loan</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4357d06/getline.ts/src/client.ts#L298">client.ts:298</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns all loans owned by a given address, regardless of their state.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>owner: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Ethereum address of owner/liege.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="_loan_.loan.html" class="tsd-signature-type">Loan</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Loans owned by <code>owner</code>.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private">
-					<a name="waittxreceipt" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> wait<wbr>TxReceipt</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">wait<wbr>TxReceipt&lt;T&gt;<span class="tsd-signature-symbol">(</span>contract<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, resolve<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span>, reject<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4357d06/getline.ts/src/client.ts#L50">client.ts:50</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Waits until a given Web3 contract is deployed on the blockchain.</p>
-								</div>
-								<p>This is a hack that had to be written for when web3.ether.contract.new
-									fails to run the creation callback for the second time. When we upgrade
-								to web3 1.0 or another library we should be able to get rid of this.</p>
-							</div>
-							<h4 class="tsd-type-parameters-title">Type parameters</h4>
-							<ul class="tsd-type-parameters">
-								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Web3.ContractInstance</span></h4>
-									<div class="tsd-comment tsd-typography">
-										<p>Web3 contract type.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>contract: <span class="tsd-signature-type">T</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Web3 contract object to wait on.</p>
-									</div>
-								</li>
-								<li>
-									<h5>resolve: <span class="tsd-signature-type">function</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Callback when contract appears on blockchain.</p>
-									</div>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>c<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-											</ul>
-											<ul class="tsd-descriptions">
-												<li class="tsd-description">
-													<h4 class="tsd-parameters-title">Parameters</h4>
-													<ul class="tsd-parameters">
-														<li>
-															<h5>c: <span class="tsd-signature-type">T</span></h5>
-														</li>
-													</ul>
-													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-												</li>
-											</ul>
-										</li>
-									</ul>
-								</li>
-								<li>
-									<h5>reject: <span class="tsd-signature-type">function</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Callback when contract fails to appear on blockchain
-										within 200 seconds.</p>
-									</div>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>e<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-											</ul>
-											<ul class="tsd-descriptions">
-												<li class="tsd-description">
-													<h4 class="tsd-parameters-title">Parameters</h4>
-													<ul class="tsd-parameters">
-														<li>
-															<h5>e: <span class="tsd-signature-type">Error</span></h5>
-														</li>
-													</ul>
-													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-												</li>
-											</ul>
-										</li>
-									</ul>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -642,8 +362,17 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_blockchain_.html">"blockchain"</a>
+					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_client_.html">"client"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_common_.html">"common"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_example_.html">"example"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_generated_metabackend_pb_service_.html">"generated/metabackend_<wbr>pb_<wbr>service"</a>
@@ -669,11 +398,8 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="_client_.client.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_client_.client.html#test_token" class="tsd-kind-icon">TEST_<wbr>TOKEN</a>
-							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="_client_.client.html#contractdefinitions" class="tsd-kind-icon">contract<wbr>Definitions</a>
+								<a href="_client_.client.html#blockchain" class="tsd-kind-icon">blockchain</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_client_.client.html#metabackend" class="tsd-kind-icon">metabackend</a>
@@ -681,35 +407,20 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_client_.client.html#network" class="tsd-kind-icon">network</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="_client_.client.html#web3" class="tsd-kind-icon">web3</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_client_.client.html#test_token" class="tsd-kind-icon">test_<wbr>token</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_client_.client.html#addnewloan" class="tsd-kind-icon">add<wbr>New<wbr>Loan</a>
+								<a href="_client_.client.html#currentuser" class="tsd-kind-icon">current<wbr>User</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_client_.client.html#blocktotime" class="tsd-kind-icon">block<wbr>ToTime</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private">
-								<a href="_client_.client.html#deploycontract" class="tsd-kind-icon">deploy<wbr>Contract</a>
+								<a href="_client_.client.html#loan" class="tsd-kind-icon">loan</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_client_.client.html#getcoinbase" class="tsd-kind-icon">get<wbr>Coinbase</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-								<a href="_client_.client.html#getcontractinstance" class="tsd-kind-icon">get<wbr>Contract<wbr>Instance</a>
+								<a href="_client_.client.html#loansbyowner" class="tsd-kind-icon">loans<wbr>ByOwner</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_client_.client.html#getcurrentblock" class="tsd-kind-icon">get<wbr>Current<wbr>Block</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_client_.client.html#getloanbyshortid" class="tsd-kind-icon">get<wbr>Loan<wbr>ByShort<wbr>Id</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_client_.client.html#getloansbyowner" class="tsd-kind-icon">get<wbr>Loans<wbr>ByOwner</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private">
-								<a href="_client_.client.html#waittxreceipt" class="tsd-kind-icon">wait<wbr>TxReceipt</a>
+								<a href="_client_.client.html#newloan" class="tsd-kind-icon">new<wbr>Loan</a>
 							</li>
 						</ul>
 					</li>

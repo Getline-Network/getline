@@ -24,22 +24,4 @@ Documentation is available in the `doc/` directory or [online](https://getline-n
 Sample usage
 ------------
 
-    import { Client, Loan, LoanState } from 'getline.ts';
-    let main = async() => {
-        let c = new Client("https://0.api.getline.in", "4");
-        let loans = await c.getLoansByOwner(await c.getCoinbase());
-        console.log("My loans:");
-        loans.forEach(async (loan: Loan)=>{
-            await loan.updateStateFromBlockchain();
-            console.log("Loan " + loan.shortId);
-            console.log("  fundraising deadline: " + loan.parameters.fundraisingDeadline.format());
-            console.log("  payback deadline:     " + loan.parameters.paybackDeadline.format());
-            console.log("  state:                " + LoanState[loan.blockchainState.loanState]);
-            console.log("  gathered funds:       " + loan.blockchainState.amountGathered.toString());
-            console.log("\n");
-        });
-    }
-    main().catch((err)=>{
-        console.log(err.stack);
-    });
-
+See `src/example.ts`.

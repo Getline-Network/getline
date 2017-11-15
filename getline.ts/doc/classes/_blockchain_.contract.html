@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IndexLoan | getline.ts</title>
+	<title>Contract | getline.ts</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,27 +56,31 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_generated_metabackend_pb_service_.html">&quot;generated/metabackend_pb_service&quot;</a>
+					<a href="../modules/_blockchain_.html">&quot;blockchain&quot;</a>
 				</li>
 				<li>
-					<a href="_generated_metabackend_pb_service_.metabackend.html">Metabackend</a>
-				</li>
-				<li>
-					<a href="_generated_metabackend_pb_service_.metabackend.indexloan.html">IndexLoan</a>
+					<a href="_blockchain_.contract.html">Contract</a>
 				</li>
 			</ul>
-			<h1>Class IndexLoan</h1>
+			<h1>Class Contract</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>A contract deployed on a blockchain.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IndexLoan</span>
+						<span class="target">Contract</span>
 					</li>
 				</ul>
 			</section>
@@ -85,80 +89,139 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_blockchain_.contract.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_generated_metabackend_pb_service_.metabackend.indexloan.html#methodname" class="tsd-kind-icon">method<wbr>Name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_generated_metabackend_pb_service_.metabackend.indexloan.html#requeststream" class="tsd-kind-icon">request<wbr>Stream</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_generated_metabackend_pb_service_.metabackend.indexloan.html#requesttype" class="tsd-kind-icon">request<wbr>Type</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_generated_metabackend_pb_service_.metabackend.indexloan.html#responsestream" class="tsd-kind-icon">response<wbr>Stream</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_generated_metabackend_pb_service_.metabackend.indexloan.html#responsetype" class="tsd-kind-icon">response<wbr>Type</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_generated_metabackend_pb_service_.metabackend.indexloan.html#service" class="tsd-kind-icon">service</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_blockchain_.contract.html#address" class="tsd-kind-icon">address</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_blockchain_.contract.html#blockchain" class="tsd-kind-icon">blockchain</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_blockchain_.contract.html#instance" class="tsd-kind-icon">instance</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_blockchain_.contract.html#call" class="tsd-kind-icon">call</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Contract<span class="tsd-signature-symbol">(</span>blockchain<span class="tsd-signature-symbol">: </span><a href="../interfaces/_blockchain_.blockchain.html" class="tsd-signature-type">Blockchain</a>, instance<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Web3.ContractInstance</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_blockchain_.contract.html" class="tsd-signature-type">Contract</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/blockchain.ts#L58">blockchain.ts:58</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>blockchain: <a href="../interfaces/_blockchain_.blockchain.html" class="tsd-signature-type">Blockchain</a></h5>
+								</li>
+								<li>
+									<h5>instance: <span class="tsd-signature-type">Web3.ContractInstance</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_blockchain_.contract.html" class="tsd-signature-type">Contract</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
-					<a name="methodname" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> method<wbr>Name</h3>
-					<div class="tsd-signature tsd-kind-icon">method<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"IndexLoan"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;IndexLoan&quot;</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="address" class="tsd-anchor"></a>
+					<h3>address</h3>
+					<div class="tsd-signature tsd-kind-icon">address<span class="tsd-signature-symbol">:</span> <a href="_common_.address.html" class="tsd-signature-type">Address</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in generated/metabackend_pb_service.ts:26</li>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/blockchain.ts#L53">blockchain.ts:53</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Address of the contract on the blockchain.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="blockchain" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> blockchain</h3>
+					<div class="tsd-signature tsd-kind-icon">blockchain<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_blockchain_.blockchain.html" class="tsd-signature-type">Blockchain</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/blockchain.ts#L57">blockchain.ts:57</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Blockchain on which the contract is located.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="instance" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> instance</h3>
+					<div class="tsd-signature tsd-kind-icon">instance<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Web3.ContractInstance</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/blockchain.ts#L58">blockchain.ts:58</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
-					<a name="requeststream" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> request<wbr>Stream</h3>
-					<div class="tsd-signature tsd-kind-icon">request<wbr>Stream<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in generated/metabackend_pb_service.ts:28</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
-					<a name="requesttype" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> request<wbr>Type</h3>
-					<div class="tsd-signature tsd-kind-icon">request<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IndexLoanRequest</span><span class="tsd-signature-symbol"> =&nbsp;metabackend_pb.IndexLoanRequest</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in generated/metabackend_pb_service.ts:30</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
-					<a name="responsestream" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> response<wbr>Stream</h3>
-					<div class="tsd-signature tsd-kind-icon">response<wbr>Stream<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in generated/metabackend_pb_service.ts:29</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
-					<a name="responsetype" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> response<wbr>Type</h3>
-					<div class="tsd-signature tsd-kind-icon">response<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IndexLoanResponse</span><span class="tsd-signature-symbol"> =&nbsp;metabackend_pb.IndexLoanResponse</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in generated/metabackend_pb_service.ts:31</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
-					<a name="service" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> service</h3>
-					<div class="tsd-signature tsd-kind-icon">service<span class="tsd-signature-symbol">:</span> <a href="_generated_metabackend_pb_service_.metabackend.html" class="tsd-signature-type">Metabackend</a><span class="tsd-signature-symbol"> =&nbsp;Metabackend</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in generated/metabackend_pb_service.ts:27</li>
-						</ul>
-					</aside>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="call" class="tsd-anchor"></a>
+					<h3>call</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">call<span class="tsd-signature-symbol">(</span>methodName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, <span class="tsd-signature-symbol">...</span>params<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/blockchain.ts#L72">blockchain.ts:72</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Call a contract method.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>methodName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Name of method to call.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>params: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Arguments to pass to method.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Result of call.</p>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -168,7 +231,7 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_blockchain_.html">"blockchain"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -180,7 +243,7 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_example_.html">"example"</a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_generated_metabackend_pb_service_.html">"generated/metabackend_<wbr>pb_<wbr>service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -199,44 +262,33 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_generated_metabackend_pb_service_.metabackend.html" class="tsd-kind-icon">Metabackend</a>
+						<a href="_blockchain_.contract.html" class="tsd-kind-icon">Contract</a>
 						<ul>
-							<li class=" tsd-kind-class tsd-parent-kind-class">
-								<a href="_generated_metabackend_pb_service_.metabackend.getdeployment.html" class="tsd-kind-icon">Get<wbr>Deployment</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="_blockchain_.contract.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-class tsd-parent-kind-class">
-								<a href="_generated_metabackend_pb_service_.metabackend.getloans.html" class="tsd-kind-icon">Get<wbr>Loans</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_blockchain_.contract.html#address" class="tsd-kind-icon">address</a>
 							</li>
-							<li class="current tsd-kind-class tsd-parent-kind-class">
-								<a href="_generated_metabackend_pb_service_.metabackend.indexloan.html" class="tsd-kind-icon">Index<wbr>Loan</a>
-								<ul>
-									<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
-										<a href="_generated_metabackend_pb_service_.metabackend.indexloan.html#methodname" class="tsd-kind-icon">method<wbr>Name</a>
-									</li>
-									<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
-										<a href="_generated_metabackend_pb_service_.metabackend.indexloan.html#requeststream" class="tsd-kind-icon">request<wbr>Stream</a>
-									</li>
-									<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
-										<a href="_generated_metabackend_pb_service_.metabackend.indexloan.html#requesttype" class="tsd-kind-icon">request<wbr>Type</a>
-									</li>
-									<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
-										<a href="_generated_metabackend_pb_service_.metabackend.indexloan.html#responsestream" class="tsd-kind-icon">response<wbr>Stream</a>
-									</li>
-									<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
-										<a href="_generated_metabackend_pb_service_.metabackend.indexloan.html#responsetype" class="tsd-kind-icon">response<wbr>Type</a>
-									</li>
-									<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
-										<a href="_generated_metabackend_pb_service_.metabackend.indexloan.html#service" class="tsd-kind-icon">service</a>
-									</li>
-								</ul>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_blockchain_.contract.html#blockchain" class="tsd-kind-icon">blockchain</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
-								<a href="_generated_metabackend_pb_service_.metabackend.html#servicename" class="tsd-kind-icon">service<wbr>Name</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_blockchain_.contract.html#instance" class="tsd-kind-icon">instance</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_blockchain_.contract.html#call" class="tsd-kind-icon">call</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_blockchain_.getlineblockchain.html" class="tsd-kind-icon">Getline<wbr>Blockchain</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/_blockchain_.blockchain.html" class="tsd-kind-icon">Blockchain</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
