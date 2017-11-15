@@ -1,5 +1,6 @@
 import {BigNumber} from 'bignumber.js';
 import * as moment from 'moment';
+import * as Web3 from 'web3';
 
 import {MetabackendClient, MetabackendService, pb} from './metabackend';
 import {GetlineBlockchain, Blockchain} from './blockchain';
@@ -29,7 +30,7 @@ export class Client {
     /**
      * Token that is used for collateral and loans in the demo.
      */
-    public test_token: Token;
+    public readonly test_token: Token;
 
     /**
      * Creates a new Getline client.
@@ -38,11 +39,14 @@ export class Client {
      *                    `https://0.api.getline.in`.
      * @param network Network identifier. Currently only `"4"` (Rinkeby) is
      *                supported.
+     * @param provider Web3 provider to use. If not given, the client will try
+     *                 to find an injected one from Metamask. Otherwise, it
+     *                 will fall back to http://localhost:8545/.
      */
-    constructor(metabackend: string, network: string) {
+    constructor(metabackend: string, network: string, provider?: Web3.Provider) {
         this.metabackend = new MetabackendClient(metabackend, network);
         this.network = network;
-        this.blockchain = new GetlineBlockchain(this.metabackend, network);
+        this.blockchain = new GetlineBlockchain(this.metabackend, network, provider);
         this.test_token = new Token(this.blockchain, "0x02c9ccaa1034a64e3a83df9ddce30e6d4bc40515");
     }
 

@@ -50,7 +50,7 @@ export class Contract {
     /**
      * Address of the contract on the blockchain.
      */
-    public address: Address
+    public readonly address: Address
     /**
      * Blockchain on which the contract is located.
      */
@@ -96,17 +96,22 @@ export class GetlineBlockchain {
     private web3: Web3;
     private contractDefinitions: Array<pb.Contract> | undefined;
 
-    constructor(metabackend: MetabackendClient, network: string) {
+    constructor(metabackend: MetabackendClient, network: string, provider: Web3.Provider | undefined) {
         this.metabackend = metabackend;
         this.network = network;
 
-        let provider = new Web3.providers.HttpProvider("http://localhost:8545")
-        if (typeof window !== 'undefined' && typeof window['web3'] !== 'undefined') {
-            console.log("getline.ts: using injected web3")
-            provider = window['web3'].currentProvider;
+        if (provider == undefined) {
+            if (typeof window !== 'undefined' && typeof window['web3'] !== 'undefined') {
+                console.log("getline.ts: using injected web3")
+                provider = window['web3'].currentProvider;
+            } else {
+                console.log("getline.ts: connecting to node running on localhost")
+                provider = new Web3.providers.HttpProvider("http://localhost:8545")
+            }
         } else {
-            console.log("getline.ts: connecting to node running on localhost")
+            console.log("getline.ts: using user-injected provider")
         }
+
         this.web3 = new Web3(provider);
         if (this.web3.version.network != this.network) {
             throw new Error("web3 is connected to wrong network")
@@ -179,7 +184,7 @@ export class GetlineBlockchain {
             let confirmed = false;
             let instance = contractAny.new(...params, opts, (err, c) =>{
                 if (err) {
-                    console.log("getline.ts: deployment failed: " + err.stack);
+                    console.error("getline.ts: deployment failed: " + err.stack);
                     reject(new Error("deployment failed: " + err));
                     return;
                 }

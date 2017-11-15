@@ -13,7 +13,7 @@ export const LOAN_CONTRACT = 'Loan';
  */
 export class Address {
     protected blockchain: Blockchain;
-    public ascii: string;
+    public readonly ascii: string;
 
     constructor(blockchain: Blockchain, ascii: string) {
         this.blockchain = blockchain;
