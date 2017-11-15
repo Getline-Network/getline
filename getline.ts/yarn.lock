@@ -8,6 +8,10 @@
   dependencies:
     "@types/node" "*"
 
+"@types/google-protobuf@^3.2.5":
+  version "3.2.7"
+  resolved "https://registry.yarnpkg.com/@types/google-protobuf/-/google-protobuf-3.2.7.tgz#9576ed5dd62cdb1c9f952522028a03b7cb2b69b5"
+
 "@types/handlebars@4.0.31":
   version "4.0.31"
   resolved "https://registry.yarnpkg.com/@types/handlebars/-/handlebars-4.0.31.tgz#a7fba66fafe42713aee88eeca8db91192efe6e72"
@@ -3629,9 +3633,9 @@ wcwidth@^1.0.0:
   dependencies:
     defaults "^1.0.3"
 
-web3-typescript-typings@^0.7.1:
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/web3-typescript-typings/-/web3-typescript-typings-0.7.1.tgz#4b1145b9fd7e80292c2ab6b75e2359cf95f0efe1"
+web3-typescript-typings@^0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/web3-typescript-typings/-/web3-typescript-typings-0.7.2.tgz#5312bb786936a9c91381eee7af3d02ac21cf13b3"
   dependencies:
     bignumber.js "^4.0.2"
 

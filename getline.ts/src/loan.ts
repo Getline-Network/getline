@@ -126,18 +126,25 @@ export class Loan {
     public async loadFromProto(proto: pb.LoanCache) {
         this.shortId = proto.getShortId();
         this.description = proto.getDescription();
-        this.address = new Address(this.blockchain, proto.getDeploymentAddress().getAscii());
-        this.owner = new Address(this.blockchain, proto.getOwner().getAscii());
+
+        if (!proto.hasDeploymentAddress()) throw new Error("invalid proto: missing deployment address");
+        if (!proto.hasOwner()) throw new Error("invalid proto: missing deployment address");
+        if (!proto.hasParameters()) throw new Error("invalid proto: missing parameters");
+        if (!proto.getParameters()!.hasCollateralToken()) throw new Error("invalid proto: missing collateral token");
+        if (!proto.getParameters()!.hasLoanToken()) throw new Error("invalid proto: missing loan token");
+
+        this.address = new Address(this.blockchain, proto.getDeploymentAddress()!.getAscii());
+        this.owner = new Address(this.blockchain, proto.getOwner()!.getAscii());
 
         let currentBlock = await this.blockchain.currentBlock();
         let blockToTime = (count: string)=>{
             return this.blockchain.blockToTime(currentBlock, new BigNumber(count));
         }
 
-        let params = proto.getParameters();
+        let params = proto.getParameters()!;
         this.parameters = {
-            collateralToken: new Token(this.blockchain, params.getCollateralToken().getAscii()),
-            loanToken: new Token(this.blockchain, params.getLoanToken().getAscii()),
+            collateralToken: new Token(this.blockchain, params.getCollateralToken()!.getAscii()),
+            loanToken: new Token(this.blockchain, params.getLoanToken()!.getAscii()),
             fundraisingDeadline: blockToTime(params.getFundraisingBlocksCount()),
             paybackDeadline: blockToTime(params.getPaybackBlocksCount()),
             amountWanted: new BigNumber(params.getAmountWanted())
@@ -151,11 +158,11 @@ export class Loan {
      */
     public async updateStateFromBlockchain(): Promise<void> {
         this.blockchainState = {
-            loanState: (await this.contract.call('currentState')).toNumber(),
-            amountGathered: await this.contract.call('amountGathered'),
-            fundraising: await this.contract.call('isFundraising'),
-            paidback: await this.contract.call('isPaidback'),
-            defaulted: await this.contract.call('isDefaulted'),
+            loanState: (await this.contract.call<BigNumber>('currentState')).toNumber(),
+            amountGathered: await this.contract.call<BigNumber>('amountGathered'),
+            fundraising: await this.contract.call<boolean>('isFundraising'),
+            paidback: await this.contract.call<boolean>('isPaidback'),
+            defaulted: await this.contract.call<boolean>('isDefaulted'),
         }
     }
 
