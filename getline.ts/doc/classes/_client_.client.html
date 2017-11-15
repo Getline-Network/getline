@@ -129,13 +129,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Client<span class="tsd-signature-symbol">(</span>metabackend<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, network<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_client_.client.html" class="tsd-signature-type">Client</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Client<span class="tsd-signature-symbol">(</span>metabackend<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, network<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, provider<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Web3.Provider</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_client_.client.html" class="tsd-signature-type">Client</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L32">client.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/client.ts#L33">client.ts:33</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -163,6 +163,16 @@
 										</div>
 									</div>
 								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> provider: <span class="tsd-signature-type">Web3.Provider</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Web3 provider to use. If not given, the client will try
+												to find an injected one from Metamask. Otherwise, it
+											will fall back to <a href="http://localhost:8545/">http://localhost:8545/</a>.</p>
+										</div>
+									</div>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_client_.client.html" class="tsd-signature-type">Client</a></h4>
 						</li>
@@ -177,7 +187,7 @@
 					<div class="tsd-signature tsd-kind-icon">blockchain<span class="tsd-signature-symbol">:</span> <a href="_blockchain_.getlineblockchain.html" class="tsd-signature-type">GetlineBlockchain</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L27">client.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/client.ts#L28">client.ts:28</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -187,7 +197,7 @@
 					<div class="tsd-signature tsd-kind-icon">metabackend<span class="tsd-signature-symbol">:</span> <a href="_metabackend_.metabackendclient.html" class="tsd-signature-type">MetabackendClient</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L25">client.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/client.ts#L26">client.ts:26</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -197,7 +207,7 @@
 					<div class="tsd-signature tsd-kind-icon">network<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L26">client.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/client.ts#L27">client.ts:27</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -207,7 +217,7 @@
 					<div class="tsd-signature tsd-kind-icon">test_<wbr>token<span class="tsd-signature-symbol">:</span> <a href="_common_.token.html" class="tsd-signature-type">Token</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L32">client.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/client.ts#L33">client.ts:33</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -229,7 +239,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L49">client.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/client.ts#L53">client.ts:53</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_common_.address.html" class="tsd-signature-type">Address</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -246,7 +256,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L118">client.ts:118</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/client.ts#L122">client.ts:122</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -279,7 +289,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L139">client.ts:139</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/client.ts#L143">client.ts:143</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -311,7 +321,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/8eee23f/getline.ts/src/client.ts#L70">client.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/client.ts#L74">client.ts:74</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
