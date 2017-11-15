@@ -7,7 +7,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import API from './api';
-import { Client } from '../../getline.ts';
+
 import { VueConstructor } from 'vue/types/vue';
 import registerPurpleTheme from './theme';
 
@@ -16,9 +16,7 @@ Vue.use(VueMaterial.MdIcon);
 
 setTimeout(async () => {
   // setTimeout because we are waiting for metamask extenion to inject the web3 object
-  API.init(Client);
-  // const myAddress = window.web3.eth.accounts[0];
-  // console.log(await API.instance().getLoansByOwner(myAddress));  // eslint-disable-line
+  API.init();
 });
 
 registerPurpleTheme(Vue);
