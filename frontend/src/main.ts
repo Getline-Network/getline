@@ -4,20 +4,25 @@ import 'vue-material/dist/vue-material.css';
 import VueMaterial from 'vue-material';
 
 import Vue from 'vue';
-import App from './App';
+import App from './App.vue';
 import router from './router';
+import API from './api';
+
+import { VueConstructor } from 'vue/types/vue';
+import registerPurpleTheme from './theme';
 
 Vue.use(VueMaterial);
 Vue.use(VueMaterial.MdIcon);
 
-/* Register default purple color */
-Vue.material.registerPalette('app-color-pallete', {
-  500: '#7249f7',
-  darkText: [500],
+setTimeout(async () => {
+  // setTimeout because we are waiting for metamask extenion to inject the web3 object
+  API.init();
 });
-Vue.material.registerTheme('default', { primary: 'app-color-pallete' });
+
+registerPurpleTheme(Vue);
 
 Vue.config.productionTip = false;
+
 
 /* eslint-disable no-new */
 new Vue({

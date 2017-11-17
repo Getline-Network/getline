@@ -61,6 +61,10 @@ export class Address {
  * Ethereum ERC-20 compatible token.
  */
 export class Token extends Address {
+    private name_: string | undefined;
+    private symbol_: string | undefined;
+    private decimals_: number | undefined;
+
     /**
      * Cache for contract properties.
      */
