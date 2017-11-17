@@ -4,10 +4,12 @@
     "target": "es2015",
     "declaration": false,
     "outDir": "./dist",
-    "allowJs": true
+    "allowJs": true,
+    "strict": true
   },
   "include": [
     "src/**/*",
+    "typings/**/*",
     "./node_modules/web3-typescript-typings/index.d.ts"
   ]
 }

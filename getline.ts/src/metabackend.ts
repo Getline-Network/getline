@@ -49,7 +49,7 @@ export class MetabackendClient {
             grpc.invoke(method, {
                 request: req,
                 host: this.metabackendHost,
-                onMessage: resolve,
+                onMessage: (res: TRes) => { resolve(res); },
                 transport: transport,
                 onEnd: (code: Code, msg: string | undefined, trailers: Metadata) => {
                     if (code != Code.OK) {
@@ -104,7 +104,7 @@ export class MetabackendClient {
         if (!pbContract.hasAbi()) {
             throw new Error("getline.ts: contract " + name + " has no ABI on metabackend");
         }
-        let json = pbContract.getAbi().getJson_asU8();
+        let json = pbContract.getAbi()!.getJson_asU8();
         let jsonString = new encoding.TextDecoder("utf-8").decode(json);
         return JSON.parse(jsonString);
     }

@@ -13,16 +13,17 @@
     "typedoc": "^0.9.0",
     "typescript": "^2.6.1",
     "typings": "^2.1.1",
-    "web3-typescript-typings": "^0.7.1",
+    "web3-typescript-typings": "^0.7.2",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4"
   },
   "scripts": {
-    "doc": "typedoc -out doc/ --ignoreCompilerErrors src",
+    "doc": "typedoc -out doc/ src typings node_modules/web3-typescript-typings/index.d.ts",
     "generate": "protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:src/generated --ts_out=service=true:src/generated -I ../pb/ ../pb/*.proto",
     "tsc": "tsc"
   },
   "dependencies": {
+    "@types/google-protobuf": "^3.2.5",
     "async-mutex": "^0.1.3",
     "bignumber": "^1.1.0",
     "google-protobuf": "^3.4.0",

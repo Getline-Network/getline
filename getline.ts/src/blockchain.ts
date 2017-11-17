@@ -69,13 +69,13 @@ export class Contract {
      * @param params Arguments to pass to method.
      * @returns Result of call.
      */
-    public async call(methodName: string, ...params: Array<any>): Promise<any> {
+    public async call<T>(methodName: string, ...params: Array<any>): Promise<T> {
         let method: any = this.instance[methodName];
-        return new Promise<any>((resolve, reject)=>{
+        return new Promise<T>((resolve, reject)=>{
             let opts = {
                 gas: 1000000,
             }
-            method(...params, opts, (err, object)=>{
+            method(...params, opts, (err: Error, object: T)=>{
                 if (err != undefined) {
                     reject(err);
                     return;
@@ -84,6 +84,12 @@ export class Contract {
             });
         });
     }
+}
+
+// TypeScript doesn't seem to have an index method on window - let's make our
+// own interface for that.
+interface WindowIndexable {
+    [key: string]: any;
 }
 
 /**
@@ -101,9 +107,9 @@ export class GetlineBlockchain {
         this.network = network;
 
         if (provider == undefined) {
-            if (typeof window !== 'undefined' && typeof window['web3'] !== 'undefined') {
+            if (typeof window != "undefined" && (<WindowIndexable>window)['web3'] != undefined) {
                 console.log("getline.ts: using injected web3")
-                provider = window['web3'].currentProvider;
+                provider = (<WindowIndexable>window)['web3'].currentProvider;
             } else {
                 console.log("getline.ts: connecting to node running on localhost")
                 provider = new Web3.providers.HttpProvider("http://localhost:8545")
@@ -146,13 +152,14 @@ export class GetlineBlockchain {
                     if (!receipt) {
                         return;
                     }
-                    this.web3.eth.getCode(receipt.contractAddress, (e, code)=>{
+                    let address = <string>receipt.contractAddress;
+                    this.web3.eth.getCode(address, (e, code)=>{
                         if (!code) {
                             return;
                         }
                         if (code.length > 3) {
                             clearInterval(interval);
-                            resolve(new Address(this, receipt.contractAddress));
+                            resolve(new Address(this, address));
                         } else {
                             clearInterval(interval);
                             reject(new Error("contract did not get stored"));
@@ -182,7 +189,7 @@ export class GetlineBlockchain {
             console.log("getline.ts:    with parameters " + params);
 
             let confirmed = false;
-            let instance = contractAny.new(...params, opts, (err, c) =>{
+            let instance = contractAny.new(...params, opts, (err: Error, c: Web3.ContractInstance) =>{
                 if (err) {
                     console.error("getline.ts: deployment failed: " + err.stack);
                     reject(new Error("deployment failed: " + err));
