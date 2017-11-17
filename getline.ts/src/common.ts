@@ -61,6 +61,10 @@ export class Address {
  * Ethereum ERC-20 compatible token.
  */
 export class Token extends Address {
+    private name_: string | undefined;
+    private symbol_: string | undefined;
+    private decimals_: number | undefined;
+
     /**
      * Returns this token's balance of an address.
      * @param address Address of which balance to get.
@@ -91,6 +95,72 @@ export class Token extends Address {
     public async approve(spender: Address, value: BigNumber): Promise<void> {
         let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
         return token.call<void>('approve', spender.ascii, value);
+    }
+
+    /**
+     * Returns this token's symbol.
+     * @returns Token symbol.
+     */
+    public async symbol(): Promise<string> {
+        if (this.symbol_ != undefined) {
+            return this.symbol_;
+        }
+        let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
+        this.symbol_ = await token.call<string>('symbol');
+        return this.symbol_;
+    }
+
+    /**
+     * Returns this token's name.
+     * @returns Token name.
+     */
+    public async name(): Promise<string> {
+        if (this.name_ != undefined) {
+            return this.name_;
+        }
+        let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
+        this.name_ = await token.call<string>('name');
+        return this.name_;
+    }
+
+    /**
+     * Returns this token's decimal places count.
+     * @returns Decimal places of token.
+     */
+    public async decimals(): Promise<number> {
+        if (this.decimals_ != undefined) {
+            return this.decimals_;
+        }
+        let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
+        // ERC20 dictates uint8 as decimals, but we (seemingly as a bug)
+        // implement it as uint256. Let's convert it to a JS number as a quick
+        // fix. In the long term, we need to fix our smart contracts.
+        // TODO(q3k): Fix the smart contract and this method.
+        let decimals = await token.call<BigNumber>('decimals');
+        this.decimals_ = decimals.toNumber();
+        return this.decimals_;
+    }
+
+    /**
+     * Converts a decimal representation of the token into the internal integer
+     * representation.
+     * @param human Token amount with decimal point.
+     * @returns Internal integer representation.
+     */
+    public async integerize(human: BigNumber): Promise<BigNumber> {
+        let decimals = await this.decimals()
+        return human.shift(decimals);
+    }
+
+    /**
+     * Converts an integer representation of the tokan into a human-friendly
+     * decimal point representation.
+     * @param internal Token amount as integer.
+     * @returns Human-readable decimal point representation.
+     */
+    public async humanize(internal: BigNumber): Promise<BigNumber> {
+        let decimals = await this.decimals()
+        return internal.shift(-decimals);
     }
 }
 
