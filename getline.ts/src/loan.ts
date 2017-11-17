@@ -59,6 +59,10 @@ export class Loan {
          * Amount of loan token wanted.
          */
         amountWanted: BigNumber
+        /**
+         * Interest of loan, in permil.
+         */
+        interestPermil: number
     }
     /**
      * A short identifier that is used to lookup the loan in the Getline
@@ -147,7 +151,8 @@ export class Loan {
             loanToken: new Token(this.blockchain, params.getLoanToken()!.getAscii()),
             fundraisingDeadline: blockToTime(params.getFundraisingBlocksCount()),
             paybackDeadline: blockToTime(params.getPaybackBlocksCount()),
-            amountWanted: new BigNumber(params.getAmountWanted())
+            amountWanted: new BigNumber(params.getAmountWanted()),
+            interestPermil: params.getInterestPermil()
         };
 
         this.contract = await this.blockchain.existing('Loan', this.address);

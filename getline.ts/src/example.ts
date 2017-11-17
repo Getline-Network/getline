@@ -16,6 +16,7 @@ let main = async() => {
         let amountWanted = await loan.parameters.loanToken.humanize(loan.parameters.amountWanted);
         let symbol = await loan.parameters.loanToken.symbol();
         console.log("  amount wanted:        " + amountWanted.toString() + " " + symbol);
+        console.log("  interest     :        " + loan.parameters.interestPermil / 10 + "%");
         console.log("  fundraising deadline: " + loan.parameters.fundraisingDeadline.format());
         console.log("  payback deadline:     " + loan.parameters.paybackDeadline.format());
         console.log("  state:                " + LoanState[loan.blockchainState.loanState]);
