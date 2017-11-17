@@ -10,17 +10,21 @@ let main = async() => {
     let loans = await c.loansByOwner(user);
     console.log(`${loans.length} loans:`);
     for (let i = 0; i < loans.length; i++) {
-        let loan = loans[i];
+        const loan = loans[i];
         await loan.updateStateFromBlockchain();
         console.log("Loan " + loan.shortId);
-        let amountWanted = await loan.parameters.loanToken.humanize(loan.parameters.amountWanted);
-        let symbol = await loan.parameters.loanToken.symbol();
+
+        const {loanToken, interestPermil, paybackDeadline, fundraisingDeadline} = loan.parameters;
+        const amountWanted = await loan.parameters.loanToken.humanize(loan.parameters.amountWanted);
+        const symbol = await loanToken.symbol();
+        const {loanState, amountGathered} = loan.blockchainState;
+
         console.log("  amount wanted:        " + amountWanted.toString() + " " + symbol);
-        console.log("  interest     :        " + loan.parameters.interestPermil / 10 + "%");
-        console.log("  fundraising deadline: " + loan.parameters.fundraisingDeadline.format());
-        console.log("  payback deadline:     " + loan.parameters.paybackDeadline.format());
-        console.log("  state:                " + LoanState[loan.blockchainState.loanState]);
-        console.log("  gathered funds:       " + loan.blockchainState.amountGathered.toString());
+        console.log("  interest     :        " + interestPermil / 10 + "%");
+        console.log("  fundraising deadline: " + fundraisingDeadline.format());
+        console.log("  payback deadline:     " + paybackDeadline.format());
+        console.log("  state:                " + LoanState[loanState]);
+        console.log("  gathered funds:       " + amountGathered.toString());
         console.log("\n");
     };
 

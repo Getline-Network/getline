@@ -66,6 +66,52 @@ export class Token extends Address {
     private decimals_: number | undefined;
 
     /**
+     * Cache for contract properties.
+     */
+    private propertyCache: { [key: string]: any } = {};
+
+    /**
+     * Returns a caching getter for a constant contract property.
+     * @param key Name of contract property.
+     * @returns Getter for contract property.
+     */
+    private contractProperty<T>(key: string): (() => Promise<T>) {
+        return async ()=>{
+            if (this.propertyCache[key] != undefined) {
+                return this.propertyCache[key];
+            }
+            let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
+            this.propertyCache[key] = await token.call<T>(key);
+            return this.propertyCache[key];
+        }
+    }
+
+    /**
+     * Returns token symbol.
+     */
+    public symbol = this.contractProperty<string>('symbol');
+    /**
+     * Returns token name.
+     */
+    public name = this.contractProperty<string>('name');
+
+    private decimalsBigNumber = this.contractProperty<BigNumber>('decimals');
+    /**
+     * Returns token decimal places count.
+     *
+     * TODO(q3k): Replace this once our smart contracts start returning uint8,
+     * per ERC20.
+     */
+    public async decimals(): Promise<BigNumber> {
+        let d = await this.decimalsBigNumber()
+        if (d.gt(255) || d.lt(0) || d.dp() != 0) {
+            throw new Error("Invalid token decimal places count")
+        }
+        return d;
+    }
+
+
+    /**
      * Returns this token's balance of an address.
      * @param address Address of which balance to get.
      * @returns Balance in this token.
@@ -97,49 +143,6 @@ export class Token extends Address {
         return token.call<void>('approve', spender.ascii, value);
     }
 
-    /**
-     * Returns this token's symbol.
-     * @returns Token symbol.
-     */
-    public async symbol(): Promise<string> {
-        if (this.symbol_ != undefined) {
-            return this.symbol_;
-        }
-        let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
-        this.symbol_ = await token.call<string>('symbol');
-        return this.symbol_;
-    }
-
-    /**
-     * Returns this token's name.
-     * @returns Token name.
-     */
-    public async name(): Promise<string> {
-        if (this.name_ != undefined) {
-            return this.name_;
-        }
-        let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
-        this.name_ = await token.call<string>('name');
-        return this.name_;
-    }
-
-    /**
-     * Returns this token's decimal places count.
-     * @returns Decimal places of token.
-     */
-    public async decimals(): Promise<number> {
-        if (this.decimals_ != undefined) {
-            return this.decimals_;
-        }
-        let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
-        // ERC20 dictates uint8 as decimals, but we (seemingly as a bug)
-        // implement it as uint256. Let's convert it to a JS number as a quick
-        // fix. In the long term, we need to fix our smart contracts.
-        // TODO(q3k): Fix the smart contract and this method.
-        let decimals = await token.call<BigNumber>('decimals');
-        this.decimals_ = decimals.toNumber();
-        return this.decimals_;
-    }
 
     /**
      * Converts a decimal representation of the token into the internal integer
@@ -148,7 +151,7 @@ export class Token extends Address {
      * @returns Internal integer representation.
      */
     public async integerize(human: BigNumber): Promise<BigNumber> {
-        let decimals = await this.decimals()
+        let decimals = (await this.decimals()).toNumber();
         return human.shift(decimals);
     }
 
@@ -159,7 +162,7 @@ export class Token extends Address {
      * @returns Human-readable decimal point representation.
      */
     public async humanize(internal: BigNumber): Promise<BigNumber> {
-        let decimals = await this.decimals()
+        let decimals = (await this.decimals()).toNumber();
         return internal.shift(-decimals);
     }
 }
