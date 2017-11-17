@@ -99,11 +99,15 @@
 								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><a href="_common_.token.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-inherited">
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_common_.token.html#ascii" class="tsd-kind-icon">ascii</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_common_.token.html#blockchain" class="tsd-kind-icon">blockchain</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_common_.token.html#decimalsbignumber" class="tsd-kind-icon">decimals<wbr>Big<wbr>Number</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_common_.token.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_common_.token.html#propertycache" class="tsd-kind-icon">property<wbr>Cache</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_common_.token.html#symbol" class="tsd-kind-icon">symbol</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -113,7 +117,11 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_common_.token.html#approve" class="tsd-kind-icon">approve</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_common_.token.html#balance" class="tsd-kind-icon">balance</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_common_.token.html#balanceof" class="tsd-kind-icon">balance<wbr>Of</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private"><a href="_common_.token.html#contractproperty" class="tsd-kind-icon">contract<wbr>Property</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_common_.token.html#decimals" class="tsd-kind-icon">decimals</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_common_.token.html#eq" class="tsd-kind-icon">eq</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_common_.token.html#humanize" class="tsd-kind-icon">humanize</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_common_.token.html#integerize" class="tsd-kind-icon">integerize</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_common_.token.html#proto" class="tsd-kind-icon">proto</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_common_.token.html#token" class="tsd-kind-icon">token</a></li>
 							</ul>
@@ -134,7 +142,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_common_.address.html">Address</a>.<a href="_common_.address.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/common.ts#L16">common.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L16">common.ts:16</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -151,7 +159,7 @@
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="ascii" class="tsd-anchor"></a>
@@ -160,7 +168,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_common_.address.html">Address</a>.<a href="_common_.address.html#ascii">ascii</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/common.ts#L16">common.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L16">common.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -171,9 +179,117 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_common_.address.html">Address</a>.<a href="_common_.address.html#blockchain">blockchain</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/common.ts#L15">common.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L15">common.ts:15</a></li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="decimalsbignumber" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> decimals<wbr>Big<wbr>Number</h3>
+					<div class="tsd-signature tsd-kind-icon">decimals<wbr>Big<wbr>Number<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;this.contractProperty&lt;BigNumber&gt;(&#x27;decimals&#x27;)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L94">common.ts:94</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-siganture">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="name" class="tsd-anchor"></a>
+					<h3>name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;this.contractProperty&lt;string&gt;(&#x27;name&#x27;)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L92">common.ts:92</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Returns token name.</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-siganture">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="propertycache" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> property<wbr>Cache</h3>
+					<div class="tsd-signature tsd-kind-icon">property<wbr>Cache<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L67">common.ts:67</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Cache for contract properties.</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-index-signature">
+								<h5><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">any</span></h5>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="symbol" class="tsd-anchor"></a>
+					<h3>symbol</h3>
+					<div class="tsd-signature tsd-kind-icon">symbol<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;this.contractProperty&lt;string&gt;(&#x27;symbol&#x27;)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L88">common.ts:88</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Returns token symbol.</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-siganture">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -188,7 +304,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/common.ts#L80">common.ts:80</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L126">common.ts:126</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -226,7 +342,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/common.ts#L91">common.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L137">common.ts:137</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -265,7 +381,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_common_.address.html">Address</a>.<a href="_common_.address.html#balance">balance</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/common.ts#L28">common.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L28">common.ts:28</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -297,7 +413,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/common.ts#L69">common.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L115">common.ts:115</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -319,6 +435,80 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private">
+					<a name="contractproperty" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> contract<wbr>Property</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">contract<wbr>Property&lt;T&gt;<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L74">common.ts:74</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a caching getter for a constant contract property.</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T</h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Name of contract property.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
+							<p>Getter for contract property.</p>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter-siganture">
+									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+									</ul>
+									<ul class="tsd-descriptions">
+										<li class="tsd-description">
+											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="decimals" class="tsd-anchor"></a>
+					<h3>decimals</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">decimals<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">BigNumber</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L101">common.ts:101</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns token decimal places count.</p>
+								</div>
+								<p>TODO(q3k): Replace this once our smart contracts start returning uint8,
+								per ERC20.</p>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">BigNumber</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="eq" class="tsd-anchor"></a>
 					<h3>eq</h3>
@@ -330,7 +520,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_common_.address.html">Address</a>.<a href="_common_.address.html#eq">eq</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/common.ts#L55">common.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L55">common.ts:55</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -352,6 +542,72 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="humanize" class="tsd-anchor"></a>
+					<h3>humanize</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">humanize<span class="tsd-signature-symbol">(</span>internal<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">BigNumber</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">BigNumber</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L160">common.ts:160</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Converts an integer representation of the tokan into a human-friendly
+									decimal point representation.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>internal: <span class="tsd-signature-type">BigNumber</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Token amount as integer.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">BigNumber</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Human-readable decimal point representation.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="integerize" class="tsd-anchor"></a>
+					<h3>integerize</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">integerize<span class="tsd-signature-symbol">(</span>human<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">BigNumber</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">BigNumber</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L149">common.ts:149</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Converts a decimal representation of the token into the internal integer
+									representation.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>human: <span class="tsd-signature-type">BigNumber</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Token amount with decimal point.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">BigNumber</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Internal integer representation.</p>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="proto" class="tsd-anchor"></a>
 					<h3>proto</h3>
@@ -363,7 +619,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_common_.address.html">Address</a>.<a href="_common_.address.html#proto">proto</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/common.ts#L36">common.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L36">common.ts:36</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -387,7 +643,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_common_.address.html">Address</a>.<a href="_common_.address.html#token">token</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/929feb3/getline.ts/src/common.ts#L46">common.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/4dc5898/getline.ts/src/common.ts#L46">common.ts:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -453,6 +709,18 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 								<a href="_common_.token.html#blockchain" class="tsd-kind-icon">blockchain</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_common_.token.html#decimalsbignumber" class="tsd-kind-icon">decimals<wbr>Big<wbr>Number</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_common_.token.html#name" class="tsd-kind-icon">name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_common_.token.html#propertycache" class="tsd-kind-icon">property<wbr>Cache</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_common_.token.html#symbol" class="tsd-kind-icon">symbol</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_common_.token.html#allowance" class="tsd-kind-icon">allowance</a>
 							</li>
@@ -465,8 +733,20 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_common_.token.html#balanceof" class="tsd-kind-icon">balance<wbr>Of</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private">
+								<a href="_common_.token.html#contractproperty" class="tsd-kind-icon">contract<wbr>Property</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_common_.token.html#decimals" class="tsd-kind-icon">decimals</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="_common_.token.html#eq" class="tsd-kind-icon">eq</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_common_.token.html#humanize" class="tsd-kind-icon">humanize</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_common_.token.html#integerize" class="tsd-kind-icon">integerize</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="_common_.token.html#proto" class="tsd-kind-icon">proto</a>
