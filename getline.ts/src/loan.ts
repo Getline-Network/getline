@@ -2,176 +2,225 @@ import {BigNumber} from 'bignumber.js';
 import * as Web3 from 'web3';
 import * as moment from 'moment';
 
+import {Address, Token, waitUntil} from './common';
+import {Blockchain, Contract} from './blockchain';
 import * as pb from './generated/metabackend_pb';
 
 
-// Connector is a way for Loans to access blockchain data - this is provided
-// by the instantiator of the Loan class.
-export interface Connector {
-    blockToTime(current: BigNumber, target: BigNumber): moment.Moment;
-    getCurrentBlock(): Promise<BigNumber>;
-    getContractInstance<T extends Web3.ContractInstance>(name: string, address: string): Promise<T>;
-    getCoinbase(): Promise<string>;
-}
-
+/**
+ * State of a Getline Loan.
+ */
 export enum LoanState {
+    /**
+     * Loan is waiting for Collateral to be sent by owner.
+     */
     CollateralCollection = 0,
+    /**
+     * Loan is raising funds by investors.
+     */
     Fundraising,
+    /**
+     * Loan is being paid back by liege.
+     */
     Payback,
+    /**
+     * Loan has been paid back or has defaulted.
+     */
     Finished
 }
 
+/**
+ * Representation of a GetLine Loan indexed by the system and running on the
+ * blockchain.
+ */
 export class Loan {
+    /**
+     * Parameters with which the loan got created on the blockchain. These are
+     * always available and constant through the life of a loan.
+     */
     public parameters: {
-        collateralTokenAddress: string
-        loanTokenAddress: string
-        liegeAddress: string
+        /**
+         * Address of ERC20-compatible token used as collateral for the loan.
+         */
+        collateralToken: Token
+        /**
+         * Address of ERC20-compatible token used as loan.
+         */
+        loanToken: Token
+        /**
+         * Date by which the loan needs to have all investment gathered.
+         */
         fundraisingDeadline: moment.Moment
+        /**
+         * Date by which loan needs to be fully repaid.
+         */
         paybackDeadline: moment.Moment
+        /**
+         * Amount of loan token wanted.
+         */
         amountWanted: BigNumber
+        /**
+         * Interest of loan, in permil.
+         */
+        interestPermil: number
     }
+    /**
+     * A short identifier that is used to lookup the loan in the Getline
+     * index system (metabackend). Opaque.
+     */
     public shortId: string
+    /**
+     * User-given description of the loan.
+     */
     public description: string
-    public address: string
-    public owner: string
+    /**
+     * Ethereum address at which loan is deployed.
+     */
+    public address: Address
+    /**
+     * Ethereum address of owner/liege of loan.
+     */
+    public owner: Address
 
+    /**
+     * State of the loan on the blockchain. These change with time.
+     * `updateStateFromBlockchain` should be called to update this data with the
+     * freshest state from the blockchain.
+     */
     public blockchainState: {
+        /**
+         * State of Loan contract.
+         */
         loanState: LoanState
+        /**
+         * Value of loan token gathered in fundraising.
+         */
         amountGathered: BigNumber
-        isFundraising: boolean
-        isPaidback: boolean
-        isDefaulted: boolean
+        /**
+         * Whether the loan is currently raising funds from investors.
+         */
+        fundraising: boolean
+        /**
+         * Whether the loan has been paid back succesfully.
+         */
+        paidback: boolean
+        /**
+         * Whether the loan has defaulted, ie. the liege has not paid back in
+         * time.
+         */
+        defaulted: boolean
     }
 
-    private connector: Connector
+    private blockchain: Blockchain
+
+    private contract: Contract
 
  
-    constructor(connector: Connector) {
-        this.connector = connector;
+    /**
+     * Private constructor used by the library.
+     */
+    constructor(blockchain: Blockchain) {
+        this.blockchain = blockchain;
     }
 
+    /**
+     * Private method used by the library to load data from a metabackend
+     * protobuf.
+     */
     public async loadFromProto(proto: pb.LoanCache) {
         this.shortId = proto.getShortId();
         this.description = proto.getDescription();
-        this.address = proto.getDeploymentAddress().getAscii();
-        this.owner = proto.getOwner().getAscii();
 
-        let currentBlock = await this.connector.getCurrentBlock();
+        if (!proto.hasDeploymentAddress()) throw new Error("invalid proto: missing deployment address");
+        if (!proto.hasOwner()) throw new Error("invalid proto: missing deployment address");
+        if (!proto.hasParameters()) throw new Error("invalid proto: missing parameters");
+        if (!proto.getParameters()!.hasCollateralToken()) throw new Error("invalid proto: missing collateral token");
+        if (!proto.getParameters()!.hasLoanToken()) throw new Error("invalid proto: missing loan token");
+
+        this.address = new Address(this.blockchain, proto.getDeploymentAddress()!.getAscii());
+        this.owner = new Address(this.blockchain, proto.getOwner()!.getAscii());
+
+        let currentBlock = await this.blockchain.currentBlock();
         let blockToTime = (count: string)=>{
-            return this.connector.blockToTime(currentBlock, new BigNumber(count));
+            return this.blockchain.blockToTime(currentBlock, new BigNumber(count));
         }
 
-        let params = proto.getParameters();
+        let params = proto.getParameters()!;
         this.parameters = {
-            collateralTokenAddress: params.getCollateralToken().getAscii(),
-            loanTokenAddress: params.getLoanToken().getAscii(),
-            liegeAddress: params.getLiege().getAscii(),
+            collateralToken: new Token(this.blockchain, params.getCollateralToken()!.getAscii()),
+            loanToken: new Token(this.blockchain, params.getLoanToken()!.getAscii()),
             fundraisingDeadline: blockToTime(params.getFundraisingBlocksCount()),
             paybackDeadline: blockToTime(params.getPaybackBlocksCount()),
-            amountWanted: new BigNumber(params.getAmountWanted())
+            amountWanted: new BigNumber(params.getAmountWanted()),
+            interestPermil: params.getInterestPermil()
         };
+
+        this.contract = await this.blockchain.existing('Loan', this.address);
     }
 
-    private async callContract(method: any, ...params: Array<any>): Promise<any> {
-        return new Promise<any>((resolve, reject)=>{
-            let opts = {
-                gas: 1000000,
-            }
-            method(...params, opts, (err, object)=>{
-                if (err != undefined) {
-                    reject(err);
-                    return;
-                }
-                resolve(object);
-            });
-        });
-    }
-
+    /**
+     * Loads the newest state of the loan from the blockchain.
+     */
     public async updateStateFromBlockchain(): Promise<void> {
-        let Loan = await this.connector.getContractInstance('Loan', this.address);
-
         this.blockchainState = {
-            loanState: (await this.callContract(Loan.currentState)).toNumber(),
-            amountGathered: (await this.callContract(Loan.amountGathered)),
-            isFundraising: (await this.callContract(Loan.isFundraising)),
-            isPaidback: (await this.callContract(Loan.isPaidback)),
-            isDefaulted: (await this.callContract(Loan.isDefaulted)),
+            loanState: (await this.contract.call<BigNumber>('currentState')).toNumber(),
+            amountGathered: await this.contract.call<BigNumber>('amountGathered'),
+            fundraising: await this.contract.call<boolean>('isFundraising'),
+            paidback: await this.contract.call<boolean>('isPaidback'),
+            defaulted: await this.contract.call<boolean>('isDefaulted'),
         }
     }
 
-    private async getLoanToken(): Promise<Web3.ContractInstance> {
-        return this.connector.getContractInstance('PrintableToken', this.parameters.loanTokenAddress);
-    }
+    /**
+     * Sends collateral to the loan and starts fundraising process. This is
+     * non-reversible as it advances the state of the smart contract.
+     *
+     * This function will block until the new state is saved on the blockchain.
+     *
+     */
+    public async sendCollateral(amount: BigNumber): Promise<void> {
+        if (this.blockchainState == undefined) {
+            await this.updateStateFromBlockchain()
+        }
 
-    private async getCollateralToken(): Promise<Web3.ContractInstance> {
-        return this.connector.getContractInstance('PrintableToken', this.parameters.loanTokenAddress);
-    }
-
-    // Gets the collateral amount that will be gathered for this loan.
-    public async getCollateralAmount(): Promise<BigNumber> {
-        let Token = await this.getCollateralToken();
-        return this.callContract(Token.allowance, this.owner, this.address);
-    }
-
-    private async waitUntil(check: ()=>Promise<boolean>): Promise<void> {
-        return new Promise<void>((resolve, reject)=>{
-            let interval = setInterval(()=>{
-                check().then((okay: boolean)=>{
-                    if (okay) {
-                        clearInterval(interval);
-                        resolve();
-                    }
-                }).catch(reject);
-            }, 1000);
-        });
-    }
-
-    // Allows the owner of the contract to change the collateral amount for this
-    // loan. This method will async block until the new amount is accepted by the
-    // blockchain.
-    public async setCollateralAmount(amount: BigNumber): Promise<void> {
         if (this.blockchainState.loanState != LoanState.CollateralCollection) {
             throw new Error("Loan is not gathering collateral anymore");
         }
-        let coinbase = await this.connector.getCoinbase();
-        if (!await this.isClientOwner()) {
+        if (!await this.isOwner()) {
             throw new Error("setCollateralAmount can only be called by owner of loan")
         }
 
-        let Token = await this.getCollateralToken();
-        await this.callContract(Token.approve, this.address.toLowerCase(), amount);
-
-        return this.waitUntil(async ()=>{
-            if ((await this.getCollateralAmount()).eq(amount)) {
+        // First, ensure that collateral allowance is set correctly.
+        let collateral = this.parameters.collateralToken;
+        await collateral.approve(this.address, amount);
+        console.log("getline.ts: waiting for collateral allowance...");
+        await waitUntil(async ()=>{
+            let allowance = await collateral.allowance(this.owner, this.address);
+            console.log("getline.ts: allowance: " + allowance.toString());
+            if (allowance.eq(amount)) {
                 await this.updateStateFromBlockchain();
                 return true;
             }
             return false;
         });
-    }
 
-    // Allows the owner to send the collateral to the loan. This method will
-    // async block until the new state propagates to the blockchain.
-    public async sendCollateral(): Promise<void> {
-        if (this.blockchainState.loanState != LoanState.CollateralCollection) {
-            throw new Error("Loan is not gathering collateral anymore");
-        }
-        let Loan = await this.connector.getContractInstance('Loan', this.address);
-        let res = await this.callContract(Loan.gatherCollateral);
-        return this.waitUntil(async ()=>{
+        // Now, call gatherCollateral and wait for state change.
+        console.log("getline.ts: waiting for fundraising...");
+        await this.contract.call('gatherCollateral');
+        return waitUntil(async ()=>{
             await this.updateStateFromBlockchain();
-            return this.blockchainState.isFundraising;
+            return this.blockchainState.fundraising;
         });
     }
 
-    public async isClientOwner(): Promise<boolean> {
-        let coinbase = await this.connector.getCoinbase();
-        return (this.owner.toLowerCase() == coinbase.toLowerCase())
-    }
-    
-    public async getBalance(token: string): Promise<BigNumber> {
-        let Token = await this.connector.getContractInstance('PrintableToken', token);
-        return this.callContract(Token.balanceOf, this.address);
+    /**
+     * Returns whether the current API client is the owner/liege of the loan.
+     *
+     * @returns Whether the current API client is the owner/liege of the loan.
+     */
+    public async isOwner(): Promise<boolean> {
+        let coinbase = await this.blockchain.coinbase();
+        return this.owner.eq(coinbase)
     }
 }
 

@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import TopPanel from '@/components/common/TopPanel';
-import Dotts from '@/components/common/Dotts';
+import TopPanel from '@/components/common/TopPanel.vue';
+import Dotts from '@/components/common/Dotts.vue';
 
 export default {
   name: 'app',
