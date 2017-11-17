@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import RequestLoan from '@/components/borrow/RequestLoan';
+import MyLoans from '@/components/borrow/MyLoans';
 import InvestBar from '@/components/invest/InvestBar';
 import LoanList from '@/components/invest/LoanList/LoanList';
 import MyInvestments from '@/components/invest/MyInvestments/MyInvestments';
@@ -17,6 +18,10 @@ export default new Router({
     {
       path: '/borrow',
       component: RequestLoan,
+    },
+    {
+      path: '/my-loans',
+      component: MyLoans,
     },
     {
       path: '/invest/loan/:loanId',
