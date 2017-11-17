@@ -5,10 +5,12 @@ Getline Network
 
 This is the main repository for the Getline Distributed P2P Lending Platform. 
 
-Web interface
--------------
+Public deployment
+-----------------
 
 For a work-in-progress webapp compatible with Metamask, see [https://demo.getline.in](demo.getline.in).
+
+Additionally, if you're developing your own application we invite you to use our [https://0.api.getline.in/](0.api.getline.in) metabackend endpoint for easy access to latest and versioned smart contracts.
 
 This repository
 ---------------
