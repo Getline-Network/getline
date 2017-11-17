@@ -98,12 +98,12 @@ export class Token extends Address {
      * TODO(q3k): Replace this once our smart contracts start returning uint8,
      * per ERC20.
      */
-    public async decimals(): Promise<number> {
+    public async decimals(): Promise<BigNumber> {
         let d = await this.decimalsBigNumber()
         if (d.gt(255) || d.lt(0) || d.dp() != 0) {
             throw new Error("Invalid token decimal places count")
         }
-        return d.toNumber();
+        return d;
     }
 
 
@@ -147,7 +147,7 @@ export class Token extends Address {
      * @returns Internal integer representation.
      */
     public async integerize(human: BigNumber): Promise<BigNumber> {
-        let decimals = await this.decimals()
+        let decimals = (await this.decimals()).toNumber();
         return human.shift(decimals);
     }
 
@@ -158,7 +158,7 @@ export class Token extends Address {
      * @returns Human-readable decimal point representation.
      */
     public async humanize(internal: BigNumber): Promise<BigNumber> {
-        let decimals = await this.decimals()
+        let decimals = (await this.decimals()).toNumber();
         return internal.shift(-decimals);
     }
 }
