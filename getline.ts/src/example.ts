@@ -13,6 +13,9 @@ let main = async() => {
         let loan = loans[i];
         await loan.updateStateFromBlockchain();
         console.log("Loan " + loan.shortId);
+        let amountWanted = await loan.parameters.loanToken.humanize(loan.parameters.amountWanted);
+        let symbol = await loan.parameters.loanToken.symbol();
+        console.log("  amount wanted:        " + amountWanted.toString() + " " + symbol);
         console.log("  fundraising deadline: " + loan.parameters.fundraisingDeadline.format());
         console.log("  payback deadline:     " + loan.parameters.paybackDeadline.format());
         console.log("  state:                " + LoanState[loan.blockchainState.loanState]);
