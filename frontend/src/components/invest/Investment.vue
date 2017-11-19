@@ -11,10 +11,7 @@
             </div>
           </div>
           <div class="li-bar-container">
-            <div class="li-bar">
-              <div class="li-bar-funded" :style="{ width: loan.percentFunded + '%' }" />
-              <div class="li-bar-remaining" />
-            </div>
+            <fundraising-bar :percentage="loan.percentFunded" barHeight="12px"/>
             <div class="li-bar-labels">
               <div> {{ loan.percentFunded }}% FUNDED </div>
               <div> {{ loan.gatheringTimeLeft }} LEFT </div>
@@ -59,6 +56,7 @@
 import loan from '@/server/getLoan';
 import UserScore from '../common/UserScore';
 import PurpleButton from '../common/PurpleButton';
+import FundraisingBar from '../common/FundraisingBar.vue';
 
 export default {
   name: 'LoanInvest',
@@ -71,6 +69,7 @@ export default {
   components: {
     'user-score': UserScore,
     'purple-button': PurpleButton,
+    'fundraising-bar': FundraisingBar,
   },
 };
 </script>
@@ -86,10 +85,6 @@ export default {
         }
       }
       .li-bar-container { padding: 30px;
-        .li-bar { display: flex; height: 12px; width: 100%;
-          .li-bar-funded { background: #21ce4c; background: -webkit-linear-gradient(-90deg, #21ce4c, #7249f7); /* For Safari 5.1 to 6.0 */ background: -o-linear-gradient(-90deg,  #21ce4c, #7249f7); /* For Opera 11.1 to 12.0 */ background: -moz-linear-gradient(-90deg,  #21ce4c, #7249f7); /* For Firefox 3.6 to 15 */  background: linear-gradient(-90deg,  #21ce4c, #7249f7); /* Standard syntax */ }
-          .li-bar-remaining { background-color: var(--color-white-smoke); flex-grow: 1; }
-        }
         .li-bar-labels { display: flex; justify-content: space-between; margin: 5px 0 0 0; font-size: 11px; font-weight: 300; letter-spacing: 0.4px; text-align: left; color: #858585; }
       }
     }

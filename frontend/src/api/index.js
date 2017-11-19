@@ -1,7 +1,7 @@
 const METABACKEND_URL = 'http://0.api.getline.in';
 const METABACKEND_NETWORK = '4';
 let api;
-import { Client, Loan } from '../../../getline.ts';
+import { Client, Loan, LoanState } from '../../../getline.ts';
 
 export default {
   init: () => {
@@ -10,4 +10,4 @@ export default {
   instance: () => api,
 };
 
-export { Loan };
+export { Loan, LoanState };

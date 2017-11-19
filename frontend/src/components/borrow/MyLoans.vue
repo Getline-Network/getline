@@ -24,7 +24,7 @@ import Vue from 'vue'
 import Summary from '../common/TilesSummary.vue';
 import Spinner from '../common/Spinner.vue';
 import MyLoanTile from './MyLoanTile.vue';
-import API from '../../api';
+import API, {LoanState} from '../../api';
 
 const Component = Vue.extend({
   name: 'MyLoans',
@@ -39,15 +39,33 @@ const Component = Vue.extend({
       let currentUser = await API.instance().currentUser();
       let loans = await API.instance().loansByOwner(currentUser);
       await Promise.all(loans.map(loan => loan.updateStateFromBlockchain()));
-      let _loans = loans.map(({ description, parameters: {interestPermil} }) =>
-        ({ description, interestPermil }));
+      let _loans = loans.map(({
+          description,
+          parameters: {interestPermil},
+          blockchainState : {loanState}
+        }) => ({ description, interestPermil, loanState }));
 
-      const humanizeAmounts = (await Promise.all(
+      const humanizeAmountsWanted = await Promise.all(
         loans.map(({parameters: {loanToken, amountWanted}}) =>
           loanToken.humanize(amountWanted))
-      )).map(amount => amount.toString())
+      )
+
+      const humanizeAmountsGathered = await Promise.all(
+        loans.map(({parameters: {loanToken}, blockchainState: {amountGathered}}) =>
+          loanToken.humanize(amountGathered))
+      );
+
+      const loanTokenSymbols = await Promise.all(
+        loans.map(({parameters: {loanToken}}) =>
+          loanToken.symbol())
+      );
+
       for (var i = 0; i < _loans.length; ++i) {
-        _loans[i].amountWanted = humanizeAmounts[i];
+        _loans[i].amountWanted = humanizeAmountsWanted[i].toString();
+        _loans[i].amountGathered = humanizeAmountsGathered[i].toString();
+        _loans[i].tokenSymbol = loanTokenSymbols[i];
+        _loans[i].isCollateralCollection = (_loans[i].loanState === LoanState.CollateralCollection);
+        _loans[i].isFundraising = (_loans[i].loanState === LoanState.Fundraising);
       }
 
       this.isLoading = false;
