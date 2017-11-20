@@ -75,7 +75,7 @@ export class Token extends Address {
      * @param key Name of contract property.
      * @returns Getter for contract property.
      */
-    private contractProperty<T>(key: string): (() => Promise<T>) {
+    protected contractProperty<T>(key: string): (() => Promise<T>) {
         return async ()=>{
             if (this.propertyCache[key] != undefined) {
                 return this.propertyCache[key];
@@ -140,9 +140,8 @@ export class Token extends Address {
      */
     public async approve(spender: Address, value: BigNumber): Promise<void> {
         let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
-        return token.call<void>('approve', spender.ascii, value);
+        return token.mutate('approve', spender.ascii, value);
     }
-
 
     /**
      * Converts a decimal representation of the token into the internal integer
@@ -164,6 +163,40 @@ export class Token extends Address {
     public async humanize(internal: BigNumber): Promise<BigNumber> {
         let decimals = (await this.decimals()).toNumber();
         return internal.shift(-decimals);
+    }
+
+    /**
+     * Converts this token to a PrintableToken.
+     * @returns This token as a PrintableToken.
+     */
+    public printable(): PrintableToken {
+        // TODO(q3k): Query blockchain/metabackend on whether this token
+        // actually is a printable token. Same goes for Address.token.
+        // Ideally, we also want to not accept loans into the metabackend
+        // that have not been verified to be of certain types..?
+        return new PrintableToken(this.blockchain, this.ascii);
+    }
+}
+
+/**
+ * PrintableToken is a ERC-20 compatible token with an additional 'print'
+ * method that allows printing of tokens and sending them to any user. We
+ * use this in our demo setup to allow users to quickly acquire our collateral
+ * and loan tokens without having to use faucets.
+ */
+export class PrintableToken extends Token {
+    /**
+     * Returns token print value (how much will be printed at once).
+     */
+    public printValue = this.contractProperty<BigNumber>('printValue');
+
+    /**
+     * Prints `printValue` tokens and sends them to an address.
+     * @param who Receiver of newly printed tokens.
+     */
+    public async print(who: Address): Promise<void> {
+        let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
+        return token.mutate('print', who.ascii);
     }
 }
 

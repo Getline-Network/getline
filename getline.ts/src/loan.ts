@@ -193,24 +193,11 @@ export class Loan {
         // First, ensure that collateral allowance is set correctly.
         let collateral = this.parameters.collateralToken;
         await collateral.approve(this.address, amount);
-        console.log("getline.ts: waiting for collateral allowance...");
-        await waitUntil(async ()=>{
-            let allowance = await collateral.allowance(this.owner, this.address);
-            console.log("getline.ts: allowance: " + allowance.toString());
-            if (allowance.eq(amount)) {
-                await this.updateStateFromBlockchain();
-                return true;
-            }
-            return false;
-        });
+        await this.updateStateFromBlockchain();
 
         // Now, call gatherCollateral and wait for state change.
-        console.log("getline.ts: waiting for fundraising...");
-        await this.contract.call('gatherCollateral');
-        return waitUntil(async ()=>{
-            await this.updateStateFromBlockchain();
-            return this.blockchainState.fundraising;
-        });
+        await this.contract.mutate('gatherCollateral');
+        await this.updateStateFromBlockchain();
     }
 
     /**

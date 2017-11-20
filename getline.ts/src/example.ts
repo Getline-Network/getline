@@ -3,10 +3,26 @@ import {BigNumber} from 'bignumber.js';
 
 import { Client, Loan, LoanState } from './index';
 
+function delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 let main = async() => {
     let c = new Client("https://0.api.getline.in", "4");
     let user = await c.currentUser();
     console.log("user: " + user.ascii);
+
+    const testToken = c.testToken;
+    const balance = await testToken.humanize(await testToken.balanceOf(user));
+    console.log(`${await testToken.name()} (${await testToken.symbol()}) balance: ${balance.toString()}`)
+    if (balance.eq(0)) {
+        const printValue = await testToken.humanize(await testToken.printValue())
+        console.log(`Printing ${printValue.toString()} ${await testToken.symbol()}...`)
+        await testToken.print(user)
+        const newBalance = await testToken.humanize(await testToken.balanceOf(user));
+        console.log(`${await testToken.name()} (${await testToken.symbol()}) balance: ${newBalance.toString()}`)
+    }
+
     let loans = await c.loansByOwner(user);
     console.log(`${loans.length} loans:`);
     for (let i = 0; i < loans.length; i++) {
@@ -25,6 +41,13 @@ let main = async() => {
         console.log("  payback deadline:     " + paybackDeadline.format());
         console.log("  state:                " + LoanState[loanState]);
         console.log("  gathered funds:       " + amountGathered.toString());
+
+        if (loanState == LoanState.CollateralCollection) {
+            console.log("  sending collateral...");
+            await loan.sendCollateral(new BigNumber(100));
+            console.log("  state:                " + LoanState[loan.blockchainState.loanState]);
+        }
+
         console.log("\n");
     };
 

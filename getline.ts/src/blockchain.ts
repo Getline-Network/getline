@@ -41,6 +41,11 @@ export interface Blockchain {
      * @returns Coinbase address.
      */
     coinbase(): Promise<Address>;
+    /**
+     * Waits until a given transaction is mined, by hash.
+     * @param hash Transaction hash for which to wait.
+     */
+    waitTxMined(hash: string): Promise<void>;
 }
 
 /**
@@ -84,6 +89,22 @@ export class Contract {
             });
         });
     }
+
+    /**
+     * Call a contract method that mutates the contract's state (sends a
+     * transaction to the blockchain) and wait until that transaction gets
+     * mined.
+     * @param methodName Name of method to call.
+     * @param params Arguments to pass to method.
+     * @throws Error when the transaction does not get mined within 60
+     *               seconds.
+     */
+    public async mutate(methodName: string, ...params: Array<any>): Promise<void> {
+        // Build a transaction and get its' hash.
+        let hash = await this.call<string>(methodName, ...params)
+        // Wait until transaction hash gets mined into a block.
+        await this.blockchain.waitTxMined(hash);
+    }
 }
 
 // TypeScript doesn't seem to have an index method on window - let's make our
@@ -126,47 +147,73 @@ export class GetlineBlockchain {
     }
 
     /**
-     * Waits until a given Web3 contract is deployed on the blockchain.
+     * Waits until a given transaction hash is present on the blockchain.
      *
-     * This is a hack that had to be written for when web3.ether.contract.new 
+     * This is a hack that had to be written for when web3.ether.contract.new
      * fails to run the creation callback for the second time. When we upgrade
      * to web3 1.0 or another library we should be able to get rid of this.
      *
-     * @param T Web3 contract type.
-     * @param contract Web3 contract object to wait on.
-     * @returns Address of new contract.
+     * @param hash Hash of transaction to look for.
      */
-    private async waitTxReceipt(contract: Web3.ContractInstance): Promise<Address> {
-        return new Promise<Address>((resolve, reject)=>{
-            let retries = 20;
+    public async waitTxMined(hash: string): Promise<void> {
+        return new Promise<void>((resolve, reject)=>{
+            // Wait for a minute.
+            // TODO(q3k): Make this configurable.
+            const timeout = 60 * 1000;
+            // Poll interval (2 seconds);
+            const poll = 2 * 1000;
+
+            let retries = timeout / poll;
             let interval = setInterval(()=>{
-                console.log("getline.ts: checking for deployed contract " + contract.transactionHash + " ...");
                 retries -= 1;
                 if (retries <= 0) {
                     clearInterval(interval);
-                    reject(new Error("Contract not deployed on time"));
+                    reject(new Error("Transaction not mined on time"));
                     return;
                 }
-    
-                this.web3.eth.getTransactionReceipt(contract.transactionHash, (e, receipt)=>{
+
+                this.web3.eth.getTransactionReceipt(hash, (e, receipt)=>{
                     if (!receipt) {
                         return;
                     }
-                    let address = <string>receipt.contractAddress;
-                    this.web3.eth.getCode(address, (e, code)=>{
-                        if (!code) {
-                            return;
-                        }
-                        if (code.length > 3) {
-                            clearInterval(interval);
-                            resolve(new Address(this, address));
-                        } else {
-                            clearInterval(interval);
-                            reject(new Error("contract did not get stored"));
-                        }
-                    });
+                    clearInterval(interval);
+                    resolve(undefined);
                 });
-            }, 5000);
+            }, poll);
+        });
+    }
+
+    /**
+     * Waits until a given contract is deployed on the network.
+     *
+     * @param hash Transactiion hash of transaction that deployed contract.
+     * @param name Name of contract.
+     * @returns Newly deployed contract.
+     */
+    private async waitContractDeployed(hash: string, name: string): Promise<Contract> {
+        await this.waitTxMined(hash)
+        return new Promise<Contract>((resolve, reject)=>{
+            this.web3.eth.getTransactionReceipt(hash, (e, receipt)=>{
+                if (!receipt) {
+                    reject(new Error("Contract disappeared from the network?"));
+                    return;
+                }
+
+                const address: string | null = receipt.contractAddress;
+                if (address == null) {
+                    reject(new Error("Contract did not get deployed"));
+                    return;
+                }
+
+                this.web3.eth.getCode(address, (e, code)=>{
+                    if (!code || code.length < 3) {
+                        reject(new Error("Contract did not get stored"));
+                        return;
+                    }
+
+                    this.existing(name, new Address(this, address)).then(resolve).catch(reject);
+                });
+            });
         });
     }
 
@@ -203,11 +250,7 @@ export class GetlineBlockchain {
                 confirmed = true;
 
                 console.log("getline.ts: deploying...");
-                this.waitTxReceipt(c).then((address)=>{
-                    console.log("getline.ts: deployed at " + address.ascii);
-                    let deployed = this.web3.eth.contract(abi).at(address.ascii);
-                    resolve(new Contract(this, deployed));
-                }).catch(reject);
+                this.waitContractDeployed(c.transactionHash, contractName).then(resolve).catch(reject);
             });
         });
     }
