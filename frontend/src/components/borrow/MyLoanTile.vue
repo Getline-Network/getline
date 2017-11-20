@@ -11,7 +11,6 @@
       <div>
         <div class="mlt-fin-line-a"> RATE </div>
         <div class="mlt-fin-line-b">{{ loan.interestPermil }}%</div>
-        <!-- div class="mlt-fin-line-c">{{ loan.apr }} APR</div -->
       </div>
       <div>
         <div class="mlt-fin-line-a"> EARNED </div>
