@@ -3,16 +3,6 @@
     <spinner />
   </div>
   <div v-else class="my-loans">
-   <div class="ml-summary">
-     <tiles-summary
-        label="CURRENTLY BORROWED"
-        amount="145.00"
-        currency="ETH" />
-      <tiles-summary
-        label="MINIMUM MONTHLY RATES"
-        amount="20.00"
-        currency="ETH" />
-    </div>
     <div class="ml-loans-container">
       <loan-tile v-for="loan in loans" :key="loan.shortId" :loan="loan" />
     </div>
@@ -21,15 +11,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Summary from '../common/TilesSummary.vue';
 import Spinner from '../common/Spinner.vue';
 import MyLoanTile from './MyLoanTile.vue';
-import API, {LoanState} from '../../api';
+import API, {Loan, LoanState} from '../../api';
+import {BigNumber} from 'bignumber.js';
 
 const Component = Vue.extend({
   name: 'MyLoans',
   components: {
-    'tiles-summary': Summary,
     'loan-tile': MyLoanTile,
     'spinner': Spinner,
   },
@@ -40,29 +29,46 @@ const Component = Vue.extend({
       let loans = await API.instance().loansByOwner(currentUser);
       await Promise.all(loans.map(loan => loan.updateStateFromBlockchain()));
       let _loans = loans.map(({
-          description,
-          parameters: {interestPermil},
-          blockchainState : {loanState}
-        }) => ({ description, interestPermil, loanState }));
+        description,
+        parameters: {interestPermil},
+        blockchainState: {loanState}
+      }) => ({
+        description,
+        interestPermil,
+        loanState
+      }));
 
-      const humanizeAmountsWanted = await Promise.all(
-        loans.map(({parameters: {loanToken, amountWanted}}) =>
-          loanToken.humanize(amountWanted))
-      )
+      const amountsWantedPromises: Promise<BigNumber>[] =
+        loans.map(({
+          parameters: {
+            loanToken,
+            amountWanted
+          }
+        }) => loanToken.humanize(amountWanted));
+      const amountsWanted: BigNumber[] = await Promise.all(amountsWantedPromises);
 
-      const humanizeAmountsGathered = await Promise.all(
-        loans.map(({parameters: {loanToken}, blockchainState: {amountGathered}}) =>
-          loanToken.humanize(amountGathered))
-      );
+      const amountsGatheredPromises: Promise<BigNumber>[] =
+        loans.map(({
+          parameters: {
+            loanToken
+          },
+          blockchainState: {
+            amountGathered
+          }
+        }) => loanToken.humanize(amountGathered));
+      const amountsGathered: BigNumber[] = await Promise.all(amountsGatheredPromises);
 
-      const loanTokenSymbols = await Promise.all(
-        loans.map(({parameters: {loanToken}}) =>
-          loanToken.symbol())
-      );
+      const loanTokenSymbolPromises: Promise<String>[] =
+        loans.map(({
+          parameters: {
+            loanToken
+          }
+        }) => loanToken.symbol());
+      const loanTokenSymbols: String[] = await Promise.all(loanTokenSymbolPromises);
 
       for (var i = 0; i < _loans.length; ++i) {
-        _loans[i].amountWanted = humanizeAmountsWanted[i].toString();
-        _loans[i].amountGathered = humanizeAmountsGathered[i].toString();
+        _loans[i].amountWanted = amountsWanted[i].toString();
+        _loans[i].amountGathered = amountsGathered[i].toString();
         _loans[i].tokenSymbol = loanTokenSymbols[i];
         _loans[i].isCollateralCollection = (_loans[i].loanState === LoanState.CollateralCollection);
         _loans[i].isFundraising = (_loans[i].loanState === LoanState.Fundraising);
@@ -84,7 +90,7 @@ export default Component;
 
 <style lang="scss" scoped>
 .my-loans-spinner { margin-top: 100px; }
-.my-loans { width: calc(100% - 200px); min-width: 570px; margin: 15px auto 40px;
+.my-loans { width: calc(100% - 200px); min-width: 570px; margin: 50px auto 40px;
   .ml-summary { display: flex; justify-content: center; }
   .ml-loans-container { display: flex; justify-content: center; flex-wrap: wrap; }
 }
