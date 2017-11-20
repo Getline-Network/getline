@@ -5,7 +5,7 @@ import * as Web3 from 'web3';
 import {MetabackendClient, MetabackendService, pb} from './metabackend';
 import {GetlineBlockchain, Blockchain} from './blockchain';
 import {Loan} from './loan';
-import {Address, Token, LOAN_CONTRACT} from './common';
+import {Address, PrintableToken, LOAN_CONTRACT} from './common';
 
 /**
  * Getline client library.
@@ -30,7 +30,7 @@ export class Client {
     /**
      * Token that is used for collateral and loans in the demo.
      */
-    public readonly test_token: Token;
+    public readonly testToken: PrintableToken;
 
     /**
      * Creates a new Getline client.
@@ -47,7 +47,7 @@ export class Client {
         this.metabackend = new MetabackendClient(metabackend, network);
         this.network = network;
         this.blockchain = new GetlineBlockchain(this.metabackend, network, provider);
-        this.test_token = new Token(this.blockchain, "0x02c9ccaa1034a64e3a83df9ddce30e6d4bc40515");
+        this.testToken = new PrintableToken(this.blockchain, "0x02c9ccaa1034a64e3a83df9ddce30e6d4bc40515");
     }
 
     public async currentUser(): Promise<Address> {
@@ -98,7 +98,7 @@ export class Client {
         let paybackEndBlocks = currentBlock + blocksPerSecond * paybackDelta;
 
         let loan = await this.blockchain.deploy(LOAN_CONTRACT,
-            this.test_token.ascii, this.test_token.ascii,
+            this.testToken.ascii, this.testToken.ascii,
             (await this.currentUser()).ascii,
             amount, interestPermil, fundraisingEndBlocks, paybackEndBlocks);
 
