@@ -96,6 +96,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_blockchain_.blockchain.html#currentblock" class="tsd-kind-icon">current<wbr>Block</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_blockchain_.blockchain.html#deploy" class="tsd-kind-icon">deploy</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_blockchain_.blockchain.html#existing" class="tsd-kind-icon">existing</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_blockchain_.blockchain.html#waittxmined" class="tsd-kind-icon">wait<wbr>TxMined</a></li>
 							</ul>
 						</section>
 					</div>
@@ -113,7 +114,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/f82bbe4/getline.ts/src/blockchain.ts#L19">blockchain.ts:19</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/a14cf84/getline.ts/src/blockchain.ts#L19">blockchain.ts:19</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -152,7 +153,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/f82bbe4/getline.ts/src/blockchain.ts#L43">blockchain.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/a14cf84/getline.ts/src/blockchain.ts#L43">blockchain.ts:43</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -175,7 +176,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/f82bbe4/getline.ts/src/blockchain.ts#L24">blockchain.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/a14cf84/getline.ts/src/blockchain.ts#L24">blockchain.ts:24</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -198,7 +199,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/f82bbe4/getline.ts/src/blockchain.ts#L38">blockchain.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/a14cf84/getline.ts/src/blockchain.ts#L38">blockchain.ts:38</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -236,7 +237,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/f82bbe4/getline.ts/src/blockchain.ts#L31">blockchain.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/a14cf84/getline.ts/src/blockchain.ts#L31">blockchain.ts:31</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -261,6 +262,37 @@
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_blockchain_.contract.html" class="tsd-signature-type">Contract</a><span class="tsd-signature-symbol">&gt;</span></h4>
 							<p>Contract at this address.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="waittxmined" class="tsd-anchor"></a>
+					<h3>wait<wbr>TxMined</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">wait<wbr>TxMined<span class="tsd-signature-symbol">(</span>hash<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Getline-Network/getline/blob/a14cf84/getline.ts/src/blockchain.ts#L48">blockchain.ts:48</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Waits until a given transaction is mined, by hash.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>hash: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Transaction hash for which to wait.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -325,6 +357,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="_blockchain_.blockchain.html#existing" class="tsd-kind-icon">existing</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="_blockchain_.blockchain.html#waittxmined" class="tsd-kind-icon">wait<wbr>TxMined</a>
 							</li>
 						</ul>
 					</li>
