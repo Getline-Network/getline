@@ -140,7 +140,7 @@ export class Token extends Address {
      */
     public async approve(spender: Address, value: BigNumber): Promise<void> {
         let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
-        return token.call<void>('approve', spender.ascii, value);
+        return token.mutate('approve', spender.ascii, value);
     }
 
     /**
@@ -196,7 +196,7 @@ export class PrintableToken extends Token {
      */
     public async print(who: Address): Promise<void> {
         let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
-        return token.call<void>('print', who.ascii);
+        return token.mutate('print', who.ascii);
     }
 }
 

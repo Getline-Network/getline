@@ -19,13 +19,7 @@ let main = async() => {
         const printValue = await testToken.humanize(await testToken.printValue())
         console.log(`Printing ${printValue.toString()} ${await testToken.symbol()}...`)
         await testToken.print(user)
-
-        let newBalance = new BigNumber(balance);
-        while (newBalance.eq(balance)) {
-            newBalance = await testToken.humanize(await testToken.balanceOf(user));
-            console.log("Waiting...")
-            await delay(5000);
-        }
+        const newBalance = await testToken.humanize(await testToken.balanceOf(user));
         console.log(`${await testToken.name()} (${await testToken.symbol()}) balance: ${newBalance.toString()}`)
     }
 
@@ -47,6 +41,13 @@ let main = async() => {
         console.log("  payback deadline:     " + paybackDeadline.format());
         console.log("  state:                " + LoanState[loanState]);
         console.log("  gathered funds:       " + amountGathered.toString());
+
+        if (loanState == LoanState.CollateralCollection) {
+            console.log("  sending collateral...");
+            await loan.sendCollateral(new BigNumber(100));
+            console.log("  state:                " + LoanState[loan.blockchainState.loanState]);
+        }
+
         console.log("\n");
     };
 
