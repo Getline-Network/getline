@@ -64,6 +64,25 @@ jobs:
             - store_artifacts:
                 path: ~/project/dapp/junit
     
+    getline_ts_build:
+        docker:
+            - image: node:8.7
+        working_directory: ~/project/getline.ts
+        steps:
+            - checkout:
+                path: ~/project
+            - restore_cache:
+                keys:
+                    - getlinets1-modules-{{ checksum "yarn.lock" }}
+                    - getlinets1-modules
+            - run: yarn
+            - save_cache:
+                key: getlinets1-modules-{{ checksum "yarn.lock" }}
+                paths:
+                    - node_modules/
+            - run:
+                command: yarn tsc
+        
     frontend_build:
         docker:
             - image: node:8.7
@@ -89,7 +108,10 @@ workflows:
     version: 2
     frontend:
         jobs:
-            - frontend_build
+            - getline_ts_build
+            - frontend_build:
+                requires:
+                  - getline_ts_build
     dapp:
         jobs:
             - dapp_test
