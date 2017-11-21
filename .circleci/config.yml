@@ -84,6 +84,11 @@ jobs:
                 command: yarn generate
             - run:
                 command: yarn tsc
+            - run:
+                command: mkdir -p /tmp/workspace && cp -rv dist /tmp/workspace/getline.ts-dist
+            - persist_to_workspace:
+                root: /tmp/workspace
+                paths: getline.ts-dist
         
     frontend_build:
         docker:
@@ -92,6 +97,8 @@ jobs:
         steps:
             - checkout:
                 path: ~/project
+            - attach_workspace:
+                at: /tmp/workspace
             - restore_cache:
                 keys:
                     - frontend2-modules-{{ checksum "yarn.lock" }}
@@ -101,6 +108,8 @@ jobs:
                 key: frontend2-modules-{{ checksum "yarn.lock" }}
                 paths:
                     - node_modules/
+            - run:
+                command: rm -rf ~/rpoject/getline.ts/dist && cp -rv /tmp/workspace/getline.ts-dist ~/project/getline.ts/dist
             - run:
                 command: yarn build
             - store_artifacts:
