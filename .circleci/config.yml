@@ -73,11 +73,11 @@ jobs:
                 path: ~/project
             - restore_cache:
                 keys:
-                    - getlinets1-modules-{{ checksum "yarn.lock" }}
-                    - getlinets1-modules
+                    - getlinets2-modules-{{ checksum "yarn.lock" }}
+                    - getlinets2-modules
             - run: yarn
             - save_cache:
-                key: getlinets1-modules-{{ checksum "yarn.lock" }}
+                key: getlinets2-modules-{{ checksum "yarn.lock" }}
                 paths:
                     - node_modules/
             - run:
@@ -94,11 +94,11 @@ jobs:
                 path: ~/project
             - restore_cache:
                 keys:
-                    - frontend1-modules-{{ checksum "yarn.lock" }}
-                    - frontend1-modules
+                    - frontend2-modules-{{ checksum "yarn.lock" }}
+                    - frontend2-modules
             - run: yarn
             - save_cache:
-                key: frontend1-modules-{{ checksum "yarn.lock" }}
+                key: frontend2-modules-{{ checksum "yarn.lock" }}
                 paths:
                     - node_modules/
             - run:
