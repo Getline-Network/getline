@@ -66,7 +66,7 @@ jobs:
     
     getline_ts_build:
         docker:
-            - image: node:8.7
+            - image: getline/ci-frontend:latest
         working_directory: ~/project/getline.ts
         steps:
             - checkout:
@@ -87,7 +87,7 @@ jobs:
         
     frontend_build:
         docker:
-            - image: node:8.7
+            - image: getline/ci-frontend:latest
         working_directory: ~/project/frontend
         steps:
             - checkout:
