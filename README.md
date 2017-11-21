@@ -10,7 +10,7 @@ Public deployment
 
 For a work-in-progress webapp compatible with Metamask, see [demo.getline.in](https://demo.getline.in).
 
-Additionally, if you're developing your own application we invite you to use our [0.api.getline.in/](https://0.api.getline.in/) metabackend endpoint for easy access to latest and versioned smart contracts.
+Additionally, if you're developing your own application we invite you to use our [0.api.getline.in/](https://0.api.getline.in/) metabackend endpoint for easy access to the latest and versioned smart contracts. Keep in mind that the service on port 443 is currently only a [gRPCWeb](https://github.com/improbable-eng/grpc-web)-compatible endpoint and might cause problems for normal gRPC 
 
 This repository
 ---------------
