@@ -63,9 +63,33 @@ jobs:
                 path: ~/project/dapp/junit
             - store_artifacts:
                 path: ~/project/dapp/junit
+    
+    frontend_build:
+        docker:
+            - image: node:8.7
+        working_directory: ~/project/frontend
+        steps:
+            - checkout:
+                path: ~/project
+            - restore_cache:
+                keys:
+                    - frontend1-modules-{{ checksum "yarn.lock" }}
+                    - frontend1-modules
+            - run: yarn
+            - save_cache:
+                key: frontend1-modules-{{ checksum "yarn.lock" }}
+                paths:
+                    - node_modules/
+            - run:
+                command: yarn build
+            - store_artifacts:
+                path: ~/project/frontend/dist
 
 workflows:
     version: 2
+    frontend:
+        jobs:
+            - frontend_build
     dapp:
         jobs:
             - dapp_test
