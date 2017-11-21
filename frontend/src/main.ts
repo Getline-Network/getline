@@ -14,8 +14,7 @@ import registerPurpleTheme from './theme';
 Vue.use(VueMaterial);
 Vue.use(VueMaterial.MdIcon);
 
-setTimeout(async () => {
-  // setTimeout because we are waiting for metamask extenion to inject the web3 object
+window.addEventListener('load', async () => {
   API.init();
 });
 
