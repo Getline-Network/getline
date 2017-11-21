@@ -81,6 +81,8 @@ jobs:
                 paths:
                     - node_modules/
             - run:
+                command: yarn generate
+            - run:
                 command: yarn tsc
         
     frontend_build:
