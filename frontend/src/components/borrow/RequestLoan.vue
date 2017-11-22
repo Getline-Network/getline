@@ -80,10 +80,11 @@ const Component = Vue.extend({
       return this.loading ? 'rl-loading' : '';
     },
     requestLoan: async function requestLoan() {
+      const api = await API.instance();
       this.loading = true;
       const fundraisingEnd: moment.Moment = moment().add(7, 'days');
       const paybackEnd: moment.Moment = moment().add(7 + this.paybackTime, 'days');
-      const loan: Loan = await API.instance().newLoan(
+      const loan: Loan = await api.newLoan(
         this.description,
         this.amount,
         this.interestPermil,
