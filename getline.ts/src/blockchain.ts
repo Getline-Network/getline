@@ -122,21 +122,34 @@ export class GetlineBlockchain {
     private network: string;
     private web3: Web3;
     private contractDefinitions: Array<pb.Contract> | undefined;
+    private debug: boolean;
 
-    constructor(metabackend: MetabackendClient, network: string, provider: Web3.Provider | undefined) {
+    private log(...msg: Array<string>) {
+        if (!this.debug) {
+            return;
+        }
+        console.log("[getline.ts/blockchain] ", ...msg);
+    }
+
+    constructor(metabackend: MetabackendClient, network: string, provider: Web3.Provider | undefined, debug?: boolean) {
         this.metabackend = metabackend;
         this.network = network;
 
+        if (debug == undefined) {
+            debug = false;
+        }
+        this.debug = debug;
+
         if (provider == undefined) {
             if (typeof window != "undefined" && (<WindowIndexable>window)['web3'] != undefined) {
-                console.log("getline.ts: using injected web3")
+                this.log("using injected web3")
                 provider = (<WindowIndexable>window)['web3'].currentProvider;
             } else {
-                console.log("getline.ts: connecting to node running on localhost")
+                this.log("connecting to node running on localhost")
                 provider = new Web3.providers.HttpProvider("http://localhost:8545")
             }
         } else {
-            console.log("getline.ts: using user-injected provider")
+            this.log("using user-injected provider")
         }
         this.web3 = new Web3(provider);
     }
@@ -251,9 +264,9 @@ export class GetlineBlockchain {
                 gas: 4500000,
                 data: bytecode,
             };
-            console.log("getline.ts: deploying contract " + contractName);
-            console.log("getline.ts: deploying bytecode " + bytecode.substring(0, 64) + "...");
-            console.log("getline.ts:    with parameters " + params);
+            this.log("deploying contract " + contractName);
+            this.log("deploying bytecode " + bytecode.substring(0, 64) + "...");
+            this.log("   with parameters " + params);
 
             let confirmed = false;
             let instance = contractAny.new(...params, opts, (err: Error, c: Web3.ContractInstance) =>{
@@ -269,7 +282,7 @@ export class GetlineBlockchain {
                 }
                 confirmed = true;
 
-                console.log("getline.ts: deploying...");
+                this.log("deploying...");
                 this.waitContractDeployed(c.transactionHash, contractName).then(resolve).catch(reject);
             });
         });
