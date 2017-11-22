@@ -11,7 +11,7 @@ let waiters: Array<Waiter> = [];
 
 export default {
   init: () => {
-    api = new Client(METABACKEND_URL, METABACKEND_NETWORK);
+    api = new Client(METABACKEND_URL, METABACKEND_NETWORK, undefined, true);
     // Wake up sleepers waiting for API.
     for (let i = 0; i < waiters.length; i++) {
       waiters[i](api);

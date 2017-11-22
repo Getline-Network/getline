@@ -42,11 +42,13 @@ export class Client {
      * @param provider Web3 provider to use. If not given, the client will try
      *                 to find an injected one from Metamask. Otherwise, it
      *                 will fall back to http://localhost:8545/.
+     * @param debug Whether to enable verbose debugging to console. Default is
+     *              false.
      */
-    constructor(metabackend: string, network: string, provider?: Web3.Provider) {
-        this.metabackend = new MetabackendClient(metabackend, network);
+    constructor(metabackend: string, network: string, provider?: Web3.Provider, debug?: boolean) {
+        this.metabackend = new MetabackendClient(metabackend, network, debug);
         this.network = network;
-        this.blockchain = new GetlineBlockchain(this.metabackend, network, provider);
+        this.blockchain = new GetlineBlockchain(this.metabackend, network, provider, debug);
         this.testToken = new PrintableToken(this.blockchain, "0x02c9ccaa1034a64e3a83df9ddce30e6d4bc40515");
     }
 
@@ -89,15 +91,15 @@ export class Client {
             throw new Error("cannot place loan with payback deadline before fundraising deadline");
         }
 
-        let currentBlock = (await this.blockchain.currentBlock()).toNumber();
-        let blocksPerSecond = (1.0) / 15;
+        const currentBlock = (await this.blockchain.currentBlock()).toNumber();
+        const blocksPerSecond = (1.0) / 15;
 
-        let fundraisingDelta = fundraisingEnd.diff(now, 'seconds');
-        let paybackDelta = paybackEnd.diff(now, 'seconds');
-        let fundraisingEndBlocks = currentBlock + blocksPerSecond * fundraisingDelta;
-        let paybackEndBlocks = currentBlock + blocksPerSecond * paybackDelta;
+        const fundraisingDelta = fundraisingEnd.diff(now, 'seconds');
+        const paybackDelta = paybackEnd.diff(now, 'seconds');
+        const fundraisingEndBlocks = currentBlock + blocksPerSecond * fundraisingDelta;
+        const paybackEndBlocks = currentBlock + blocksPerSecond * paybackDelta;
 
-        let loan = await this.blockchain.deploy(LOAN_CONTRACT,
+        const loan = await this.blockchain.deploy(LOAN_CONTRACT,
             this.testToken.ascii, this.testToken.ascii,
             (await this.currentUser()).ascii,
             amount, interestPermil, fundraisingEndBlocks, paybackEndBlocks);
@@ -108,7 +110,6 @@ export class Client {
         req.setLoan(loan.address.proto());
 
         let res = await this.metabackend.invoke(MetabackendService.IndexLoan, req);
-        console.log("getline.ts: indexed loan as " + res.getShortId());
         return this.loan(res.getShortId());
     }
 
