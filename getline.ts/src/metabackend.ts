@@ -28,11 +28,24 @@ export class MetabackendClient {
     private network: string;
     private contractDefinitions: Array<pb.Contract> | undefined;
     private contractDefinitionsLock: Mutex
+    private debug: boolean
 
-    public constructor(host: string, network: string) {
+    private log(...msg: Array<string>) {
+        if (!this.debug) {
+            return;
+        }
+        console.log("[getline.ts/metabackend]", ...msg);
+    }
+
+    public constructor(host: string, network: string, debug?: boolean) {
         this.metabackendHost = host;
         this.network = network;
         this.contractDefinitionsLock = new Mutex;
+
+        if (debug == undefined) {
+            debug = false;
+        }
+        this.debug = debug;
     }
 
     /**
@@ -70,7 +83,7 @@ export class MetabackendClient {
             release();
             return this.contractDefinitions;
         }
-        console.log("getline.ts: downloading contract definitions from metabackend...");
+        this.log("downloading contract definitions from metabackend...");
         let req = new pb.GetDeploymentRequest();
         req.setNetworkId(this.network);
         let res = await this.invoke(MetabackendService.GetDeployment, req);
