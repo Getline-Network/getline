@@ -23,10 +23,12 @@ const Component = Vue.extend({
     'spinner': Spinner,
   },
   created() {
-    setTimeout(async () => {
+    (async () => {
       this.isLoading = true;
-      let currentUser = await API.instance().currentUser();
-      let loans = await API.instance().loansByOwner(currentUser);
+      const api = await API.instance();
+
+      let currentUser = await api.currentUser();
+      let loans = await api.loansByOwner(currentUser);
       await Promise.all(loans.map(loan => loan.updateStateFromBlockchain()));
       let _loans = loans.map(({
         description,
@@ -76,7 +78,7 @@ const Component = Vue.extend({
 
       this.isLoading = false;
       this.loans = _loans;
-    });
+    })();
   },
   data() {
     return {
