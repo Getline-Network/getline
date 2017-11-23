@@ -1,0 +1,66 @@
+version: '3'
+services:
+  # Container to build and deploy the dapp.
+  dapp:
+    build:
+      context: ../../../
+      dockerfile: production/ci/integration/dapp/Dockerfile
+    links:
+      - ganache
+
+  # Utility container to call the metabackend gRPC.
+  grpc:
+    image: returnpath/grpc_cli
+    links:
+      - metabackend
+
+  # Test database.
+  psql:
+    image: postgres:10-alpine
+    environment:
+      POSTGRES_PASSSWORD: postgresci
+    expose:
+      - 5432
+
+  # Test blockchain.
+  ganache:
+    image: trufflesuite/ganache-cli:v6.0.3
+    expose:
+      - 8545
+    command:
+      - "-i"
+      - "4"
+
+  # Library under test.
+  getline.ts:
+    build:
+      context: ../../../
+      dockerfile: production/ci/integration/getline.ts/Dockerfile
+    links:
+      - metabackend
+      - ganache
+
+  # Metabackend under test.
+  metabackend:
+    build: 
+        context: ../../../
+        dockerfile: production/metabackend/Dockerfile
+    links:
+      - psql
+    working_dir: /app
+    volumes:
+      - "dapp-build:/app/build"
+    expose:
+      - 2000
+      - 2080
+    command:
+      - "./metabackend"
+      - "-logtostderr"
+      - "-db_data_source"
+      - "user=postgres password=postgresci dbname=postgres host=psql sslmode=disable"
+      - "-eth_remote"
+      - "http://ganache:8545"
+
+volumes:
+  # Container for built contracts and their addresses on the test blockchain.
+  dapp-build:
