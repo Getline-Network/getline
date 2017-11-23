@@ -63,9 +63,66 @@ jobs:
                 path: ~/project/dapp/junit
             - store_artifacts:
                 path: ~/project/dapp/junit
+    
+    getline_ts_build:
+        docker:
+            - image: getline/ci-frontend:latest
+        working_directory: ~/project/getline.ts
+        steps:
+            - checkout:
+                path: ~/project
+            - restore_cache:
+                keys:
+                    - getlinets2-modules-{{ checksum "yarn.lock" }}
+                    - getlinets2-modules
+            - run: yarn
+            - save_cache:
+                key: getlinets2-modules-{{ checksum "yarn.lock" }}
+                paths:
+                    - node_modules/
+            - run:
+                command: yarn generate
+            - run:
+                command: yarn tsc
+            - run:
+                command: mkdir -p /tmp/workspace/getline.ts && cp -rv dist node_modules /tmp/workspace/getline.ts/
+            - persist_to_workspace:
+                root: /tmp/workspace
+                paths: getline.ts
+        
+    frontend_build:
+        docker:
+            - image: getline/ci-frontend:latest
+        working_directory: ~/project/frontend
+        steps:
+            - checkout:
+                path: ~/project
+            - attach_workspace:
+                at: /tmp/workspace
+            - restore_cache:
+                keys:
+                    - frontend2-modules-{{ checksum "yarn.lock" }}
+                    - frontend2-modules
+            - run: yarn
+            - save_cache:
+                key: frontend2-modules-{{ checksum "yarn.lock" }}
+                paths:
+                    - node_modules/
+            - run:
+                command:  cp -rv /tmp/workspace/getline.ts/* ~/project/getline.ts/
+            - run:
+                command: yarn build
+            - store_artifacts:
+                path: ~/project/frontend/dist
 
 workflows:
     version: 2
+    frontend:
+        jobs:
+            - getline_ts_build
+            - frontend_build:
+                requires:
+                  - getline_ts_build
     dapp:
         jobs:
             - dapp_test
