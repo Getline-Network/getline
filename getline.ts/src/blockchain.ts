@@ -5,6 +5,42 @@ import * as moment from 'moment';
 import {Address} from './common';
 import {MetabackendClient, pb} from './metabackend';
 
+class UserVisibleError extends Error {
+    constructor(message: string) {
+        super(message)
+        Object.setPrototypeOf(this, new.target.prototype);
+    }
+}
+
+/**
+ * Ethereum Provider (ie. Metamask) has its' main account locked.
+ */
+export class ProviderLocked extends UserVisibleError {
+    constructor() {
+        super("Ethereum provider is locked.");
+    }
+}
+
+/**
+ * Ethereum Provider (ie. Metamask) is not on a supported blockchain.
+ */
+export class ProviderOnUnsupportedNetwork extends UserVisibleError {
+    constructor(got: string) {
+        super("Ethereum provider is on unsupported network: " + got);
+    }
+}
+
+/**
+ * Ethereum Provider (ie. Metamask) thrown an unexpected error.
+ * This can happen if we're using the default localhost:8545 web3 provider
+ * but it's not running.
+ */
+export class ProviderError extends UserVisibleError {
+    constructor(err: Error) {
+        super("Error from ethereum provider: " + err);
+    }
+}
+
 /**
  * A connector used to access blockchains.
  */
@@ -145,19 +181,19 @@ export class GetlineBlockchain {
         return new Promise<void>((resolve, reject)=>{
             this.web3.version.getNetwork((e, network)=>{
                 if (e != null) {
-                    reject(new Error("Could not initialize getline.ts: " + e));
+                    reject(new ProviderError(e));
                     return;
                 }
                 if (network != this.network) {
-                    reject(new Error(`Connected to wrong network (got ${network}, expected ${this.network})`));
+                    reject(new ProviderOnUnsupportedNetwork(network));
                     return;
                 }
                 this.web3.eth.getAccounts((e, accounts)=>{
                     if (e != null) {
-                        reject(new Error("Could not initialize getline.ts: " + e));
+                        reject(new ProviderError(e));
                     }
                     if (accounts.length < 1) {
-                        reject(new Error("No accounts available"));
+                        reject(new ProviderLocked());
                     }
                     this.web3.eth.defaultAccount = accounts[0];
                     resolve();
