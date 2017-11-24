@@ -53,8 +53,8 @@ class EndToEndTests {
     @test async activeUser() {
         const c = await this.createClient();
         const user = await c.currentUser();
-        assert(user.ascii != undefined);
-        assert(user.ascii.length > 0);
+        const w3 = new Web3(this.provider);
+        assert(user.ascii == w3.eth.accounts[0], "account is returned correctly");
     }
 
 
