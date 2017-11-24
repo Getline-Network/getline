@@ -2,7 +2,7 @@
 
 set -e -o pipefail
 
-if [ ! -e ROOT ] ; then
+if [ ! -e .ROOT ] ; then
     echo "Please run this script from the root of the monorepo, ie.:" >&2
     echo "    sh production/ci/integration/run.sh" >&2
     exit 1
