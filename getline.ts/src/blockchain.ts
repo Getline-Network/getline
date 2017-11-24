@@ -140,8 +140,9 @@ export class GetlineBlockchain {
         }
 
         this.web3 = new Web3(provider);
-        if (this.web3.version.network != this.network) {
-            throw new Error("web3 is connected to wrong network")
+        const currentNetwork = this.web3.version.network;
+        if (currentNetwork != this.network) {
+            throw new Error(`web3 is connected to wrong network (got ${currentNetwork}, expected ${this.network})`)
         }
         this.web3.eth.defaultAccount = this.web3.eth.accounts[0];
     }
