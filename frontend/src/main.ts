@@ -5,18 +5,13 @@ import VueMaterial from 'vue-material';
 
 import Vue from 'vue';
 import App from './App.vue';
-import router from './router';
+import router, { isErrorPage, goToMainPage, goToUnlockMetamaskPage, goToUnsupportedNetworkPage, goToInstallMetamaskPage, goToErrorPage } from './router';
 import API from './api';
 
 import { VueConstructor } from 'vue/types/vue';
 import registerPurpleTheme from './theme';
 
 Vue.use(VueMaterial);
-Vue.use(VueMaterial.MdIcon);
-
-window.addEventListener('load', async () => {
-  API.init();
-});
 
 registerPurpleTheme(Vue);
 
@@ -24,9 +19,25 @@ Vue.config.productionTip = false;
 
 
 /* eslint-disable no-new */
-new Vue({
+var _Vue = new Vue({
   el: '#app',
   router,
   template: '<App/>',
   components: { App },
+});
+
+const actions = {
+  metamaskNotInstalled: () => goToInstallMetamaskPage.call(_Vue),
+  metamaskLocked: () => goToUnlockMetamaskPage.call(_Vue),
+  unsupportedNetwork: () => goToUnsupportedNetworkPage.call(_Vue),
+  unknownError: () => goToErrorPage.cal(_Vue),
+  afterSuccessfulInitialization: () => {
+    if (isErrorPage.call(_Vue)) {
+      goToMainPage.call(_Vue);
+    }
+  }
+}
+
+window.addEventListener('load', async () => {
+  API.init(actions);
 });
