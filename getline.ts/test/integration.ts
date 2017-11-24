@@ -27,7 +27,7 @@ class EndToEndTests {
         if (this.client != undefined) {
             return this.client;
         }
-        let client: any = new Client(metabackendUrl, "4", this.provider, false);
+        let client: any = new Client(metabackendUrl, "4", this.provider);
         let token = await client.blockchain.deploy("PrintableToken", "Integration Testcoin", 2, "ITC", 10000);
         client.testToken = token.address.token().printable();
         this.client = client;
