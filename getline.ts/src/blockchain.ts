@@ -31,11 +31,11 @@ export class ProviderOnUnsupportedNetwork extends UserVisibleError {
 }
 
 /**
- * Ethereum Provider (ie. Metamask) thrown an unexpected error.
+ * Ethereum Provider (ie. Metamask) thrown an unexpected error on initialization.
  * This can happen if we're using the default localhost:8545 web3 provider
  * but it's not running.
  */
-export class ProviderError extends UserVisibleError {
+export class ProviderInitializationError extends UserVisibleError {
     constructor(err: Error) {
         super("Error from ethereum provider: " + err);
     }
@@ -181,7 +181,7 @@ export class GetlineBlockchain {
         return new Promise<void>((resolve, reject)=>{
             this.web3.version.getNetwork((e, network)=>{
                 if (e != null) {
-                    reject(new ProviderError(e));
+                    reject(new ProviderInitializationError(e));
                     return;
                 }
                 if (network != this.network) {
@@ -190,7 +190,7 @@ export class GetlineBlockchain {
                 }
                 this.web3.eth.getAccounts((e, accounts)=>{
                     if (e != null) {
-                        reject(new ProviderError(e));
+                        reject(new ProviderInitializationError(e));
                     }
                     if (accounts.length < 1) {
                         reject(new ProviderLocked());
