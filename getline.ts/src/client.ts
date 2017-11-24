@@ -1,11 +1,14 @@
 import {BigNumber} from 'bignumber.js';
 import * as moment from 'moment';
 import * as Web3 from 'web3';
+import * as debug from 'debug';
 
 import {MetabackendClient, MetabackendService, pb} from './metabackend';
 import {GetlineBlockchain, Blockchain} from './blockchain';
 import {Loan} from './loan';
 import {Address, PrintableToken, LOAN_CONTRACT} from './common';
+
+const logger = debug('getline.ts:client')
 
 /**
  * Getline client library.
@@ -44,13 +47,13 @@ export class Client {
      * @param provider Web3 provider to use. If not given, the client will try
      *                 to find an injected one from Metamask. Otherwise, it
      *                 will fall back to http://localhost:8545/.
-     * @param debug Whether to enable verbose debugging to console. Default is
-     *              false.
      */
-    constructor(metabackend: string, network: string, provider?: Web3.Provider, debug?: boolean) {
-        this.metabackend = new MetabackendClient(metabackend, network, debug);
+    constructor(metabackend: string, network: string, provider?: Web3.Provider) {
+        logger("Starting...");
+
+        this.metabackend = new MetabackendClient(metabackend, network);
         this.network = network;
-        this.blockchain = new GetlineBlockchain(this.metabackend, network, provider, debug);
+        this.blockchain = new GetlineBlockchain(this.metabackend, network, provider);
         this.testToken = new PrintableToken(this.blockchain, "0x02c9ccaa1034a64e3a83df9ddce30e6d4bc40515");
         this.initialized = false;
     }
