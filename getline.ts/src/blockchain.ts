@@ -1,9 +1,14 @@
 import * as Web3 from 'web3';
 import {BigNumber} from 'bignumber.js';
 import * as moment from 'moment';
+import * as debug from 'debug';
 
 import {Address} from './common';
 import {MetabackendClient, pb} from './metabackend';
+
+
+const logger = debug('getline.ts:blockchain')
+
 
 class UserVisibleError extends Error {
     constructor(message: string) {
@@ -111,6 +116,7 @@ export class Contract {
      * @returns Result of call.
      */
     public async call<T>(methodName: string, ...params: Array<any>): Promise<T> {
+        logger(`Calling ${methodName}...`);
         let method: any = this.instance[methodName];
         return new Promise<T>((resolve, reject)=>{
             let opts = {
@@ -118,9 +124,11 @@ export class Contract {
             }
             method(...params, opts, (err: Error, object: T)=>{
                 if (err != undefined) {
+                    logger(`Failed: ${err}`);
                     reject(err);
                     return;
                 }
+                logger("Sucess.");
                 resolve(object);
             });
         });
@@ -136,6 +144,7 @@ export class Contract {
      *               seconds.
      */
     public async mutate(methodName: string, ...params: Array<any>): Promise<void> {
+        logger(`Mutating ${methodName}...`);
         // Build a transaction and get its' hash.
         let hash = await this.call<string>(methodName, ...params)
         // Wait until transaction hash gets mined into a block.
@@ -165,14 +174,14 @@ export class GetlineBlockchain {
 
         if (provider == undefined) {
             if (typeof window != "undefined" && (<WindowIndexable>window)['web3'] != undefined) {
-                console.log("getline.ts: using injected web3")
+                logger("Using injected web3")
                 provider = (<WindowIndexable>window)['web3'].currentProvider;
             } else {
-                console.log("getline.ts: connecting to node running on localhost")
+                logger("Connecting to node running on localhost")
                 provider = new Web3.providers.HttpProvider("http://localhost:8545")
             }
         } else {
-            console.log("getline.ts: using user-injected provider")
+            logger("Using user-injected provider")
         }
         this.web3 = new Web3(provider);
     }
@@ -220,7 +229,9 @@ export class GetlineBlockchain {
             const poll = 2 * 1000;
 
             let retries = timeout / poll;
+            logger("Starting transaction receipt waiter for " + hash);
             let interval = setInterval(()=>{
+                logger(`Retries left: ${retries}`);
                 retries -= 1;
                 if (retries <= 0) {
                     clearInterval(interval);
@@ -230,8 +241,10 @@ export class GetlineBlockchain {
 
                 this.web3.eth.getTransactionReceipt(hash, (e, receipt)=>{
                     if (!receipt) {
+                        logger(`No receipt yet.`);
                         return;
                     }
+                    logger(`Receipt found.`);
                     clearInterval(interval);
                     resolve(undefined);
                 });
@@ -247,6 +260,7 @@ export class GetlineBlockchain {
      * @returns Newly deployed contract.
      */
     private async waitContractDeployed(hash: string, name: string): Promise<Contract> {
+        logger(`Waiting for ${name} to be deployed by tx ${hash}`);
         await this.waitTxMined(hash)
         return new Promise<Contract>((resolve, reject)=>{
             this.web3.eth.getTransactionReceipt(hash, (e, receipt)=>{
@@ -267,6 +281,7 @@ export class GetlineBlockchain {
                         return;
                     }
 
+                    logger("Contract deployed at " + address);
                     this.existing(name, new Address(this, address)).then(resolve).catch(reject);
                 });
             });
@@ -287,9 +302,9 @@ export class GetlineBlockchain {
                 gas: 4500000,
                 data: bytecode,
             };
-            console.log("getline.ts: deploying contract " + contractName);
-            console.log("getline.ts: deploying bytecode " + bytecode.substring(0, 64) + "...");
-            console.log("getline.ts:    with parameters " + params);
+            logger("Deploying contract " + contractName);
+            logger("Deploying bytecode " + bytecode.substring(0, 64) + "...");
+            logger("With parameters " + params);
 
             let confirmed = false;
             let instance = contractAny.new(...params, opts, (err: Error, c: Web3.ContractInstance) =>{
@@ -305,7 +320,7 @@ export class GetlineBlockchain {
                 }
                 confirmed = true;
 
-                console.log("getline.ts: deploying...");
+                logger("Deploying...");
                 this.waitContractDeployed(c.transactionHash, contractName).then(resolve).catch(reject);
             });
         });

@@ -1,11 +1,14 @@
 import {BigNumber} from 'bignumber.js';
 import * as moment from 'moment';
 import * as Web3 from 'web3';
+import * as debug from 'debug';
 
 import {MetabackendClient, MetabackendService, pb} from './metabackend';
 import {GetlineBlockchain, Blockchain} from './blockchain';
 import {Loan} from './loan';
 import {Address, PrintableToken, LOAN_CONTRACT} from './common';
+
+const logger = debug('getline.ts:client')
 
 /**
  * Getline client library.
@@ -46,6 +49,8 @@ export class Client {
      *                 will fall back to http://localhost:8545/.
      */
     constructor(metabackend: string, network: string, provider?: Web3.Provider) {
+        logger("Starting...");
+
         this.metabackend = new MetabackendClient(metabackend, network);
         this.network = network;
         this.blockchain = new GetlineBlockchain(this.metabackend, network, provider);
@@ -119,15 +124,15 @@ export class Client {
             throw new Error("cannot place loan with payback deadline before fundraising deadline");
         }
 
-        let currentBlock = (await this.blockchain.currentBlock()).toNumber();
-        let blocksPerSecond = (1.0) / 15;
+        const currentBlock = (await this.blockchain.currentBlock()).toNumber();
+        const blocksPerSecond = (1.0) / 15;
 
-        let fundraisingDelta = fundraisingEnd.diff(now, 'seconds');
-        let paybackDelta = paybackEnd.diff(now, 'seconds');
-        let fundraisingEndBlocks = currentBlock + blocksPerSecond * fundraisingDelta;
-        let paybackEndBlocks = currentBlock + blocksPerSecond * paybackDelta;
+        const fundraisingDelta = fundraisingEnd.diff(now, 'seconds');
+        const paybackDelta = paybackEnd.diff(now, 'seconds');
+        const fundraisingEndBlocks = currentBlock + blocksPerSecond * fundraisingDelta;
+        const paybackEndBlocks = currentBlock + blocksPerSecond * paybackDelta;
 
-        let loan = await this.blockchain.deploy(LOAN_CONTRACT,
+        const loan = await this.blockchain.deploy(LOAN_CONTRACT,
             this.testToken.ascii, this.testToken.ascii,
             (await this.currentUser()).ascii,
             amount, interestPermil, fundraisingEndBlocks, paybackEndBlocks);
@@ -138,7 +143,6 @@ export class Client {
         req.setLoan(loan.address.proto());
 
         let res = await this.metabackend.invoke(MetabackendService.IndexLoan, req);
-        console.log("getline.ts: indexed loan as " + res.getShortId());
         return this.loan(res.getShortId());
     }
 

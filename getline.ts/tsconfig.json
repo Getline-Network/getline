@@ -5,6 +5,7 @@
     "declaration": false,
     "outDir": "./dist",
     "allowJs": true,
+    "experimentalDecorators": true,
     "strict": true
   },
   "include": [
