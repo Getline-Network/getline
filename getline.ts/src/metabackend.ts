@@ -3,6 +3,7 @@ import * as Web3 from 'web3';
 import * as encoding from 'text-encoding';
 import * as IsNode from 'is-node';
 import {Mutex, MutexInterface} from 'async-mutex';
+import * as debug from 'debug';
 
 import {Metabackend as MetabackendService} from './generated/metabackend_pb_service';
 import * as pb from "./generated/metabackend_pb";
@@ -12,6 +13,9 @@ import nodeHttpRequest from 'grpc-web-client/dist/transports/nodeHttp';
 import { DefaultTransportFactory } from 'grpc-web-client/dist/transports/Transport';
 
 export {MetabackendService, pb};
+
+
+const logger = debug('getline.ts:metabackend')
 
 
 /**
@@ -41,6 +45,7 @@ export class MetabackendClient {
     public  async invoke<TReq extends jspb.Message, TRes extends jspb.Message>
                                    (method: grpc.MethodDefinition<TReq, TRes>, req: TReq): Promise<TRes> {
         return new Promise<TRes>((resolve, reject)=>{
+            logger(`Invoking ${method.methodName}...`);
             let transport = DefaultTransportFactory.detectTransport();
             // Are we running in Node? Force using nodeHttpRequest.
             if (IsNode) {
@@ -49,10 +54,14 @@ export class MetabackendClient {
             grpc.invoke(method, {
                 request: req,
                 host: this.metabackendHost,
-                onMessage: (res: TRes) => { resolve(res); },
+                onMessage: (res: TRes) => { 
+                    logger("Success.");
+                    resolve(res);
+                },
                 transport: transport,
                 onEnd: (code: Code, msg: string | undefined, trailers: Metadata) => {
                     if (code != Code.OK) {
+                    logger(`Failed (${code}): ${msg}`);
                         reject(new Error("gRPC failed (" + code + "): " + msg));
                     }
                 }
@@ -70,7 +79,7 @@ export class MetabackendClient {
             release();
             return this.contractDefinitions;
         }
-        console.log("getline.ts: downloading contract definitions from metabackend...");
+        logger("Downloading contract definitions from metabackend...");
         let req = new pb.GetDeploymentRequest();
         req.setNetworkId(this.network);
         let res = await this.invoke(MetabackendService.GetDeployment, req);
