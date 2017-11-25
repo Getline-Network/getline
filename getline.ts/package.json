@@ -31,7 +31,8 @@
     "doc": "typedoc -out doc/ src typings node_modules/web3-typescript-typings/index.d.ts",
     "generate": "protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:src/generated --ts_out=service=true:src/generated -I ../pb/ ../pb/*.proto",
     "tsc": "tsc",
-    "test": "mocha -r ts-node/register test/**/*.ts"
+    "test": "mocha -r ts-node/register test/**/*.ts",
+    "lint": "tslint -c tslint.json 'src/**/*.ts' -e src/generated/**/*"
   },
   "dependencies": {
     "@types/debug": "^0.0.30",
@@ -43,6 +44,7 @@
     "grpc-web-client": "^0.3.1",
     "is-node": "^1.0.2",
     "moment": "^2.19.1",
+    "tslint": "^5.8.0",
     "typed-promisify": "^0.4.0",
     "web3": "0.20.1"
   }

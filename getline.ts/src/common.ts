@@ -1,19 +1,18 @@
-import {BigNumber} from 'bignumber.js';
+import {BigNumber} from "bignumber.js";
 
-import {Blockchain} from './blockchain';
-import {pb} from './metabackend';
+import {Blockchain} from "./blockchain";
+import {pb} from "./metabackend";
 
-
-export const TOKEN_CONTRACT = 'PrintableToken';
-export const LOAN_CONTRACT = 'Loan';
-
+export const TOKEN_CONTRACT = "PrintableToken";
+export const LOAN_CONTRACT = "Loan";
 
 /**
  * Ethereum address of a contract or account.
  */
 export class Address {
-    protected blockchain: Blockchain;
     public readonly ascii: string;
+
+    protected blockchain: Blockchain;
 
     constructor(blockchain: Blockchain, ascii: string) {
         this.blockchain = blockchain;
@@ -34,7 +33,7 @@ export class Address {
      * @returns This address as a protobuf.
      */
     public proto(): pb.Address {
-        let address = new pb.Address();
+        const address = new pb.Address();
         address.setAscii(this.ascii);
         return address;
     }
@@ -53,7 +52,7 @@ export class Address {
      * @returns Whether addresses are equal.
      */
     public eq(other: Address): boolean {
-        return this.ascii.toLowerCase() == other.ascii.toLowerCase()
+        return this.ascii.toLowerCase() === other.ascii.toLowerCase();
     }
 }
 
@@ -61,41 +60,22 @@ export class Address {
  * Ethereum ERC-20 compatible token.
  */
 export class Token extends Address {
-    private name_: string | undefined;
-    private symbol_: string | undefined;
-    private decimals_: number | undefined;
+    /**
+     * Returns token symbol.
+     */
+    public symbol = this.contractProperty<string>("symbol");
+    /**
+     * Returns token name.
+     */
+    public name = this.contractProperty<string>("name");
 
     /**
      * Cache for contract properties.
      */
     private propertyCache: { [key: string]: any } = {};
 
-    /**
-     * Returns a caching getter for a constant contract property.
-     * @param key Name of contract property.
-     * @returns Getter for contract property.
-     */
-    protected contractProperty<T>(key: string): (() => Promise<T>) {
-        return async ()=>{
-            if (this.propertyCache[key] != undefined) {
-                return this.propertyCache[key];
-            }
-            let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
-            this.propertyCache[key] = await token.call<T>(key);
-            return this.propertyCache[key];
-        }
-    }
+    private decimalsBigNumber = this.contractProperty<BigNumber>("decimals");
 
-    /**
-     * Returns token symbol.
-     */
-    public symbol = this.contractProperty<string>('symbol');
-    /**
-     * Returns token name.
-     */
-    public name = this.contractProperty<string>('name');
-
-    private decimalsBigNumber = this.contractProperty<BigNumber>('decimals');
     /**
      * Returns token decimal places count.
      *
@@ -103,13 +83,12 @@ export class Token extends Address {
      * per ERC20.
      */
     public async decimals(): Promise<BigNumber> {
-        let d = await this.decimalsBigNumber()
-        if (d.gt(255) || d.lt(0) || d.dp() != 0) {
-            throw new Error("Invalid token decimal places count")
+        const d = await this.decimalsBigNumber();
+        if (d.gt(255) || d.lt(0) || d.dp() !== 0) {
+            throw new Error("Invalid token decimal places count");
         }
         return d;
     }
-
 
     /**
      * Returns this token's balance of an address.
@@ -117,8 +96,8 @@ export class Token extends Address {
      * @returns Balance in this token.
      */
     public async balanceOf(address: Address): Promise<BigNumber> {
-        let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
-        return token.call<BigNumber>('balanceOf', address.ascii);
+        const token = await this.blockchain.existing(TOKEN_CONTRACT, this);
+        return token.call<BigNumber>("balanceOf", address.ascii);
     }
 
     /**
@@ -128,8 +107,8 @@ export class Token extends Address {
      * @returns Balance in this token.
      */
     public async allowance(owner: Address, spender: Address): Promise<BigNumber> {
-        let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
-        return token.call<BigNumber>('allowance', owner.ascii, spender.ascii);
+        const token = await this.blockchain.existing(TOKEN_CONTRACT, this);
+        return token.call<BigNumber>("allowance", owner.ascii, spender.ascii);
     }
 
     /**
@@ -139,8 +118,8 @@ export class Token extends Address {
      * @returns Balance in this token.
      */
     public async approve(spender: Address, value: BigNumber): Promise<void> {
-        let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
-        return token.mutate('approve', spender.ascii, value);
+        const token = await this.blockchain.existing(TOKEN_CONTRACT, this);
+        return token.mutate("approve", spender.ascii, value);
     }
 
     /**
@@ -150,7 +129,7 @@ export class Token extends Address {
      * @returns Internal integer representation.
      */
     public async integerize(human: BigNumber): Promise<BigNumber> {
-        let decimals = (await this.decimals()).toNumber();
+        const decimals = (await this.decimals()).toNumber();
         return human.shift(decimals);
     }
 
@@ -161,7 +140,7 @@ export class Token extends Address {
      * @returns Human-readable decimal point representation.
      */
     public async humanize(internal: BigNumber): Promise<BigNumber> {
-        let decimals = (await this.decimals()).toNumber();
+        const decimals = (await this.decimals()).toNumber();
         return internal.shift(-decimals);
     }
 
@@ -176,6 +155,22 @@ export class Token extends Address {
         // that have not been verified to be of certain types..?
         return new PrintableToken(this.blockchain, this.ascii);
     }
+
+    /**
+     * Returns a caching getter for a constant contract property.
+     * @param key Name of contract property.
+     * @returns Getter for contract property.
+     */
+    protected contractProperty<T>(key: string): (() => Promise<T>) {
+        return async () => {
+            if (this.propertyCache[key] !== undefined) {
+                return this.propertyCache[key];
+            }
+            const token = await this.blockchain.existing(TOKEN_CONTRACT, this);
+            this.propertyCache[key] = await token.call<T>(key);
+            return this.propertyCache[key];
+        };
+    }
 }
 
 /**
@@ -188,15 +183,15 @@ export class PrintableToken extends Token {
     /**
      * Returns token print value (how much will be printed at once).
      */
-    public printValue = this.contractProperty<BigNumber>('printValue');
+    public printValue = this.contractProperty<BigNumber>("printValue");
 
     /**
      * Prints `printValue` tokens and sends them to an address.
      * @param who Receiver of newly printed tokens.
      */
     public async print(who: Address): Promise<void> {
-        let token = await this.blockchain.existing(TOKEN_CONTRACT, this);
-        return token.mutate('print', who.ascii);
+        const token = await this.blockchain.existing(TOKEN_CONTRACT, this);
+        return token.mutate("print", who.ascii);
     }
 }
 
@@ -204,10 +199,10 @@ export class PrintableToken extends Token {
  * Waits asynchronously until a promise is true.
  * @param check Predicate.
  */
-export async function waitUntil(check: ()=>Promise<boolean>): Promise<void> {
-    return new Promise<void>((resolve, reject)=>{
-        let interval = setInterval(()=>{
-            check().then((okay: boolean)=>{
+export async function waitUntil(check: () => Promise<boolean>): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+        const interval = setInterval(() => {
+            check().then((okay: boolean) => {
                 if (okay) {
                     clearInterval(interval);
                     resolve();
@@ -216,4 +211,3 @@ export async function waitUntil(check: ()=>Promise<boolean>): Promise<void> {
         }, 1000);
     });
 }
-

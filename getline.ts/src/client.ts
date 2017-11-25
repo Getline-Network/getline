@@ -1,14 +1,14 @@
-import {BigNumber} from 'bignumber.js';
-import * as moment from 'moment';
-import * as Web3 from 'web3';
-import * as debug from 'debug';
+import {BigNumber} from "bignumber.js";
+import * as debug from "debug";
+import * as moment from "moment";
+import * as Web3 from "web3";
 
-import {MetabackendClient, MetabackendService, pb} from './metabackend';
-import {GetlineBlockchain, Blockchain} from './blockchain';
-import {Loan} from './loan';
-import {Address, PrintableToken, LOAN_CONTRACT} from './common';
+import {Blockchain, GetlineBlockchain} from "./blockchain";
+import {Address, LOAN_CONTRACT, PrintableToken} from "./common";
+import {Loan} from "./loan";
+import {MetabackendClient, MetabackendService, pb} from "./metabackend";
 
-const logger = debug('getline.ts:client')
+const logger = debug("getline.ts:client");
 
 /**
  * Getline client library.
@@ -26,15 +26,15 @@ const logger = debug('getline.ts:client')
  *
  */
 export class Client {
-    private metabackend: MetabackendClient;
-    private network: string;
-    private blockchain: GetlineBlockchain;
-    private initialized: boolean;
-
     /**
      * Token that is used for collateral and loans in the demo.
      */
     public readonly testToken: PrintableToken;
+
+    private metabackend: MetabackendClient;
+    private network: string;
+    private blockchain: GetlineBlockchain;
+    private initialized: boolean;
 
     /**
      * Creates a new Getline client.
@@ -70,16 +70,6 @@ export class Client {
         await this.blockchain.initialize();
         this.initialized = true;
     }
-    
-    // TODO(q3k): Remove this after demo, require explicit initialization instead.
-    private async initializeIfNeeded(): Promise<void> {
-        if (this.initialized) {
-            return;
-        }
-        console.error("getline.ts client was not explicitely initialized - this will be deprecated in the future");
-        return this.initialize();
-    }
-
 
     public async currentUser(): Promise<Address> {
         await this.initializeIfNeeded();
@@ -109,11 +99,11 @@ export class Client {
         await this.initializeIfNeeded();
 
         // TODO(q3k) change this when we're not on rinkeby and we have a better loan SC
-        if (this.network != "4") {
+        if (this.network !== "4") {
             throw new Error("cannot place loan on non-rinkeby chains");
         }
 
-        let now = moment();
+        const now = moment();
         if (fundraisingEnd.isBefore(now)) {
             throw new Error("cannot place loan with fundraising deadline in the past");
         }
@@ -127,8 +117,8 @@ export class Client {
         const currentBlock = (await this.blockchain.currentBlock()).toNumber();
         const blocksPerSecond = (1.0) / 15;
 
-        const fundraisingDelta = fundraisingEnd.diff(now, 'seconds');
-        const paybackDelta = paybackEnd.diff(now, 'seconds');
+        const fundraisingDelta = fundraisingEnd.diff(now, "seconds");
+        const paybackDelta = paybackEnd.diff(now, "seconds");
         const fundraisingEndBlocks = currentBlock + blocksPerSecond * fundraisingDelta;
         const paybackEndBlocks = currentBlock + blocksPerSecond * paybackDelta;
 
@@ -137,12 +127,12 @@ export class Client {
             (await this.currentUser()).ascii,
             amount, interestPermil, fundraisingEndBlocks, paybackEndBlocks);
 
-        let req = new pb.IndexLoanRequest();
+        const req = new pb.IndexLoanRequest();
         req.setNetworkId(this.network);
         req.setDescription(description);
         req.setLoan(loan.address.proto());
 
-        let res = await this.metabackend.invoke(MetabackendService.IndexLoan, req);
+        const res = await this.metabackend.invoke(MetabackendService.IndexLoan, req);
         return this.loan(res.getShortId());
     }
 
@@ -156,16 +146,16 @@ export class Client {
     public async loan(shortId: string): Promise<Loan> {
         await this.initializeIfNeeded();
 
-        let req = new pb.GetLoansRequest();
+        const req = new pb.GetLoansRequest();
         req.setNetworkId(this.network);
         req.setShortId(shortId);
 
-        let res = await this.metabackend.invoke(MetabackendService.GetLoans, req);
-        if (res.getNetworkId() != this.network) {
+        const res = await this.metabackend.invoke(MetabackendService.GetLoans, req);
+        if (res.getNetworkId() !== this.network) {
             throw new Error("Invalid network ID in response.");
         }
 
-        let loan = new Loan(this.blockchain);
+        const loan = new Loan(this.blockchain);
         await loan.loadFromProto(res.getLoanCacheList()[0]);
         return loan;
     }
@@ -176,27 +166,37 @@ export class Client {
      * @param owner Ethereum address of owner/liege.
      * @returns Loans owned by `owner`.
      */
-    public async loansByOwner(owner: Address): Promise<Array<Loan>> {
+    public async loansByOwner(owner: Address): Promise<Loan[]> {
         await this.initializeIfNeeded();
 
-        let req = new pb.GetLoansRequest();
+        const req = new pb.GetLoansRequest();
         req.setNetworkId(this.network);
         req.setOwner(owner.proto());
 
-        let res = await this.metabackend.invoke(MetabackendService.GetLoans, req);
-        if (res.getNetworkId() != this.network) {
+        const res = await this.metabackend.invoke(MetabackendService.GetLoans, req);
+        if (res.getNetworkId() !== this.network) {
             throw new Error("Invalid network ID in response.");
         }
 
-        let loans : Array<Loan> = [];
-        let promises : Array<Promise<void>> = [];
-        let currentBlock = await this.blockchain.currentBlock();
+        const loans: Loan[] = [];
+        const promises: Array<Promise<void>> = [];
+        const currentBlock = await this.blockchain.currentBlock();
         res.getLoanCacheList().forEach((elem) => {
-            let loan = new Loan(this.blockchain);
+            const loan = new Loan(this.blockchain);
             promises.push(loan.loadFromProto(elem));
             loans.push(loan);
         });
         await Promise.all(promises);
         return loans;
     }
+
+    // TODO(q3k): Remove this after demo, require explicit initialization instead.
+    private async initializeIfNeeded(): Promise<void> {
+        if (this.initialized) {
+            return;
+        }
+        console.error("getline.ts client was not explicitely initialized - this will be deprecated in the future");
+        return this.initialize();
+    }
+
 }
