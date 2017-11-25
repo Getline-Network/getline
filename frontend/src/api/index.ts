@@ -12,10 +12,12 @@ let waiters: Array<Waiter> = [];
 export default {
   init: () => {
     api = new Client(METABACKEND_URL, METABACKEND_NETWORK);
-    // Wake up sleepers waiting for API.
-    for (let i = 0; i < waiters.length; i++) {
-      waiters[i](api);
-    }
+    api.initialize().then(()=>{
+        // Wake up sleepers waiting for API.
+        for (let i = 0; i < waiters.length; i++) {
+          waiters[i](api);
+        }
+    });
   },
   instance: (): Promise<Client> => {
     return new Promise<Client>((resolve, reject) => {

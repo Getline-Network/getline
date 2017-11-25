@@ -9,6 +9,7 @@ function delay(ms: number): Promise<void> {
 
 let main = async() => {
     let c = new Client("https://0.api.getline.in", "4");
+    await c.initialize();
     let user = await c.currentUser();
     console.log("user: " + user.ascii);
 

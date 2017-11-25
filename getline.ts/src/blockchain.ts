@@ -145,13 +145,32 @@ export class GetlineBlockchain {
         } else {
             logger("Using user-injected provider")
         }
-
         this.web3 = new Web3(provider);
-        if (this.web3.version.network != this.network) {
-            throw new Error("web3 is connected to wrong network")
-        }
-        this.web3.eth.defaultAccount = this.web3.eth.accounts[0];
-        logger("Current user is " + this.web3.eth.defaultAccount);
+    }
+
+    public async initialize(): Promise<void> {
+        return new Promise<void>((resolve, reject)=>{
+            this.web3.version.getNetwork((e, network)=>{
+                if (e != null) {
+                    reject(new Error("Could not initialize getline.ts: " + e));
+                    return;
+                }
+                if (network != this.network) {
+                    reject(new Error(`Connected to wrong network (got ${network}, expected ${this.network})`));
+                    return;
+                }
+                this.web3.eth.getAccounts((e, accounts)=>{
+                    if (e != null) {
+                        reject(new Error("Could not initialize getline.ts: " + e));
+                    }
+                    if (accounts.length < 1) {
+                        reject(new Error("No accounts available"));
+                    }
+                    this.web3.eth.defaultAccount = accounts[0];
+                    resolve();
+                });
+            });
+        });
     }
 
     /**

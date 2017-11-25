@@ -29,6 +29,7 @@ export class Client {
     private metabackend: MetabackendClient;
     private network: string;
     private blockchain: GetlineBlockchain;
+    private initialized: boolean;
 
     /**
      * Token that is used for collateral and loans in the demo.
@@ -37,6 +38,7 @@ export class Client {
 
     /**
      * Creates a new Getline client.
+     * The .initialize() method must be called before first use.
      *
      * @param metabackend Address of metabackend. Production address is
      *                    `https://0.api.getline.in`.
@@ -53,9 +55,35 @@ export class Client {
         this.network = network;
         this.blockchain = new GetlineBlockchain(this.metabackend, network, provider);
         this.testToken = new PrintableToken(this.blockchain, "0x02c9ccaa1034a64e3a83df9ddce30e6d4bc40515");
+        this.initialized = false;
     }
 
+    /**
+     * Initialize the API client and connect to the blockchain.
+     * This must be called before any other method.
+     */
+    public async initialize(): Promise<void> {
+        if (this.initialized) {
+            console.error("getline.ts client was initialized twice - ignoring.");
+            return;
+        }
+        await this.blockchain.initialize();
+        this.initialized = true;
+    }
+    
+    // TODO(q3k): Remove this after demo, require explicit initialization instead.
+    private async initializeIfNeeded(): Promise<void> {
+        if (this.initialized) {
+            return;
+        }
+        console.error("getline.ts client was not explicitely initialized - this will be deprecated in the future");
+        return this.initialize();
+    }
+
+
     public async currentUser(): Promise<Address> {
+        await this.initializeIfNeeded();
+
         return this.blockchain.coinbase();
     }
 
@@ -78,6 +106,8 @@ export class Client {
      */
     public async newLoan(description: string, amount: BigNumber, interestPermil: number,
                          fundraisingEnd: moment.Moment, paybackEnd: moment.Moment): Promise<Loan> {
+        await this.initializeIfNeeded();
+
         // TODO(q3k) change this when we're not on rinkeby and we have a better loan SC
         if (this.network != "4") {
             throw new Error("cannot place loan on non-rinkeby chains");
@@ -124,6 +154,8 @@ export class Client {
      * @returns Loan identifier by shortId.
      */
     public async loan(shortId: string): Promise<Loan> {
+        await this.initializeIfNeeded();
+
         let req = new pb.GetLoansRequest();
         req.setNetworkId(this.network);
         req.setShortId(shortId);
@@ -145,6 +177,8 @@ export class Client {
      * @returns Loans owned by `owner`.
      */
     public async loansByOwner(owner: Address): Promise<Array<Loan>> {
+        await this.initializeIfNeeded();
+
         let req = new pb.GetLoansRequest();
         req.setNetworkId(this.network);
         req.setOwner(owner.proto());
