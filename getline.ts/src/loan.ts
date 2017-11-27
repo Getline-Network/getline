@@ -1,11 +1,10 @@
-import {BigNumber} from 'bignumber.js';
-import * as Web3 from 'web3';
-import * as moment from 'moment';
+import {BigNumber} from "bignumber.js";
+import * as moment from "moment";
+import * as Web3 from "web3";
 
-import {Address, Token, waitUntil} from './common';
-import {Blockchain, Contract} from './blockchain';
-import * as pb from './generated/metabackend_pb';
-
+import {Blockchain, Contract} from "./blockchain";
+import {Address, Token, waitUntil} from "./common";
+import * as pb from "./generated/metabackend_pb";
 
 /**
  * State of a Getline Loan.
@@ -26,7 +25,7 @@ export enum LoanState {
     /**
      * Loan has been paid back or has defaulted.
      */
-    Finished
+    Finished,
 }
 
 /**
@@ -42,45 +41,45 @@ export class Loan {
         /**
          * Address of ERC20-compatible token used as collateral for the loan.
          */
-        collateralToken: Token
+        collateralToken: Token,
         /**
          * Address of ERC20-compatible token used as loan.
          */
-        loanToken: Token
+        loanToken: Token,
         /**
          * Date by which the loan needs to have all investment gathered.
          */
-        fundraisingDeadline: moment.Moment
+        fundraisingDeadline: moment.Moment,
         /**
          * Date by which loan needs to be fully repaid.
          */
-        paybackDeadline: moment.Moment
+        paybackDeadline: moment.Moment,
         /**
          * Amount of loan token wanted.
          */
-        amountWanted: BigNumber
+        amountWanted: BigNumber,
         /**
          * Interest of loan, in permil.
          */
-        interestPermil: number
-    }
+        interestPermil: number,
+    };
     /**
      * A short identifier that is used to lookup the loan in the Getline
      * index system (metabackend). Opaque.
      */
-    public shortId: string
+    public shortId: string;
     /**
      * User-given description of the loan.
      */
-    public description: string
+    public description: string;
     /**
      * Ethereum address at which loan is deployed.
      */
-    public address: Address
+    public address: Address;
     /**
      * Ethereum address of owner/liege of loan.
      */
-    public owner: Address
+    public owner: Address;
 
     /**
      * State of the loan on the blockchain. These change with time.
@@ -91,31 +90,30 @@ export class Loan {
         /**
          * State of Loan contract.
          */
-        loanState: LoanState
+        loanState: LoanState,
         /**
          * Value of loan token gathered in fundraising.
          */
-        amountGathered: BigNumber
+        amountGathered: BigNumber,
         /**
          * Whether the loan is currently raising funds from investors.
          */
-        fundraising: boolean
+        fundraising: boolean,
         /**
          * Whether the loan has been paid back succesfully.
          */
-        paidback: boolean
+        paidback: boolean,
         /**
          * Whether the loan has defaulted, ie. the liege has not paid back in
          * time.
          */
-        defaulted: boolean
-    }
+        defaulted: boolean,
+    };
 
-    private blockchain: Blockchain
+    private blockchain: Blockchain;
 
-    private contract: Contract
+    private contract: Contract;
 
- 
     /**
      * Private constructor used by the library.
      */
@@ -131,31 +129,33 @@ export class Loan {
         this.shortId = proto.getShortId();
         this.description = proto.getDescription();
 
-        if (!proto.hasDeploymentAddress()) throw new Error("invalid proto: missing deployment address");
-        if (!proto.hasOwner()) throw new Error("invalid proto: missing deployment address");
-        if (!proto.hasParameters()) throw new Error("invalid proto: missing parameters");
-        if (!proto.getParameters()!.hasCollateralToken()) throw new Error("invalid proto: missing collateral token");
-        if (!proto.getParameters()!.hasLoanToken()) throw new Error("invalid proto: missing loan token");
+        if (!proto.hasDeploymentAddress()) { throw new Error("invalid proto: missing deployment address"); }
+        if (!proto.hasOwner()) { throw new Error("invalid proto: missing deployment address"); }
+        if (!proto.hasParameters()) { throw new Error("invalid proto: missing parameters"); }
+        if (!proto.getParameters()!.hasCollateralToken()) {
+            throw new Error("invalid proto: missing collateral token");
+        }
+        if (!proto.getParameters()!.hasLoanToken()) { throw new Error("invalid proto: missing loan token"); }
 
         this.address = new Address(this.blockchain, proto.getDeploymentAddress()!.getAscii());
         this.owner = new Address(this.blockchain, proto.getOwner()!.getAscii());
 
-        let currentBlock = await this.blockchain.currentBlock();
-        let blockToTime = (count: string)=>{
+        const currentBlock = await this.blockchain.currentBlock();
+        const blockToTime = (count: string) => {
             return this.blockchain.blockToTime(currentBlock, new BigNumber(count));
-        }
-
-        let params = proto.getParameters()!;
-        this.parameters = {
-            collateralToken: new Token(this.blockchain, params.getCollateralToken()!.getAscii()),
-            loanToken: new Token(this.blockchain, params.getLoanToken()!.getAscii()),
-            fundraisingDeadline: blockToTime(params.getFundraisingBlocksCount()),
-            paybackDeadline: blockToTime(params.getPaybackBlocksCount()),
-            amountWanted: new BigNumber(params.getAmountWanted()),
-            interestPermil: params.getInterestPermil()
         };
 
-        this.contract = await this.blockchain.existing('Loan', this.address);
+        const params = proto.getParameters()!;
+        this.parameters = {
+            amountWanted: new BigNumber(params.getAmountWanted()),
+            collateralToken: new Token(this.blockchain, params.getCollateralToken()!.getAscii()),
+            fundraisingDeadline: blockToTime(params.getFundraisingBlocksCount()),
+            interestPermil: params.getInterestPermil(),
+            loanToken: new Token(this.blockchain, params.getLoanToken()!.getAscii()),
+            paybackDeadline: blockToTime(params.getPaybackBlocksCount()),
+        };
+
+        this.contract = await this.blockchain.existing("Loan", this.address);
     }
 
     /**
@@ -163,12 +163,12 @@ export class Loan {
      */
     public async updateStateFromBlockchain(): Promise<void> {
         this.blockchainState = {
-            loanState: (await this.contract.call<BigNumber>('currentState')).toNumber(),
-            amountGathered: await this.contract.call<BigNumber>('amountGathered'),
-            fundraising: await this.contract.call<boolean>('isFundraising'),
-            paidback: await this.contract.call<boolean>('isPaidback'),
-            defaulted: await this.contract.call<boolean>('isDefaulted'),
-        }
+            amountGathered: await this.contract.call<BigNumber>("amountGathered"),
+            defaulted: await this.contract.call<boolean>("isDefaulted"),
+            fundraising: await this.contract.call<boolean>("isFundraising"),
+            loanState: (await this.contract.call<BigNumber>("currentState")).toNumber(),
+            paidback: await this.contract.call<boolean>("isPaidback"),
+        };
     }
 
     /**
@@ -179,24 +179,24 @@ export class Loan {
      *
      */
     public async sendCollateral(amount: BigNumber): Promise<void> {
-        if (this.blockchainState == undefined) {
-            await this.updateStateFromBlockchain()
+        if (this.blockchainState === undefined) {
+            await this.updateStateFromBlockchain();
         }
 
-        if (this.blockchainState.loanState != LoanState.CollateralCollection) {
+        if (this.blockchainState.loanState !== LoanState.CollateralCollection) {
             throw new Error("Loan is not gathering collateral anymore");
         }
         if (!await this.isOwner()) {
-            throw new Error("setCollateralAmount can only be called by owner of loan")
+            throw new Error("setCollateralAmount can only be called by owner of loan");
         }
 
         // First, ensure that collateral allowance is set correctly.
-        let collateral = this.parameters.collateralToken;
+        const collateral = this.parameters.collateralToken;
         await collateral.approve(this.address, amount);
         await this.updateStateFromBlockchain();
 
         // Now, call gatherCollateral and wait for state change.
-        await this.contract.mutate('gatherCollateral');
+        await this.contract.mutate("gatherCollateral");
         await this.updateStateFromBlockchain();
     }
 
@@ -206,9 +206,7 @@ export class Loan {
      * @returns Whether the current API client is the owner/liege of the loan.
      */
     public async isOwner(): Promise<boolean> {
-        let coinbase = await this.blockchain.coinbase();
-        return this.owner.eq(coinbase)
+        const coinbase = await this.blockchain.coinbase();
+        return this.owner.eq(coinbase);
     }
 }
-
-

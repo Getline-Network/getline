@@ -89,6 +89,25 @@ jobs:
             - persist_to_workspace:
                 root: /tmp/workspace
                 paths: getline.ts
+
+    getline_ts_lint:
+        docker:
+            - image: getline/ci-frontend:latest
+        working_directory: ~/project/getline.ts
+        steps:
+            - checkout:
+                path: ~/project
+            - restore_cache:
+                keys:
+                    - getlinets2-modules-{{ checksum "yarn.lock" }}
+                    - getlinets2-modules
+            - run: yarn
+            - save_cache:
+                key: getlinets2-modules-{{ checksum "yarn.lock" }}
+                paths:
+                    - node_modules/
+            - run: yarn lint
+
         
     frontend_build:
         docker:
@@ -119,6 +138,7 @@ workflows:
     version: 2
     frontend:
         jobs:
+            - getline_ts_lint
             - getline_ts_build
             - frontend_build:
                 requires:
