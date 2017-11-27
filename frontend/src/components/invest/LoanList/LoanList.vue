@@ -32,7 +32,7 @@
 <script>
 import UserScore from '@/components/common/UserScore';
 import loans from '@/server/getGatheringLoans';
-import { goToLoan } from '@/router/index';
+import { goToLoan } from '@/router/redirects';
 import NoLoans from './NoLoans';
 
 export default {
