@@ -190,7 +190,7 @@ export class GetlineBlockchain {
                     return;
                 }
                 this.web3.eth.getAccounts((e2, accounts) => {
-                    if (e2 !== undefined) {
+                    if (e2 !== null) {
                         reject(new ProviderInitializationError(e));
                     }
                     if (accounts.length < 1) {
