@@ -1,6 +1,7 @@
-const METABACKEND_URL = 'http://0.api.getline.in';
-const METABACKEND_NETWORK = '4';
+import METABACKEND from './metabackend';
 import { Client, Loan, LoanState } from '../../../getline.ts';
+import { EventsProvider } from '../events';
+import { handleInitError } from './errors';
 
 interface Waiter {
   (resolve: Client): void
@@ -9,17 +10,22 @@ interface Waiter {
 let api: Client | undefined;
 let waiters: Array<Waiter> = [];
 
+
 export default {
-  init: () => {
-    api = new Client(METABACKEND_URL, METABACKEND_NETWORK);
-    api.initialize().then(()=>{
-        // Wake up sleepers waiting for API.
-        for (let i = 0; i < waiters.length; i++) {
-          waiters[i](api);
-        }
-    });
+  init: async function (events: EventsProvider): Promise<void> {
+    try {
+      api = new Client(METABACKEND.URL, METABACKEND.NETWORK);
+      await api.initialize();
+      events.afterSuccessfulInitialization();
+      // Wake up sleepers waiting for API.
+      for (let i = 0; i < waiters.length; i++) {
+        waiters[i](api);
+      }
+    } catch (error) {
+      handleInitError(error, events);
+    }
   },
-  instance: (): Promise<Client> => {
+  instance: function (): Promise<Client> {
     return new Promise<Client>((resolve, reject) => {
       // Have we not initialized yet? Return and wait to be called when we are.
       if (api == undefined) {

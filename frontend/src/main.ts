@@ -7,26 +7,23 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import API from './api';
-
-import { VueConstructor } from 'vue/types/vue';
+import { initEvents } from './events';
 import registerPurpleTheme from './theme';
 
 Vue.use(VueMaterial);
-Vue.use(VueMaterial.MdIcon);
-
-window.addEventListener('load', async () => {
-  API.init();
-});
 
 registerPurpleTheme(Vue);
 
 Vue.config.productionTip = false;
 
-
 /* eslint-disable no-new */
-new Vue({
+const vue = new Vue({
   el: '#app',
   router,
   template: '<App/>',
   components: { App },
+});
+
+window.addEventListener('load', async () => {
+  API.init(initEvents(vue));
 });
