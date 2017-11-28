@@ -1,18 +1,16 @@
-import * as Web3 from 'web3';
-import {BigNumber} from 'bignumber.js';
-import * as moment from 'moment';
-import * as debug from 'debug';
+import {BigNumber} from "bignumber.js";
+import * as debug from "debug";
+import * as moment from "moment";
+import * as Web3 from "web3";
 
-import {Address} from './common';
-import {MetabackendClient, pb} from './metabackend';
+import {Address} from "./common";
+import {MetabackendClient, pb} from "./metabackend";
 
-
-const logger = debug('getline.ts:blockchain')
-
+const logger = debug("getline.ts:blockchain");
 
 class UserVisibleError extends Error {
     constructor(message: string) {
-        super(message)
+        super(message);
         Object.setPrototypeOf(this, new.target.prototype);
     }
 }
@@ -76,7 +74,7 @@ export interface Blockchain {
      * @param params Constructor parameters of the contract.
      * @returns Newly deployed contract.
      */
-    deploy(name: string, ...params: Array<any>): Promise<Contract>;
+    deploy(name: string, ...params: any[]): Promise<Contract>;
     /**
      * Returns coinbase of the blockchain client.
      * @returns Coinbase address.
@@ -96,12 +94,12 @@ export class Contract {
     /**
      * Address of the contract on the blockchain.
      */
-    public readonly address: Address
+    public readonly address: Address;
     /**
      * Blockchain on which the contract is located.
      */
-    private blockchain: Blockchain
-    private instance: Web3.ContractInstance
+    private blockchain: Blockchain;
+    private instance: Web3.ContractInstance;
 
     constructor(blockchain: Blockchain, instance: Web3.ContractInstance) {
         this.blockchain = blockchain;
@@ -115,15 +113,15 @@ export class Contract {
      * @param params Arguments to pass to method.
      * @returns Result of call.
      */
-    public async call<T>(methodName: string, ...params: Array<any>): Promise<T> {
+    public async call<T>(methodName: string, ...params: any[]): Promise<T> {
         logger(`Calling ${methodName}...`);
-        let method: any = this.instance[methodName];
-        return new Promise<T>((resolve, reject)=>{
-            let opts = {
+        const method: any = this.instance[methodName];
+        return new Promise<T>((resolve, reject) => {
+            const opts = {
                 gas: 1000000,
-            }
-            method(...params, opts, (err: Error, object: T)=>{
-                if (err != undefined) {
+            };
+            method(...params, opts, (err: Error, object: T) => {
+                if (err !== null) {
                     logger(`Failed: ${err}`);
                     reject(err);
                     return;
@@ -143,19 +141,13 @@ export class Contract {
      * @throws Error when the transaction does not get mined within 60
      *               seconds.
      */
-    public async mutate(methodName: string, ...params: Array<any>): Promise<void> {
+    public async mutate(methodName: string, ...params: any[]): Promise<void> {
         logger(`Mutating ${methodName}...`);
         // Build a transaction and get its' hash.
-        let hash = await this.call<string>(methodName, ...params)
+        const hash = await this.call<string>(methodName, ...params);
         // Wait until transaction hash gets mined into a block.
         await this.blockchain.waitTxMined(hash);
     }
-}
-
-// TypeScript doesn't seem to have an index method on window - let's make our
-// own interface for that.
-interface WindowIndexable {
-    [key: string]: any;
 }
 
 /**
@@ -166,45 +158,46 @@ export class GetlineBlockchain {
     private metabackend: MetabackendClient;
     private network: string;
     private web3: Web3;
-    private contractDefinitions: Array<pb.Contract> | undefined;
+    private contractDefinitions: pb.Contract[] | undefined;
 
     constructor(metabackend: MetabackendClient, network: string, provider: Web3.Provider | undefined) {
         this.metabackend = metabackend;
         this.network = network;
 
-        if (provider == undefined) {
-            if (typeof window != "undefined" && (<WindowIndexable>window)['web3'] != undefined) {
-                logger("Using injected web3")
-                provider = (<WindowIndexable>window)['web3'].currentProvider;
+        if (provider === undefined) {
+            if (typeof window !== "undefined" && (window as any).web3 !== undefined) {
+                logger("Using injected web3");
+                provider = (window as any).web3.currentProvider;
             } else {
-                logger("Connecting to node running on localhost")
-                provider = new Web3.providers.HttpProvider("http://localhost:8545")
+                logger("Connecting to node running on localhost");
+                provider = new Web3.providers.HttpProvider("http://localhost:8545");
             }
         } else {
-            logger("Using user-injected provider")
+            logger("Using user-injected provider");
         }
         this.web3 = new Web3(provider);
     }
 
     public async initialize(): Promise<void> {
-        return new Promise<void>((resolve, reject)=>{
-            this.web3.version.getNetwork((e, network)=>{
+        return new Promise<void>((resolve, reject) => {
+            this.web3.version.getNetwork((e, network) => {
                 if (e != null) {
                     reject(new ProviderInitializationError(e));
                     return;
                 }
-                if (network != this.network) {
+                if (network !== this.network) {
                     reject(new ProviderOnUnsupportedNetwork(network));
                     return;
                 }
-                this.web3.eth.getAccounts((e, accounts)=>{
-                    if (e != null) {
+                this.web3.eth.getAccounts((e2, accounts) => {
+                    if (e2 !== undefined) {
                         reject(new ProviderInitializationError(e));
                     }
                     if (accounts.length < 1) {
                         reject(new ProviderLocked());
                     }
                     this.web3.eth.defaultAccount = accounts[0];
+                    logger("Current user is " + this.web3.eth.defaultAccount);
                     resolve();
                 });
             });
@@ -221,7 +214,7 @@ export class GetlineBlockchain {
      * @param hash Hash of transaction to look for.
      */
     public async waitTxMined(hash: string): Promise<void> {
-        return new Promise<void>((resolve, reject)=>{
+        return new Promise<void>((resolve, reject) => {
             // Wait for a minute.
             // TODO(q3k): Make this configurable.
             const timeout = 60 * 1000;
@@ -230,7 +223,7 @@ export class GetlineBlockchain {
 
             let retries = timeout / poll;
             logger("Starting transaction receipt waiter for " + hash);
-            let interval = setInterval(()=>{
+            const interval = setInterval(() => {
                 logger(`Retries left: ${retries}`);
                 retries -= 1;
                 if (retries <= 0) {
@@ -239,7 +232,7 @@ export class GetlineBlockchain {
                     return;
                 }
 
-                this.web3.eth.getTransactionReceipt(hash, (e, receipt)=>{
+                this.web3.eth.getTransactionReceipt(hash, (e, receipt) => {
                     if (!receipt) {
                         logger(`No receipt yet.`);
                         return;
@@ -252,62 +245,26 @@ export class GetlineBlockchain {
         });
     }
 
-    /**
-     * Waits until a given contract is deployed on the network.
-     *
-     * @param hash Transactiion hash of transaction that deployed contract.
-     * @param name Name of contract.
-     * @returns Newly deployed contract.
-     */
-    private async waitContractDeployed(hash: string, name: string): Promise<Contract> {
-        logger(`Waiting for ${name} to be deployed by tx ${hash}`);
-        await this.waitTxMined(hash)
-        return new Promise<Contract>((resolve, reject)=>{
-            this.web3.eth.getTransactionReceipt(hash, (e, receipt)=>{
-                if (!receipt) {
-                    reject(new Error("Contract disappeared from the network?"));
-                    return;
-                }
+    public async deploy(contractName: string, ...params: any[]): Promise<Contract> {
+        const abi = await this.metabackend.getABI(contractName);
+        const contract = this.web3.eth.contract(abi);
+        const bytecode = await this.metabackend.getBytecode(contractName);
 
-                const address: string | null = receipt.contractAddress;
-                if (address == null) {
-                    reject(new Error("Contract did not get deployed"));
-                    return;
-                }
-
-                this.web3.eth.getCode(address, (e, code)=>{
-                    if (!code || code.length < 3) {
-                        reject(new Error("Contract did not get stored"));
-                        return;
-                    }
-
-                    logger("Contract deployed at " + address);
-                    this.existing(name, new Address(this, address)).then(resolve).catch(reject);
-                });
-            });
-        });
-    }
-
-    public async deploy(contractName: string, ...params: Array<any>): Promise<Contract> {
-        let abi = await this.metabackend.getABI(contractName);
-        let contract = this.web3.eth.contract(abi);
-        let bytecode = await this.metabackend.getBytecode(contractName);
-
-        return new Promise<Contract>((resolve, reject)=>{
+        return new Promise<Contract>((resolve, reject) => {
             // TODO(q3k): Typify Web3.Contract.new
-            let contractAny: any = contract;
+            const contractAny: any = contract;
 
-            let opts = {
+            const opts = {
+                data: bytecode,
                 from: this.web3.eth.coinbase,
                 gas: 4500000,
-                data: bytecode,
             };
             logger("Deploying contract " + contractName);
             logger("Deploying bytecode " + bytecode.substring(0, 64) + "...");
             logger("With parameters " + params);
 
             let confirmed = false;
-            let instance = contractAny.new(...params, opts, (err: Error, c: Web3.ContractInstance) =>{
+            const instance = contractAny.new(...params, opts, (err: Error, c: Web3.ContractInstance) => {
                 if (err) {
                     console.error("getline.ts: deployment failed: " + err.stack);
                     reject(new Error("deployment failed: " + err));
@@ -327,8 +284,8 @@ export class GetlineBlockchain {
     }
 
     public async existing(name: string, address: Address): Promise<Contract> {
-        let abi = await this.metabackend.getABI(name);
-        let deployed = this.web3.eth.contract(abi).at(address.ascii);
+        const abi = await this.metabackend.getABI(name);
+        const deployed = this.web3.eth.contract(abi).at(address.ascii);
         return new Contract(this, deployed);
     }
 
@@ -338,8 +295,8 @@ export class GetlineBlockchain {
 
     public currentBlock(): Promise<BigNumber> {
         // TODO(q3k): Cache this?
-        return new Promise<BigNumber>((result, reject)=>{
-            this.web3.eth.getBlockNumber((err, block: number)=>{
+        return new Promise<BigNumber>((result, reject) => {
+            this.web3.eth.getBlockNumber((err, block: number) => {
                 if (err) {
                     reject(err);
                     return;
@@ -350,14 +307,48 @@ export class GetlineBlockchain {
     }
 
     public blockToTime(current: BigNumber, block: BigNumber): moment.Moment {
-        if (this.network != "4") {
+        if (this.network !== "4") {
             throw new Error("getline.ts only supports rinkeby chains");
         }
-        let secondsPerBlock = new BigNumber(15);
-        let seconds = block.minus(current).times(secondsPerBlock);
+        const secondsPerBlock = new BigNumber(15);
+        const seconds = block.minus(current).times(secondsPerBlock);
 
-        return moment(moment.now()).add(seconds.toNumber(), 'seconds');
+        return moment(moment.now()).add(seconds.toNumber(), "seconds");
     }
 
-}
+    /**
+     * Waits until a given contract is deployed on the network.
+     *
+     * @param hash Transactiion hash of transaction that deployed contract.
+     * @param name Name of contract.
+     * @returns Newly deployed contract.
+     */
+    private async waitContractDeployed(hash: string, name: string): Promise<Contract> {
+        logger(`Waiting for ${name} to be deployed by tx ${hash}`);
+        await this.waitTxMined(hash);
+        return new Promise<Contract>((resolve, reject) => {
+            this.web3.eth.getTransactionReceipt(hash, (e, receipt) => {
+                if (!receipt) {
+                    reject(new Error("Contract disappeared from the network?"));
+                    return;
+                }
 
+                const address: string | null = receipt.contractAddress;
+                if (address == null) {
+                    reject(new Error("Contract did not get deployed"));
+                    return;
+                }
+
+                this.web3.eth.getCode(address, (e2, code) => {
+                    if (!code || code.length < 3) {
+                        reject(new Error("Contract did not get stored"));
+                        return;
+                    }
+
+                    logger("Contract deployed at " + address);
+                    this.existing(name, new Address(this, address)).then(resolve).catch(reject);
+                });
+            });
+        });
+    }
+}
