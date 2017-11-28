@@ -29,8 +29,7 @@
   },
   "scripts": {
     "doc": "typedoc -out doc/ src typings node_modules/web3-typescript-typings/index.d.ts",
-    "generate": "protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:src/generated --ts_out=service=true:src/generated -I ../pb/ ../pb/*.proto",
-    "tsc": "tsc",
+    "build": "sh scripts/build.sh",
     "test": "mocha -r ts-node/register test/**/*.ts",
     "lint": "tslint -c tslint.json 'src/**/*.ts' -e src/generated/**/*"
   },

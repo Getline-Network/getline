@@ -81,9 +81,7 @@ jobs:
                 paths:
                     - node_modules/
             - run:
-                command: yarn generate
-            - run:
-                command: yarn tsc
+                command: yarn build
             - run:
                 command: mkdir -p /tmp/workspace/getline.ts && cp -rv dist node_modules /tmp/workspace/getline.ts/
             - persist_to_workspace:

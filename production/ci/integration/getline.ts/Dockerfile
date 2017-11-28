@@ -11,5 +11,4 @@ WORKDIR /app/getline.ts
 
 RUN set -e -x ;\
     yarn ;\
-    yarn generate ;\
-    yarn tsc
+    yarn build
