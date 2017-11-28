@@ -2,9 +2,8 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es2015",
-    "declaration": false,
+    "declaration": true,
     "outDir": "./dist",
-    "allowJs": true,
     "experimentalDecorators": true,
     "strict": true
   },

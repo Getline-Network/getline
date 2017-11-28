@@ -16,6 +16,20 @@ import MyLoanTile from './MyLoanTile.vue';
 import API, {Loan, LoanState} from '../../api';
 import {BigNumber} from 'bignumber.js';
 
+interface ViewLoan {
+  // Data received immediately.
+  description: string;
+  interestPermil: number;
+  loanState: LoanState;
+
+  // Data from promises.
+  amountGathered?: string;
+  amountWanted?: string;
+  isCollateralCollection?: boolean;
+  isFundraising?: boolean;
+  tokenSymbol?: string;
+};
+
 const Component = Vue.extend({
   name: 'MyLoans',
   components: {
@@ -30,14 +44,14 @@ const Component = Vue.extend({
       let currentUser = await api.currentUser();
       let loans = await api.loansByOwner(currentUser);
       await Promise.all(loans.map(loan => loan.updateStateFromBlockchain()));
-      let _loans = loans.map(({
+      let _loans: ViewLoan[] = loans.map(({
         description,
         parameters: {interestPermil},
         blockchainState: {loanState}
-      }) => ({
+      }): ViewLoan => ({
         description,
         interestPermil,
-        loanState
+        loanState,
       }));
 
       const amountsWantedPromises: Promise<BigNumber>[] =
@@ -60,13 +74,13 @@ const Component = Vue.extend({
         }) => loanToken.humanize(amountGathered));
       const amountsGathered: BigNumber[] = await Promise.all(amountsGatheredPromises);
 
-      const loanTokenSymbolPromises: Promise<String>[] =
+      const loanTokenSymbolPromises: Promise<string>[] =
         loans.map(({
           parameters: {
             loanToken
           }
         }) => loanToken.symbol());
-      const loanTokenSymbols: String[] = await Promise.all(loanTokenSymbolPromises);
+      const loanTokenSymbols: string[] = await Promise.all(loanTokenSymbolPromises);
 
       for (var i = 0; i < _loans.length; ++i) {
         _loans[i].amountWanted = amountsWanted[i].toString();

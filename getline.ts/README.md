@@ -25,3 +25,9 @@ Sample usage
 ------------
 
 See `src/example.ts`.
+
+Building
+--------
+
+    yarn
+    yarn build

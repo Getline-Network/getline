@@ -8,7 +8,7 @@ import {MetabackendClient, pb} from "./metabackend";
 
 const logger = debug("getline.ts:blockchain");
 
-class UserVisibleError extends Error {
+export class UserVisibleError extends Error {
     constructor(message: string) {
         super(message);
         Object.setPrototypeOf(this, new.target.prototype);
