@@ -7,6 +7,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import API from './api';
+import store from './store';
 import { initEvents } from './events';
 import registerPurpleTheme from './theme';
 
@@ -20,6 +21,7 @@ Vue.config.productionTip = false;
 const vue = new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App },
 });
