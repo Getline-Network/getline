@@ -15,7 +15,6 @@
 package server
 
 import (
-	"encoding/json"
 	"fmt"
 	"sort"
 
@@ -27,74 +26,6 @@ import (
 	"github.com/getline-network/getline/pb"
 	"github.com/golang/glog"
 )
-
-func protoABIFunction(entry deployments.JSONABIEntry) *pb.ABIFunction {
-	function_type := map[string]pb.ABIFunction_Type{
-		"":            pb.ABIFunction_FUNCTION,
-		"function":    pb.ABIFunction_FUNCTION,
-		"constructor": pb.ABIFunction_CONSTRUCTOR,
-		"fallback":    pb.ABIFunction_FALLBACK,
-	}[entry.Type]
-	inputs, outputs := []*pb.ABIFunction_InputOutput{}, []*pb.ABIFunction_InputOutput{}
-	for _, input := range entry.Inputs {
-		inputs = append(inputs, &pb.ABIFunction_InputOutput{
-			Name: input.Name,
-			Type: input.Type,
-		})
-	}
-	for _, output := range entry.Outputs {
-		outputs = append(outputs, &pb.ABIFunction_InputOutput{
-			Name: output.Name,
-			Type: output.Type,
-		})
-	}
-	return &pb.ABIFunction{
-		Type:     function_type,
-		Name:     entry.Name,
-		Inputs:   inputs,
-		Outputs:  outputs,
-		Constant: entry.Constant,
-		Payable:  entry.Payable,
-	}
-}
-
-func protoABIEvent(entry deployments.JSONABIEntry) *pb.ABIEvent {
-	inputs := []*pb.ABIEvent_Input{}
-	for _, input := range entry.Inputs {
-		inputs = append(inputs, &pb.ABIEvent_Input{
-			Name:    input.Name,
-			Type:    input.Type,
-			Indexed: input.Indexed,
-		})
-	}
-	return &pb.ABIEvent{
-		Name:      entry.Name,
-		Inputs:    inputs,
-		Anonymous: entry.Anonymous,
-	}
-}
-
-// protoABI returns a proto ABI type for a given internal ABI representation.
-func protoABI(abi deployments.JSONABI) *pb.ABI {
-	jsonData, _ := json.Marshal(abi)
-	functions, events := []*pb.ABIFunction{}, []*pb.ABIEvent{}
-
-	for _, entry := range abi {
-		is_function, _ := entry.IsFunction()
-		if is_function {
-			functions = append(functions, protoABIFunction(entry))
-		} else {
-			events = append(events, protoABIEvent(entry))
-		}
-	}
-
-	res := &pb.ABI{
-		Json:      jsonData,
-		Functions: functions,
-		Events:    events,
-	}
-	return res
-}
 
 // gRPC server implementation for pb.Metabackend.
 type Server struct {
@@ -117,7 +48,7 @@ func (s *Server) GetDeployment(ctx context.Context, req *pb.GetDeploymentRequest
 			Name:         contract.Name,
 			Address:      util.ProtoAddress(contract.GetAddress(networkId)),
 			LinkedBinary: contract.LinkedBinary,
-			Abi:          protoABI(contract.ABI),
+			Abi:          contract.ABI.Proto(),
 		}
 		res.Contract = append(res.Contract, pbc)
 	}

@@ -17,8 +17,11 @@ package deployments
 // JSON schema and validators for Truffle build artifacts.
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
+
+	"github.com/getline-network/getline/pb"
 )
 
 type JSONABIIO struct {
@@ -140,4 +143,72 @@ func (c *JSONContract) Valid() error {
 		return fmt.Errorf("abi invalid: %v", err)
 	}
 	return nil
+}
+
+func (e JSONABIEntry) ProtoFunction() *pb.ABIFunction {
+	function_type := map[string]pb.ABIFunction_Type{
+		"":            pb.ABIFunction_FUNCTION,
+		"function":    pb.ABIFunction_FUNCTION,
+		"constructor": pb.ABIFunction_CONSTRUCTOR,
+		"fallback":    pb.ABIFunction_FALLBACK,
+	}[e.Type]
+	inputs, outputs := []*pb.ABIFunction_InputOutput{}, []*pb.ABIFunction_InputOutput{}
+	for _, input := range e.Inputs {
+		inputs = append(inputs, &pb.ABIFunction_InputOutput{
+			Name: input.Name,
+			Type: input.Type,
+		})
+	}
+	for _, output := range e.Outputs {
+		outputs = append(outputs, &pb.ABIFunction_InputOutput{
+			Name: output.Name,
+			Type: output.Type,
+		})
+	}
+	return &pb.ABIFunction{
+		Type:     function_type,
+		Name:     e.Name,
+		Inputs:   inputs,
+		Outputs:  outputs,
+		Constant: e.Constant,
+		Payable:  e.Payable,
+	}
+}
+
+func (e JSONABIEntry) ProtoEvent() *pb.ABIEvent {
+	inputs := []*pb.ABIEvent_Input{}
+	for _, input := range e.Inputs {
+		inputs = append(inputs, &pb.ABIEvent_Input{
+			Name:    input.Name,
+			Type:    input.Type,
+			Indexed: input.Indexed,
+		})
+	}
+	return &pb.ABIEvent{
+		Name:      e.Name,
+		Inputs:    inputs,
+		Anonymous: e.Anonymous,
+	}
+}
+
+// protoABI returns a proto ABI type for a given internal ABI representation.
+func (a JSONABI) Proto() *pb.ABI {
+	jsonData, _ := json.Marshal(a)
+	functions, events := []*pb.ABIFunction{}, []*pb.ABIEvent{}
+
+	for _, entry := range a {
+		is_function, _ := entry.IsFunction()
+		if is_function {
+			functions = append(functions, entry.ProtoFunction())
+		} else {
+			events = append(events, entry.ProtoEvent())
+		}
+	}
+
+	res := &pb.ABI{
+		Json:      jsonData,
+		Functions: functions,
+		Events:    events,
+	}
+	return res
 }
