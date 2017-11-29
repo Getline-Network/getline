@@ -18,3 +18,4 @@ export interface MyLoanT {
 };
 
 import { LoanState } from '../../../../getline.ts';
+export { LoanState } from '../../../../getline.ts';

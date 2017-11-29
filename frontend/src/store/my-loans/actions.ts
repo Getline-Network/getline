@@ -1,13 +1,12 @@
 import * as api from '../../api'
-import * as types from './mutation-types'
 
-export const GET_MY_LOANS = "getMyLoans";
+export const GET_MY_LOANS_ACTION = "getMyLoansAction";
 
 const actions = {
-  [GET_MY_LOANS]({ commit }) {
-    commit(types.START_LOADING_MY_LOANS);
+  [GET_MY_LOANS_ACTION]({ commit }) {
+    commit('REQUEST_MY_LOANS');
     api.getMyLoans(loans => {
-      commit(types.RECEIVE_MY_LOANS, {
+      commit('RECEIVE_MY_LOANS', {
         loans
       })
     })

@@ -16,7 +16,7 @@ import { mapState } from 'vuex'
 import Spinner from '../common/Spinner.vue';
 import MyLoanTile from './MyLoanTile.vue';
 
-import { GET_MY_LOANS } from '@/store/my-loans';
+import { GET_MY_LOANS_ACTION } from '@/store/my-loans/actions';
 import { StateT } from '@/store';
 
 const Component = Vue.extend({
@@ -26,7 +26,7 @@ const Component = Vue.extend({
     'spinner': Spinner,
   },
   created() {
-    this.$store.dispatch(GET_MY_LOANS);
+    this.$store.dispatch(GET_MY_LOANS_ACTION);
   },
   computed: mapState({
     myLoans: (state:StateT) => state.myLoans.myLoansList,

@@ -1,5 +1,5 @@
 import actions from './actions';
-import mutations from './mutations';
+import { mutations } from './mutations';
 import { MyLoansStateT } from './types';
 
 const state: MyLoansStateT = {
@@ -14,4 +14,3 @@ export default {
 };
 
 export { MyLoanT } from './types';
-export { GET_MY_LOANS } from './actions';
