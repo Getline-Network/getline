@@ -18,7 +18,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"sort"
-	"sync"
 
 	"golang.org/x/net/context"
 
@@ -135,7 +134,7 @@ func (s *Server) GetLoans(ctx context.Context, req *pb.GetLoansRequest) (*pb.Get
 		return nil, fmt.Errorf("no such network ID")
 	}
 
-	query := model.LoanMetadataQuery{
+	query := model.LoanQuery{
 		Network: network.ID,
 	}
 	if req.GetOwner() != nil {
@@ -156,59 +155,28 @@ func (s *Server) GetLoans(ctx context.Context, req *pb.GetLoansRequest) (*pb.Get
 	}
 
 	cache := make([]*pb.LoanCache, len(loans))
-	errors := make([]error, len(loans))
-	wg := sync.WaitGroup{}
-
-	glog.Infof("GetLoans: %d results", len(loans))
 	for i, loan := range loans {
-		loan := loan
-		wg.Add(1)
-		go func(loan *model.LoanMetadata, i int) {
-			defer wg.Done()
-
-			parameters, err := s.Model.GetLoanParameters(ctx, network.ID, *loan.DeployedAddress)
-			if err != nil {
-				errors[i] = fmt.Errorf("when getting loan %v: %v", loan.DeployedAddress.Hex(), err)
-				return
-			}
-			c := pb.LoanCache{
-				Owner:             util.ProtoAddress(loan.Borrower.Hex()),
-				DeploymentAddress: util.ProtoAddress(loan.DeployedAddress.Hex()),
-				ShortId:           loan.ShortID,
-				Parameters:        parameters.Proto(),
-				Description:       loan.Description,
-				DeploymentState:   pb.LoanCache_DEPLOYED,
-			}
-			cache[i] = &c
-		}(&loan, i)
-	}
-	wg.Wait()
-
-	for _, err := range errors {
-		if err == nil {
-			continue
+		c := pb.LoanCache{
+			Owner:             util.ProtoAddress(loan.Metadata.Borrower.Hex()),
+			DeploymentAddress: util.ProtoAddress(loan.Metadata.DeployedAddress.Hex()),
+			ShortId:           loan.Metadata.ShortID,
+			Parameters:        loan.ProtoParameters(),
+			Description:       loan.Metadata.Description,
+			DeploymentState:   pb.LoanCache_DEPLOYED,
 		}
-		glog.Errorf("Could not get loan parameters: %v", err)
-	}
-
-	cacheNoErrors := []*pb.LoanCache{}
-	for _, cacheElem := range cache {
-		if cacheElem == nil {
-			continue
-		}
-		cacheNoErrors = append(cacheNoErrors, cacheElem)
+		cache[i] = &c
 	}
 
 	res := &pb.GetLoansResponse{
 		NetworkId: network.ID,
-		LoanCache: cacheNoErrors,
+		LoanCache: cache,
 	}
 	return res, nil
 }
 
 func (s *Server) IndexLoan(ctx context.Context, req *pb.IndexLoanRequest) (*pb.IndexLoanResponse, error) {
 	networkId := req.GetNetworkId()
-	network, ok := s.Deployment.Networks[networkId]
+	_, ok := s.Deployment.Networks[networkId]
 	if !ok {
 		return nil, fmt.Errorf("no such network ID")
 	}
@@ -218,37 +186,42 @@ func (s *Server) IndexLoan(ctx context.Context, req *pb.IndexLoanRequest) (*pb.I
 		return nil, fmt.Errorf("invalid loan address specified: %v", err)
 	}
 
-	existing, err := model.LoanMetadataQuery{
-		Network:         network.ID,
-		DeployedAddress: &address,
-	}.Run(ctx, s.Model)
-	if err == nil && len(existing) != 0 {
-		return &pb.IndexLoanResponse{
-			existing[0].ShortID,
-		}, nil
-	}
-
-	invalid, err := s.Model.ValidLoan(ctx, network.ID, address)
+	tx, err := s.Model.Transaction()
 	if err != nil {
-		glog.Errorf("ValidLoan(..., %q, %q): %v", network.ID, address.Hex(), err)
+		glog.Errorf("When beginning transaction: %v", err)
 		return nil, fmt.Errorf("internal server error")
 	}
-	if invalid != "" {
-		return nil, fmt.Errorf("invalid loan specified: %s", invalid)
+	defer tx.Rollback()
+
+	loan := s.Model.NewLoan()
+	loan.Metadata.NetworkID = networkId
+	loan.Metadata.Description = req.GetDescription()
+	loan.Metadata.DeployedAddress = address
+
+	if err = loan.LoadParametersFromBlockchain(ctx); err != nil {
+		return nil, fmt.Errorf("invalid loan specified: %v", err)
 	}
 
-	md := model.NewLoanMetadata(s.Model, network.ID)
-	md.Description = req.GetDescription()
-	md.DeployedAddress = &address
+	loan.Metadata.Borrower = loan.Parameters.Borrower
 
-	err = md.Index(ctx)
+	if err = loan.UpsertMetadata(ctx, tx); err != nil {
+		glog.Errorf("When upserting metadata: %v", err)
+		return nil, fmt.Errorf("internal server error")
+	}
+
+	if err = loan.InsertParameters(ctx, tx); err != nil {
+		glog.Errorf("When inserting parameters: %v", err)
+		return nil, fmt.Errorf("internal server error")
+	}
+
+	err = tx.Commit()
 	if err != nil {
-		glog.Errorf("LoanMetadta.Index(..., %v, %v): %v", network.ID, address.Hex(), err)
+		glog.Errorf("When commiting transaction: %v", err)
 		return nil, fmt.Errorf("internal server error")
 	}
 
 	res := &pb.IndexLoanResponse{
-		md.ShortID,
+		loan.Metadata.ShortID,
 	}
 	return res, nil
 }

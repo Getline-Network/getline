@@ -18,59 +18,47 @@ import (
 	"fmt"
 	"math/big"
 
-	"golang.org/x/net/context"
-
 	ethcommon "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/getline-network/getline/metabackend/util"
 	"github.com/getline-network/getline/pb"
-	"github.com/golang/glog"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"golang.org/x/net/context"
 )
 
-type DeployedLoanParameters struct {
-	model   *Model
-	network string
-	address ethcommon.Address
+type Loan struct {
+	model *Model
 
-	BorrowedToken          ethcommon.Address
-	CollateralToken        ethcommon.Address
-	AmountWanted           *big.Int
-	Borrower               ethcommon.Address
-	InterestPermil         uint16
-	FundraisingBlocksCount *big.Int
-	PaybackBlocksCount     *big.Int
+	Parameters struct {
+		BorrowedToken          ethcommon.Address
+		CollateralToken        ethcommon.Address
+		AmountWanted           *big.Int
+		Borrower               ethcommon.Address
+		InterestPermil         uint16
+		FundraisingBlocksCount *big.Int
+		PaybackBlocksCount     *big.Int
+	}
+	Metadata struct {
+		NetworkID       string
+		ShortID         string
+		Borrower        ethcommon.Address
+		Description     string
+		DeployedAddress ethcommon.Address
+	}
 }
 
-func (d *DeployedLoanParameters) Proto() *pb.LoanParameters {
+func (d *Loan) ProtoParameters() *pb.LoanParameters {
 	res := pb.LoanParameters{
-		CollateralToken:        util.ProtoAddress(d.CollateralToken.Hex()),
-		LoanToken:              util.ProtoAddress(d.BorrowedToken.Hex()),
-		Liege:                  util.ProtoAddress(d.Borrower.Hex()),
-		AmountWanted:           d.AmountWanted.String(),
-		InterestPermil:         uint32(d.InterestPermil),
-		FundraisingBlocksCount: d.FundraisingBlocksCount.String(),
-		PaybackBlocksCount:     d.PaybackBlocksCount.String(),
+		CollateralToken:        util.ProtoAddress(d.Parameters.CollateralToken.Hex()),
+		LoanToken:              util.ProtoAddress(d.Parameters.BorrowedToken.Hex()),
+		Liege:                  util.ProtoAddress(d.Parameters.Borrower.Hex()),
+		AmountWanted:           d.Parameters.AmountWanted.String(),
+		InterestPermil:         uint32(d.Parameters.InterestPermil),
+		FundraisingBlocksCount: d.Parameters.FundraisingBlocksCount.String(),
+		PaybackBlocksCount:     d.Parameters.PaybackBlocksCount.String(),
 	}
 	return &res
-}
-
-type LoanMetadata struct {
-	model   *Model
-	network string
-
-	ShortID         string
-	Borrower        ethcommon.Address
-	Description     string
-	DeployedAddress *ethcommon.Address
-}
-
-func NewLoanMetadata(model *Model, network string) *LoanMetadata {
-	return &LoanMetadata{
-		model:   model,
-		network: network,
-	}
 }
 
 type Model struct {
@@ -101,43 +89,35 @@ func New(driverName, dataSourceName, ethRemote string, server pb.MetabackendServ
 	return m, nil
 }
 
-// TODO(q3k): Refactor this into the query-struct style.
-func (m *Model) GetLoanParameters(ctx context.Context, network string, address ethcommon.Address) (*DeployedLoanParameters, error) {
-	// Try to load from database.
-	data, err := m.GetDeployedLoanParametersByAddress(ctx, network, address)
-	if err != nil {
-		glog.Warningf("Couldn't load loan from database: %v", err)
+func (m *Model) NewLoan() *Loan {
+	return &Loan{
+		model: m,
 	}
-	if data != nil {
-		return data.Object(m)
-	}
-
-	// Since that failed, try to load it from the blockchain.
-	obj, err := m.blockchain.GetLoan(ctx, network, address)
-	if err != nil {
-		return nil, fmt.Errorf("loading from blockchain failed: %v", err)
-	}
-
-	// Save to database for cache.
-	// TODO(q3k): Yes, this is a hack. This should disappear with the saveToDatabase
-	// refactor.
-	obj.model = m
-	obj.network = network
-	obj.address = address
-	err = obj.saveToDatabase(ctx)
-	if err != nil {
-		glog.Warningf("Saving loan to database failed: %v", err)
-	}
-
-	return obj, nil
 }
 
-func (m *Model) ValidLoan(ctx context.Context, network string, address ethcommon.Address) (string, error) {
-	_, err := m.blockchain.GetLoan(ctx, network, address)
+func (m *Model) Transaction() (*sqlx.Tx, error) {
+	return m.dbConn.Beginx()
+}
+
+func (l *Loan) LoadParametersFromBlockchain(ctx context.Context) error {
+	loanContract, err := l.model.blockchain.get(ctx, l.Metadata.NetworkID, "Loan", l.Metadata.DeployedAddress)
 	if err != nil {
-		// TODO(q3k): Do not leak error messages to caller.
-		return err.Error(), nil
+		return fmt.Errorf("getting Loan contract failed: %v", err)
 	}
-	// TODO(q3k): Validate if given address contains known loan bytecode.
-	return "", nil
+
+	errs := []error{}
+	errs = append(errs, loanContract.Call(nil, &l.Parameters.BorrowedToken, "borrowedToken"))
+	errs = append(errs, loanContract.Call(nil, &l.Parameters.CollateralToken, "collateralToken"))
+	errs = append(errs, loanContract.Call(nil, &l.Parameters.AmountWanted, "amountWanted"))
+	errs = append(errs, loanContract.Call(nil, &l.Parameters.Borrower, "borrower"))
+	errs = append(errs, loanContract.Call(nil, &l.Parameters.InterestPermil, "interestPermil"))
+	errs = append(errs, loanContract.Call(nil, &l.Parameters.FundraisingBlocksCount, "fundraisingBlocksCount"))
+	errs = append(errs, loanContract.Call(nil, &l.Parameters.PaybackBlocksCount, "paybackBlocksCount"))
+	for _, err := range errs {
+		if err != nil {
+			return fmt.Errorf("calling getter failed: %v", err)
+		}
+	}
+
+	return nil
 }
