@@ -75,14 +75,3 @@ func (b *blockchainRemote) get(ctx context.Context, networkId, contractName stri
 	bound := bind.NewBoundContract(address, parsed, b.blockchain, b.blockchain)
 	return bound, nil
 }
-
-func (b *blockchainRemote) ValidLoan(ctx context.Context, networkId string, address common.Address) (string, error) {
-	return "", nil
-	//=_, err := b.GetLoan(ctx, network, address)
-	//=if err != nil {
-	//=	// TODO(q3k): Do not leak error messages to caller.
-	//=	return err.Error(), nil
-	//=}
-	//=// TODO(q3k): Validate if given address contains known loan bytecode.
-	//=return "", nil
-}

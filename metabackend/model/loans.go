@@ -26,48 +26,6 @@ import (
 	"golang.org/x/net/context"
 )
 
-// This file contains the actual SQL schema, mapped types and conversion
-// methods.
-
-var schema = `
-
-CREATE TABLE deployed_loan_parameters (
-    network varchar(32) not null,
-	version  bigint not null,
-	address bytea not null,
-
-	borrowed_token bytea not null,
-	collateral_token bytea not null,
-	amount_wanted numeric not null,
-	borrower bytea not null,
-	interest_permil int not null,
-	fundraising_blocks_count numeric not null,
-	payback_blocks_count numeric not null,
-
-	primary key(network, address)
-);
-
-CREATE TABLE loan_metadata (
-	loan_metadata_id bigserial,
-	shortid varchar(12) not null,
-
-	borrower bytea not null,
-	description varchar(800),
-
-	network varchar(32) not null,
-	deployed_address bytea not null,
-
-	primary key(loan_metadata_id),
-	unique(shortid),
-	unique(network, deployed_address)
-);
-`
-
-func (m *Model) InitializeSchema() error {
-	_, err := m.dbConn.Exec(schema)
-	return err
-}
-
 type fieldsLoanMetadata struct {
 	// Identification
 	ID      int64  `db:"meta_loan_metadata_id"`
@@ -324,4 +282,27 @@ func (l *Loan) InsertParameters(ctx context.Context, tx *sqlx.Tx) error {
 		PaybackBlocksCount:     l.Parameters.PaybackBlocksCount.String(),
 	})
 	return err
+}
+
+func (l *Loan) LoadParametersFromBlockchain(ctx context.Context) error {
+	loanContract, err := l.model.blockchain.get(ctx, l.Metadata.NetworkID, "Loan", l.Metadata.DeployedAddress)
+	if err != nil {
+		return fmt.Errorf("getting Loan contract failed: %v", err)
+	}
+
+	errs := []error{}
+	errs = append(errs, loanContract.Call(nil, &l.Parameters.BorrowedToken, "borrowedToken"))
+	errs = append(errs, loanContract.Call(nil, &l.Parameters.CollateralToken, "collateralToken"))
+	errs = append(errs, loanContract.Call(nil, &l.Parameters.AmountWanted, "amountWanted"))
+	errs = append(errs, loanContract.Call(nil, &l.Parameters.Borrower, "borrower"))
+	errs = append(errs, loanContract.Call(nil, &l.Parameters.InterestPermil, "interestPermil"))
+	errs = append(errs, loanContract.Call(nil, &l.Parameters.FundraisingBlocksCount, "fundraisingBlocksCount"))
+	errs = append(errs, loanContract.Call(nil, &l.Parameters.PaybackBlocksCount, "paybackBlocksCount"))
+	for _, err := range errs {
+		if err != nil {
+			return fmt.Errorf("calling getter failed: %v", err)
+		}
+	}
+
+	return nil
 }

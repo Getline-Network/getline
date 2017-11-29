@@ -19,13 +19,84 @@ import (
 	"math/big"
 
 	ethcommon "github.com/ethereum/go-ethereum/common"
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
+
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/getline-network/getline/metabackend/util"
 	"github.com/getline-network/getline/pb"
-	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
-	"golang.org/x/net/context"
 )
+
+var schema = `
+
+CREATE TABLE deployed_loan_parameters (
+    network varchar(32) not null,
+	version  bigint not null,
+	address bytea not null,
+
+	borrowed_token bytea not null,
+	collateral_token bytea not null,
+	amount_wanted numeric not null,
+	borrower bytea not null,
+	interest_permil int not null,
+	fundraising_blocks_count numeric not null,
+	payback_blocks_count numeric not null,
+
+	primary key(network, address)
+);
+
+CREATE TABLE loan_metadata (
+	loan_metadata_id bigserial,
+	shortid varchar(12) not null,
+
+	borrower bytea not null,
+	description varchar(800),
+
+	network varchar(32) not null,
+	deployed_address bytea not null,
+
+	primary key(loan_metadata_id),
+	unique(shortid),
+	unique(network, deployed_address)
+);
+`
+
+type Model struct {
+	dbConn      *sqlx.DB
+	metabackend pb.MetabackendServer
+	blockchain  *blockchainRemote
+}
+
+func New(driverName, dataSourceName, ethRemote string, server pb.MetabackendServer) (*Model, error) {
+	// TODO(q3k): one eth backend per networkid.
+	backend, err := ethclient.Dial(ethRemote)
+	if err != nil {
+		return nil, fmt.Errorf("connecting to blockchain failed: %v", err)
+	}
+	db, err := sqlx.Connect(driverName, dataSourceName)
+	if err != nil {
+		return nil, fmt.Errorf("connecting to database failed: %v", err)
+	}
+
+	m := &Model{
+		dbConn:      db,
+		metabackend: server,
+		blockchain: &blockchainRemote{
+			blockchain:  backend,
+			metabackend: server,
+		},
+	}
+	return m, nil
+}
+
+func (m *Model) Transaction() (*sqlx.Tx, error) {
+	return m.dbConn.Beginx()
+}
+
+func (m *Model) InitializeSchema() error {
+	_, err := m.dbConn.Exec(schema)
+	return err
+}
 
 type Loan struct {
 	model *Model
@@ -61,63 +132,8 @@ func (d *Loan) ProtoParameters() *pb.LoanParameters {
 	return &res
 }
 
-type Model struct {
-	dbConn      *sqlx.DB
-	metabackend pb.MetabackendServer
-	blockchain  *blockchainRemote
-}
-
-func New(driverName, dataSourceName, ethRemote string, server pb.MetabackendServer) (*Model, error) {
-	// TODO(q3k): one eth backend per networkid.
-	backend, err := ethclient.Dial(ethRemote)
-	if err != nil {
-		return nil, fmt.Errorf("connecting to blockchain failed: %v", err)
-	}
-	db, err := sqlx.Connect(driverName, dataSourceName)
-	if err != nil {
-		return nil, fmt.Errorf("connecting to database failed: %v", err)
-	}
-
-	m := &Model{
-		dbConn:      db,
-		metabackend: server,
-		blockchain: &blockchainRemote{
-			blockchain:  backend,
-			metabackend: server,
-		},
-	}
-	return m, nil
-}
-
 func (m *Model) NewLoan() *Loan {
 	return &Loan{
 		model: m,
 	}
-}
-
-func (m *Model) Transaction() (*sqlx.Tx, error) {
-	return m.dbConn.Beginx()
-}
-
-func (l *Loan) LoadParametersFromBlockchain(ctx context.Context) error {
-	loanContract, err := l.model.blockchain.get(ctx, l.Metadata.NetworkID, "Loan", l.Metadata.DeployedAddress)
-	if err != nil {
-		return fmt.Errorf("getting Loan contract failed: %v", err)
-	}
-
-	errs := []error{}
-	errs = append(errs, loanContract.Call(nil, &l.Parameters.BorrowedToken, "borrowedToken"))
-	errs = append(errs, loanContract.Call(nil, &l.Parameters.CollateralToken, "collateralToken"))
-	errs = append(errs, loanContract.Call(nil, &l.Parameters.AmountWanted, "amountWanted"))
-	errs = append(errs, loanContract.Call(nil, &l.Parameters.Borrower, "borrower"))
-	errs = append(errs, loanContract.Call(nil, &l.Parameters.InterestPermil, "interestPermil"))
-	errs = append(errs, loanContract.Call(nil, &l.Parameters.FundraisingBlocksCount, "fundraisingBlocksCount"))
-	errs = append(errs, loanContract.Call(nil, &l.Parameters.PaybackBlocksCount, "paybackBlocksCount"))
-	for _, err := range errs {
-		if err != nil {
-			return fmt.Errorf("calling getter failed: %v", err)
-		}
-	}
-
-	return nil
 }
