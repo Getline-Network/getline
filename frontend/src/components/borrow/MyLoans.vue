@@ -44,7 +44,7 @@ const Component = Vue.extend({
       let currentUser = await api.currentUser();
       let loans = await api.loansByOwner(currentUser);
       await Promise.all(loans.map(loan => loan.updateStateFromBlockchain()));
-      let _loans = loans.map(({
+      let _loans: ViewLoan[] = loans.map(({
         description,
         parameters: {interestPermil},
         blockchainState: {loanState}
