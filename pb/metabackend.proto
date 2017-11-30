@@ -37,23 +37,22 @@ message Address {
 // GetLine Loan Cache //
 ////////////////////////
 
-// The state of a GetLine Loan contract, to be used as a cache.
-// See contract Solidity source for more information. This is returned
-// unopinionated, straight from the blockchain.
+// These are messages that represent data from the Loan smart contract. They're
+// unopinionated by the metabackend, even if cached.
+
+enum LoanLifetimeState {
+    INVALID = 0;
+
+    COLLATERAL_COLLECTION = 1;
+    FUNDRAISING = 2;
+    PAYBACK = 3;
+    FINISHED = 4;
+}
+
+// Collection of all data in the Loan contract that can change.
 message LoanState {
-    reserved 1, 2;
-    bytes fundraising_deadline = 3;
-    bytes payback_deadline = 4;
-
-    enum State {
-        INVALID = 0;
-
-        COLLATERAL_COLLECTION = 1;
-        FUNDRAISING = 2;
-        PAYBACK = 3;
-        FINISHED = 4;
-    }
-    State current_state = 5;
+    reserved 1, 2, 3, 4;
+    LoanLifetimeState lifetime_state = 5;
 }
 
 // Parameters with which a GetLine Loan was created.
@@ -172,6 +171,7 @@ message GetLoansRequest {
     Address owner = 2;
     // If set, filter by contract short ID.
     string short_id = 3;
+    LoanLifetimeState state = 4;
 }
 
 message GetLoansResponse {

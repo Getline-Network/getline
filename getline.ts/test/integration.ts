@@ -139,7 +139,6 @@ class EndToEndTests {
 
         // Create the first loan.
         const loan1 = await this.createSampleLoan(c);
-
         // Check if loan can be retrieved by ID.
         const loan1_ = await c.loan(loan1.shortId);
         assert(loan1.address.eq(loan1_.address), "returned loan is the same loan");
@@ -147,13 +146,11 @@ class EndToEndTests {
         // Check if loan is present in loan user list.
         loans = await c.loansByOwner(user);
         assert(loans.length == loanCount + 1, "one new loan is owned by user")
-
-        loans = loans.slice(loanCount);
-        assert(loan1.address.eq(loans[0].address), "returned loan is the same loan");
+        let addresses = loans.map((l: Loan): string => l.address.ascii);
+        assert(addresses.includes(loan1.address.ascii), "newly added loan is present");
 
         // Add another loan.
         const loan2 = await this.createSampleLoan(c);
-
         // Check if loan can be retrieved by ID.
         const loan2_ = await c.loan(loan2.shortId);
         assert(loan2.address.eq(loan2_.address), "returned loan is the same loan");
@@ -161,9 +158,70 @@ class EndToEndTests {
         // Check if the two loans are present.
         loans = await c.loansByOwner(user);
         assert(loans.length == loanCount + 2, "two new loans are owned by user")
+        addresses = loans.map((l: Loan): string => l.address.ascii);
+        assert(addresses.includes(loan1.address.ascii), "first loan is present");
+        assert(addresses.includes(loan2.address.ascii), "second loan is present");
+    }
 
-        loans = loans.slice(loanCount);
-        assert(loan1.address.eq(loans[0].address), "returned loan is the same loan");
-        assert(loan2.address.eq(loans[1].address), "returned loan is the same loan");
+    private async addressesByState(c: Client): Promise<{ [id: number]: string[] }> {
+        const states: LoanState[] = [
+            LoanState.CollateralCollection,
+            LoanState.Fundraising,
+            LoanState.Payback,
+            LoanState.Finished,
+        ];
+        const res: { [id: number]: string[] } = {}
+        for (const state of states) {
+            const loans = await c.loansByState(state);
+            res[state] = loans.map((l: Loan): string => l.address.ascii);
+        }
+        return res;
+    }
+
+    /**
+     * Checks if a loans are correctly returned when their state changes.
+     */
+    @test(timeout(60000), slow(15000)) async loanIndexByState() {
+        const c = await this.createClient();
+        const user = await c.currentUser();
+
+        // Create a bunch of test loans.
+        const loans: Loan[] = [];
+        const promises: Array<Promise<void>> = [];
+        for (let i = 0; i < 4; i++) {
+            const promise = this.createSampleLoan(c).then(async (l: Loan): Promise<void> => {
+                loans.push(l);
+            });
+            promises.push(promise);
+        }
+        await Promise.all(promises);
+
+        let loansByState = await this.addressesByState(c);
+        for (const loan of loans) {
+            const a = loan.address.ascii
+            assert(loansByState[LoanState.CollateralCollection].includes(a), "new loan in collateral collection");
+            assert(!loansByState[LoanState.Fundraising].includes(a), "new loan not in fundraising");
+            assert(!loansByState[LoanState.Payback].includes(a), "new loan not in payback");
+            assert(!loansByState[LoanState.Finished].includes(a), "new loan not in finished");
+        }
+
+        // Print some money, then send the collateral.
+        await c.testToken.print(user);
+        await loans[2].sendCollateral(new BigNumber(5000));
+        loansByState = await this.addressesByState(c);
+        for (const loan of loans) {
+            const a = loan.address.ascii
+            if (loan === loans[2]) {
+                assert(!loansByState[LoanState.CollateralCollection].includes(a), "changed loan not in collection");
+                assert(loansByState[LoanState.Fundraising].includes(a), "changed loan in fundraising");
+                assert(!loansByState[LoanState.Payback].includes(a), "changed loan not in payback");
+                assert(!loansByState[LoanState.Finished].includes(a), "changed loan not in finished");
+            } else {
+                assert(loansByState[LoanState.CollateralCollection].includes(a), "unchanged loan in collection");
+                assert(!loansByState[LoanState.Fundraising].includes(a), "unchanged loan not in fundraising");
+                assert(!loansByState[LoanState.Payback].includes(a), "unchanged loan not in payback");
+                assert(!loansByState[LoanState.Finished].includes(a), "unchanged loan not in finished");
+            }
+        }
     }
 }

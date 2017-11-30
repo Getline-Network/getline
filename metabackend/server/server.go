@@ -75,9 +75,9 @@ func (s *Server) GetLoans(ctx context.Context, req *pb.GetLoansRequest) (*pb.Get
 		}
 		query.Borrower = &owner
 	}
-	if req.GetShortId() != "" {
-		query.ShortID = req.GetShortId()
-	}
+
+	query.ShortID = req.GetShortId()
+	query.State = req.GetState()
 
 	loans, err := query.Run(ctx, s.Model)
 	if err != nil {

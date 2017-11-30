@@ -341,7 +341,7 @@ export class GetlineBlockchain {
 
                 this.web3.eth.getCode(address, (e2, code) => {
                     if (!code || code.length < 3) {
-                        reject(new Error("Contract did not get stored"));
+                        reject(new Error("Contract did not get stored: " + e2));
                         return;
                     }
 

@@ -18,13 +18,59 @@ import (
 	"fmt"
 	"math/big"
 	"strings"
+	"sync"
 
 	ethcommon "github.com/ethereum/go-ethereum/common"
+	"github.com/getline-network/getline/metabackend/util"
+	"github.com/getline-network/getline/pb"
 	"github.com/golang/glog"
 	"github.com/jmoiron/sqlx"
 	"github.com/teris-io/shortid"
 	"golang.org/x/net/context"
 )
+
+type Loan struct {
+	model *Model
+
+	Parameters struct {
+		BorrowedToken          ethcommon.Address
+		CollateralToken        ethcommon.Address
+		AmountWanted           *big.Int
+		Borrower               ethcommon.Address
+		InterestPermil         uint16
+		FundraisingBlocksCount *big.Int
+		PaybackBlocksCount     *big.Int
+	}
+	Metadata struct {
+		NetworkID       string
+		ShortID         string
+		Borrower        ethcommon.Address
+		Description     string
+		DeployedAddress ethcommon.Address
+	}
+	State struct {
+		CurrentState pb.LoanLifetimeState
+	}
+}
+
+func (d *Loan) ProtoParameters() *pb.LoanParameters {
+	res := pb.LoanParameters{
+		CollateralToken:        util.ProtoAddress(d.Parameters.CollateralToken.Hex()),
+		LoanToken:              util.ProtoAddress(d.Parameters.BorrowedToken.Hex()),
+		Liege:                  util.ProtoAddress(d.Parameters.Borrower.Hex()),
+		AmountWanted:           d.Parameters.AmountWanted.String(),
+		InterestPermil:         uint32(d.Parameters.InterestPermil),
+		FundraisingBlocksCount: d.Parameters.FundraisingBlocksCount.String(),
+		PaybackBlocksCount:     d.Parameters.PaybackBlocksCount.String(),
+	}
+	return &res
+}
+
+func (m *Model) NewLoan() *Loan {
+	return &Loan{
+		model: m,
+	}
+}
 
 type fieldsLoanMetadata struct {
 	// Identification
@@ -135,6 +181,7 @@ type LoanQuery struct {
 	ShortID         string
 	Borrower        *ethcommon.Address
 	DeployedAddress *ethcommon.Address
+	State           pb.LoanLifetimeState
 }
 
 func buildWhere(keys []string) string {
@@ -188,6 +235,35 @@ func (q LoanQuery) Run(ctx context.Context, m *Model) ([]Loan, error) {
 			continue
 		}
 		res = append(res, l)
+	}
+
+	if q.State != pb.LoanLifetimeState_INVALID {
+		// TODO(q3k): Cache this. For now let's call the blockchain for every
+		// loan and see if it's in the desired state.
+		wg := sync.WaitGroup{}
+		wg.Add(len(res))
+		loansFiltered := make(chan *Loan, len(res))
+		for _, loan := range res {
+			loan = loan
+			go func(l Loan) {
+				defer wg.Done()
+				if err := l.LoadStateFromBlockchain(ctx); err != nil {
+					glog.Errorf("When loading state from blockchain: %v", err)
+					return
+				}
+				if l.State.CurrentState != q.State {
+					return
+				}
+				loansFiltered <- &l
+			}(loan)
+		}
+		wg.Wait()
+		close(loansFiltered)
+
+		res = make([]Loan, 0, len(res))
+		for l := range loansFiltered {
+			res = append(res, *l)
+		}
 	}
 
 	return res, nil
@@ -302,6 +378,33 @@ func (l *Loan) LoadParametersFromBlockchain(ctx context.Context) error {
 		if err != nil {
 			return fmt.Errorf("calling getter failed: %v", err)
 		}
+	}
+
+	return nil
+}
+
+func (l *Loan) LoadStateFromBlockchain(ctx context.Context) error {
+	loanContract, err := l.model.blockchain.get(ctx, l.Metadata.NetworkID, "Loan", l.Metadata.DeployedAddress)
+	if err != nil {
+		return fmt.Errorf("getting Loan contract failed: %v", err)
+	}
+
+	var state uint8
+	if err = loanContract.Call(nil, &state, "currentState"); err != nil {
+		return fmt.Errorf("calling currentState failed: %v", err)
+	}
+
+	switch state {
+	case 0:
+		l.State.CurrentState = pb.LoanLifetimeState_COLLATERAL_COLLECTION
+	case 1:
+		l.State.CurrentState = pb.LoanLifetimeState_FUNDRAISING
+	case 2:
+		l.State.CurrentState = pb.LoanLifetimeState_PAYBACK
+	case 3:
+		l.State.CurrentState = pb.LoanLifetimeState_FINISHED
+	default:
+		return fmt.Errorf("unexpected currentState: %d", state)
 	}
 
 	return nil

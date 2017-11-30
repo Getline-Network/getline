@@ -16,14 +16,11 @@ package model
 
 import (
 	"fmt"
-	"math/big"
 
-	ethcommon "github.com/ethereum/go-ethereum/common"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/getline-network/getline/metabackend/util"
 	"github.com/getline-network/getline/pb"
 )
 
@@ -96,44 +93,4 @@ func (m *Model) Transaction() (*sqlx.Tx, error) {
 func (m *Model) InitializeSchema() error {
 	_, err := m.dbConn.Exec(schema)
 	return err
-}
-
-type Loan struct {
-	model *Model
-
-	Parameters struct {
-		BorrowedToken          ethcommon.Address
-		CollateralToken        ethcommon.Address
-		AmountWanted           *big.Int
-		Borrower               ethcommon.Address
-		InterestPermil         uint16
-		FundraisingBlocksCount *big.Int
-		PaybackBlocksCount     *big.Int
-	}
-	Metadata struct {
-		NetworkID       string
-		ShortID         string
-		Borrower        ethcommon.Address
-		Description     string
-		DeployedAddress ethcommon.Address
-	}
-}
-
-func (d *Loan) ProtoParameters() *pb.LoanParameters {
-	res := pb.LoanParameters{
-		CollateralToken:        util.ProtoAddress(d.Parameters.CollateralToken.Hex()),
-		LoanToken:              util.ProtoAddress(d.Parameters.BorrowedToken.Hex()),
-		Liege:                  util.ProtoAddress(d.Parameters.Borrower.Hex()),
-		AmountWanted:           d.Parameters.AmountWanted.String(),
-		InterestPermil:         uint32(d.Parameters.InterestPermil),
-		FundraisingBlocksCount: d.Parameters.FundraisingBlocksCount.String(),
-		PaybackBlocksCount:     d.Parameters.PaybackBlocksCount.String(),
-	}
-	return &res
-}
-
-func (m *Model) NewLoan() *Loan {
-	return &Loan{
-		model: m,
-	}
 }
