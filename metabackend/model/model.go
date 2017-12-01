@@ -16,62 +16,47 @@ package model
 
 import (
 	"fmt"
-	"math/big"
 
-	"golang.org/x/net/context"
-
-	ethcommon "github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/getline-network/getline/metabackend/util"
-	"github.com/getline-network/getline/pb"
-	"github.com/golang/glog"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+
+	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/getline-network/getline/pb"
 )
 
-type DeployedLoanParameters struct {
-	model   *Model
-	network string
-	address ethcommon.Address
+var schema = `
 
-	BorrowedToken          ethcommon.Address
-	CollateralToken        ethcommon.Address
-	AmountWanted           *big.Int
-	Borrower               ethcommon.Address
-	InterestPermil         uint16
-	FundraisingBlocksCount *big.Int
-	PaybackBlocksCount     *big.Int
-}
+CREATE TABLE deployed_loan_parameters (
+    network varchar(32) not null,
+	version  bigint not null,
+	address bytea not null,
 
-func (d *DeployedLoanParameters) Proto() *pb.LoanParameters {
-	res := pb.LoanParameters{
-		CollateralToken:        util.ProtoAddress(d.CollateralToken.Hex()),
-		LoanToken:              util.ProtoAddress(d.BorrowedToken.Hex()),
-		Liege:                  util.ProtoAddress(d.Borrower.Hex()),
-		AmountWanted:           d.AmountWanted.String(),
-		InterestPermil:         uint32(d.InterestPermil),
-		FundraisingBlocksCount: d.FundraisingBlocksCount.String(),
-		PaybackBlocksCount:     d.PaybackBlocksCount.String(),
-	}
-	return &res
-}
+	borrowed_token bytea not null,
+	collateral_token bytea not null,
+	amount_wanted numeric not null,
+	borrower bytea not null,
+	interest_permil int not null,
+	fundraising_blocks_count numeric not null,
+	payback_blocks_count numeric not null,
 
-type LoanMetadata struct {
-	model   *Model
-	network string
+	primary key(network, address)
+);
 
-	ShortID         string
-	Borrower        ethcommon.Address
-	Description     string
-	DeployedAddress *ethcommon.Address
-}
+CREATE TABLE loan_metadata (
+	loan_metadata_id bigserial,
+	shortid varchar(12) not null,
 
-func NewLoanMetadata(model *Model, network string) *LoanMetadata {
-	return &LoanMetadata{
-		model:   model,
-		network: network,
-	}
-}
+	borrower bytea not null,
+	description varchar(800),
+
+	network varchar(32) not null,
+	deployed_address bytea not null,
+
+	primary key(loan_metadata_id),
+	unique(shortid),
+	unique(network, deployed_address)
+);
+`
 
 type Model struct {
 	dbConn      *sqlx.DB
@@ -101,43 +86,11 @@ func New(driverName, dataSourceName, ethRemote string, server pb.MetabackendServ
 	return m, nil
 }
 
-// TODO(q3k): Refactor this into the query-struct style.
-func (m *Model) GetLoanParameters(ctx context.Context, network string, address ethcommon.Address) (*DeployedLoanParameters, error) {
-	// Try to load from database.
-	data, err := m.GetDeployedLoanParametersByAddress(ctx, network, address)
-	if err != nil {
-		glog.Warningf("Couldn't load loan from database: %v", err)
-	}
-	if data != nil {
-		return data.Object(m)
-	}
-
-	// Since that failed, try to load it from the blockchain.
-	obj, err := m.blockchain.GetLoan(ctx, network, address)
-	if err != nil {
-		return nil, fmt.Errorf("loading from blockchain failed: %v", err)
-	}
-
-	// Save to database for cache.
-	// TODO(q3k): Yes, this is a hack. This should disappear with the saveToDatabase
-	// refactor.
-	obj.model = m
-	obj.network = network
-	obj.address = address
-	err = obj.saveToDatabase(ctx)
-	if err != nil {
-		glog.Warningf("Saving loan to database failed: %v", err)
-	}
-
-	return obj, nil
+func (m *Model) Transaction() (*sqlx.Tx, error) {
+	return m.dbConn.Beginx()
 }
 
-func (m *Model) ValidLoan(ctx context.Context, network string, address ethcommon.Address) (string, error) {
-	_, err := m.blockchain.GetLoan(ctx, network, address)
-	if err != nil {
-		// TODO(q3k): Do not leak error messages to caller.
-		return err.Error(), nil
-	}
-	// TODO(q3k): Validate if given address contains known loan bytecode.
-	return "", nil
+func (m *Model) InitializeSchema() error {
+	_, err := m.dbConn.Exec(schema)
+	return err
 }

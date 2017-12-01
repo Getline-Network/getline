@@ -75,27 +75,3 @@ func (b *blockchainRemote) get(ctx context.Context, networkId, contractName stri
 	bound := bind.NewBoundContract(address, parsed, b.blockchain, b.blockchain)
 	return bound, nil
 }
-
-func (b *blockchainRemote) GetLoan(ctx context.Context, networkId string, address common.Address) (*DeployedLoanParameters, error) {
-	loanContract, err := b.get(ctx, networkId, "Loan", address)
-	if err != nil {
-		return nil, fmt.Errorf("getting Loan contract failed: %v", err)
-	}
-
-	d := DeployedLoanParameters{}
-	errs := []error{}
-	errs = append(errs, loanContract.Call(nil, &d.BorrowedToken, "borrowedToken"))
-	errs = append(errs, loanContract.Call(nil, &d.CollateralToken, "collateralToken"))
-	errs = append(errs, loanContract.Call(nil, &d.AmountWanted, "amountWanted"))
-	errs = append(errs, loanContract.Call(nil, &d.Borrower, "borrower"))
-	errs = append(errs, loanContract.Call(nil, &d.InterestPermil, "interestPermil"))
-	errs = append(errs, loanContract.Call(nil, &d.FundraisingBlocksCount, "fundraisingBlocksCount"))
-	errs = append(errs, loanContract.Call(nil, &d.PaybackBlocksCount, "paybackBlocksCount"))
-	for _, err := range errs {
-		if err != nil {
-			return nil, fmt.Errorf("calling getter failed: %v", err)
-		}
-	}
-
-	return &d, nil
-}

@@ -5,7 +5,7 @@ import * as Web3 from "web3";
 
 import {Blockchain, GetlineBlockchain} from "./blockchain";
 import {Address, LOAN_CONTRACT, PrintableToken} from "./common";
-import {Loan} from "./loan";
+import {Loan, LoanState} from "./loan";
 import {MetabackendClient, MetabackendService, pb} from "./metabackend";
 
 const logger = debug("getline.ts:client");
@@ -172,15 +172,37 @@ export class Client {
         const req = new pb.GetLoansRequest();
         req.setNetworkId(this.network);
         req.setOwner(owner.proto());
-
         const res = await this.metabackend.invoke(MetabackendService.GetLoans, req);
+        return this.loadLoans(res);
+    }
+
+    /**
+     * Returns all loans in a particular state, regardless of their owner.
+     * @param state State in which the loans are.
+     * @returns Loans in state `state`.
+     */
+    public async loansByState(state: LoanState): Promise<Loan[]> {
+        await this.initializeIfNeeded();
+
+        const stateMap: { [id: number]: pb.LoanLifetimeState } = {};
+        stateMap[LoanState.CollateralCollection] = pb.LoanLifetimeState.COLLATERAL_COLLECTION;
+        stateMap[LoanState.Fundraising] = pb.LoanLifetimeState.FUNDRAISING;
+        stateMap[LoanState.Payback] = pb.LoanLifetimeState.PAYBACK;
+        stateMap[LoanState.Finished] = pb.LoanLifetimeState.FINISHED;
+
+        const req = new pb.GetLoansRequest();
+        req.setNetworkId(this.network);
+        req.setState(stateMap[state]);
+        const res = await this.metabackend.invoke(MetabackendService.GetLoans, req);
+        return this.loadLoans(res);
+    }
+
+    private async loadLoans(res: pb.GetLoansResponse): Promise<Loan[]> {
         if (res.getNetworkId() !== this.network) {
             throw new Error("Invalid network ID in response.");
         }
-
         const loans: Loan[] = [];
         const promises: Array<Promise<void>> = [];
-        const currentBlock = await this.blockchain.currentBlock();
         res.getLoanCacheList().forEach((elem) => {
             const loan = new Loan(this.blockchain);
             promises.push(loan.loadFromProto(elem));
