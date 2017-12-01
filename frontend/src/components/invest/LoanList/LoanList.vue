@@ -10,8 +10,8 @@
             <md-table-row>
               <md-table-head md-sort-by="name" class="ll-th"> NAME </md-table-head>
               <md-table-head md-sort-by="score" class="ll-th"> SCORE </md-table-head>
-              <md-table-head md-sort-by="amount-needed" class="ll-th"> AMOUNT NEEDED </md-table-head>
-              <md-table-head md-sort-by="time" class="ll-th"> TIME </md-table-head>
+              <md-table-head md-sort-by="amount-needed" class="ll-th"> AMOUNT WANTED </md-table-head>
+              <md-table-head md-sort-by="time" class="ll-th"> FUNDRAISING DEADLINE </md-table-head>
               <md-table-head md-sort-by="percent-funded" class="ll-th"> % FUNDED </md-table-head>
               <md-table-head md-sort-by="percent-needed" class="ll-th"> % NEEDED </md-table-head>
             </md-table-row>
@@ -20,10 +20,10 @@
             <md-table-row @click.native='goToLoan(loan.id)' v-for="loan in loansToInvest" :key="loan.id">
               <md-table-cell class="ll-td">{{ loan.userName }}</md-table-cell>
               <md-table-cell class="ll-td ll-score"> <user-score :value="loan.userScore"/> </md-table-cell>
-              <md-table-cell class="ll-td">{{ loan.amountNeeded }}</md-table-cell>
-              <md-table-cell class="ll-td ll-time">{{ loan.time }}</md-table-cell>
-              <md-table-cell class="ll-td">{{ loan.percentFunded }}</md-table-cell>
-              <md-table-cell class="ll-td">{{ loan.percentNeeded }}</md-table-cell>
+              <md-table-cell class="ll-td">{{ loan.amountWantedWithToken }}</md-table-cell>
+              <md-table-cell class="ll-td ll-time">{{ loan.fundraisingDeadline }}</md-table-cell>
+              <md-table-cell class="ll-td">{{ loan.percentageFunded }}</md-table-cell>
+              <md-table-cell class="ll-td">{{ loan.percentageWanted }}</md-table-cell>
             </md-table-row>
           </md-table-body>
         </md-table>

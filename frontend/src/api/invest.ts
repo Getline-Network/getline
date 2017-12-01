@@ -1,23 +1,32 @@
-export async function getLoansToInvest(cb) {
-  /** TODO Connect to the getline.ts
-   * import API, { LoanState } from './index';
-   *
-   * const api = await API.instance();
-   * let currentUser = await api.currentUser();
-   * let stateMap = await api.loansByState();
-   * return stateMap[LoanState.Fundraising
-   */
-  setTimeout(function () {
-    cb([mockLoan, mockLoan]);
-  }, 1000);
-}
+import { BigNumber } from 'bignumber.js';
 
-const mockLoan = {
-  id: 1,
-  userName: 'Rodney Wright',
-  userScore: 'A',
-  amountNeeded: '123.45 USD',
-  time: '1 Month',
-  percentFunded: '47%',
-  percentNeeded: '53%',
-};
+import API, { LoanState } from './index';
+import { LoanToInvestT } from '@/store/invest/types';
+import { getTokenSymbolsFromBlockchain, getAmountsWantedFromBlockchain, getAmountsGatheredFromBlockchain } from './utils';
+
+export async function getLoansToInvest(cb) {
+  const api = await API.instance();
+  let currentUser = await api.currentUser();
+  let blockchainLoans = await api.loansByState(LoanState.Fundraising);
+  await Promise.all(blockchainLoans.map(loan => loan.updateStateFromBlockchain()));
+
+  const amountsWanted: BigNumber[] = await getAmountsWantedFromBlockchain(blockchainLoans);
+  const amountsGathered: BigNumber[] = await getAmountsGatheredFromBlockchain(blockchainLoans);
+  const loanTokenSymbols: string[] = await getTokenSymbolsFromBlockchain(blockchainLoans);
+
+  let loansToInvest: LoanToInvestT[] =
+    blockchainLoans.map(({
+      shortId,
+      owner,
+      parameters,
+  }, index): LoanToInvestT => ({
+        id: shortId,
+        userName: owner.ascii,
+        userScore: "A", // TODO Remove mock
+        fundraisingDeadline: parameters.fundraisingDeadline.format('LL'),
+        amountGathered: amountsGathered[index],
+        amountWanted: amountsWanted[index],
+        tokenSymbol: loanTokenSymbols[index]
+      }));
+  cb(loansToInvest);
+}
