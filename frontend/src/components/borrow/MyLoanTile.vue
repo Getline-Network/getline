@@ -27,16 +27,29 @@
         <div class="mit-fundraising-amount"> 3.75 {{ loan.tokenSymbol }} </div>
       </div>
     </div>
-    <div v-if="loan.isCollateralCollection" class="mit-collateral">
-      <div class="mit-collateral-text"> Things to do before loan </div>
-      <purple-button text="TRANSFER COLLATERAL TOKEN" />
+    <div v-if="loan.isCollateralCollection" :class="isSendingCollateral()" class="mit-collateral">
+      <div class="mit-collateral-text"> Things to do before loan: </div>
+      <md-input-container class="mlt-collateral-input">
+        <label> AMOUNT </label>
+        <md-input v-model="collateralAmount" type="number" />
+        <div class="rl-input-right-text"> DEMO TKN </div>
+      </md-input-container>
+      <purple-button class="mlt-send-collateral-button" @click.native='transferCollateral' text="TRANSFER COLLATERAL DEMO TOKEN" />
+      <div class="mlt-spinner-container">
+        <spinner />
+        <div class="mlt-sending-text">
+          Please don't close this window and wait until we process your order. It usually takes about 10 seconds
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import PurpleButton from '../common/PurpleButton.vue';
 import FundraisingBar from '../common/FundraisingBar.vue';
+import Spinner from '../common/Spinner.vue';
+import { gatherCollateral } from '../../api';
 
 export default {
   name: 'MyLoanTile',
@@ -44,7 +57,26 @@ export default {
   components: {
     'purple-button': PurpleButton,
     'fundraising-bar': FundraisingBar,
+    'spinner': Spinner,
   },
+  data() {
+    return {
+      collateralAmount: '0.01',
+      sendingCollateral: false,
+    };
+  },
+  methods: {
+    transferCollateral: async function transferCollateral() {
+      this.sendingCollateral = true;
+      const { shortId } = this.loan;
+      await gatherCollateral(shortId, this.collateralAmount);
+      // TODO send action to refresh this loan
+      this.sendingCollateral = false;
+    },
+    isSendingCollateral: function isSendingCollateral():string {
+      return this.sendingCollateral ? 'mlt-sending-collateral' : '';
+    },
+  }
 };
 </script>
 
@@ -60,6 +92,12 @@ export default {
   }
   .mit-collateral { padding: 23px 30px;
     .mit-collateral-text { font-size: 18px; font-weight: 300; line-height: 1.22; letter-spacing: -0.2px; color: var(--color-black-cod); }
+    .mlt-spinner-container { display: none; }
+  }
+  .mit-collateral.mlt-sending-collateral  { padding: 23px 30px;
+    .mlt-send-collateral-button, .mit-collateral-text, .mlt-collateral-input { display: none; }
+    .mlt-sending-text { display: flex; justify-content: center; font-size: 18px; font-weight: 300; line-height: 1.22; letter-spacing: -0.2px; color: var(--color-black-cod); text-align: center; }
+    .mlt-spinner-container { display: block; }
   }
   .mit-fundraising-container { display: flex; align-items: center; min-height: 250px;padding: 23px 30px;
     .mit-fundraising { display: flex; flex-direction: column; align-items: center; width: 100%;
