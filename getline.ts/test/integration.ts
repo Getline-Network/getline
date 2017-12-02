@@ -154,7 +154,7 @@ class EndToEndTests {
         // Check if loan can be retrieved by ID.
         const loan2_ = await c.loan(loan2.shortId);
         assert(loan2.address.eq(loan2_.address), "returned loan is the same loan");
-        
+
         // Check if the two loans are present.
         loans = await c.loansByOwner(user);
         assert(loans.length == loanCount + 2, "two new loans are owned by user")
