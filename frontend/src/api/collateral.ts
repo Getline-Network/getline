@@ -7,6 +7,5 @@ export async function gatherCollateral(shortId: string, amount) {
   const token = api.testToken;
   const user = await api.currentUser();
   const loan = await api.loan(shortId);
-  const collateralAmount = (new BigNumber(amount)).mul(1000);
-  await loan.sendCollateral(collateralAmount);
+  await loan.sendCollateral(new BigNumber(amount));
 }
