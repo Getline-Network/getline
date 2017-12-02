@@ -7,13 +7,12 @@ export interface InvestStateT {
 export interface LoanToInvestT {
   id: string;
   userName: string;
-  userScore: string;
   fundraisingDeadline: string;
   amountGathered: BigNumber;
   amountWanted: BigNumber;
   amountWantedWithToken?: string,
   tokenSymbol: string;
-
+  interestPermil: number;
   percentageFunded?: string;
   percentageWanted?: string;
 };

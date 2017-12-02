@@ -25,7 +25,7 @@ const routing: RouterOptions = {
       component: MyLoans,
     },
     {
-      path: '/invest/loan/:loanId',
+      path: '/invest/loan/:shortId',
       component: Investment,
       props: { hideInvestBar: true },
     },

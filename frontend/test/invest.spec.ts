@@ -8,7 +8,7 @@ import { } from 'jasmine'; // For describe(...) and it(...) types
 const mockLoan: LoanToInvestT = {
   id: '1',
   userName: 'Rodney Wright',
-  userScore: 'A',
+  interestPermil: 500,
   fundraisingDeadline: 'today',
   amountGathered: new BigNumber("30"),
   amountWanted: new BigNumber("50"),

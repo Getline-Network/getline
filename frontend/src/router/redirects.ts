@@ -34,6 +34,10 @@ export function goToErrorPage(): void {
   vue.$router.push({ path });
 }
 
+export function goToBlogspotScore(): void {
+  location.href = "http://blog.getline.in/scoring";
+}
+
 export function isErrorPage(): boolean {
   let path = vue.$route.path.split("/");
   return (path && path.length > 0 && path[1] === "error");

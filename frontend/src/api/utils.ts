@@ -2,24 +2,42 @@ import { BigNumber } from 'bignumber.js';
 
 export async function getAmountsWantedFromBlockchain(loans): Promise<BigNumber[]> {
   const amountsWantedPromises: Promise<BigNumber>[] =
-    loans.map(({
-      parameters: { loanToken, amountWanted }
-    }) => loanToken.humanize(amountWanted));
+    loans.map(getSingleAmountWantedFromBlockchain);
   return Promise.all(amountsWantedPromises);
 }
 
 export async function getAmountsGatheredFromBlockchain(loans): Promise<BigNumber[]> {
-  const amountsGatheredPromises: Promise<BigNumber>[] = loans.map(({
-    parameters: { loanToken },
-    blockchainState: { amountGathered }
-  }) => loanToken.humanize(amountGathered));
+  const amountsGatheredPromises: Promise<BigNumber>[] =
+    loans.map(getSingleAmountGatheredFromBlockchain);
   return Promise.all(amountsGatheredPromises);
 }
 
 export async function getTokenSymbolsFromBlockchain(loans): Promise<string[]> {
   const loanTokenSymbolPromises: Promise<string>[] =
-    loans.map(({
-      parameters: { loanToken }
-    }) => loanToken.symbol());
+    loans.map(getSingleTokenSymbolFromBlockchain);
   return Promise.all(loanTokenSymbolPromises);
 }
+
+export async function getSingleAmountWantedFromBlockchain(loan): Promise<BigNumber> {
+  const {
+    parameters: { loanToken, amountWanted }
+  } = loan;
+  return loanToken.humanize(amountWanted);
+}
+
+export async function getSingleAmountGatheredFromBlockchain(loan): Promise<BigNumber> {
+  const {
+    parameters: { loanToken, amountWanted },
+    blockchainState: { amountGathered }
+  } = loan;
+  return loanToken.humanize(amountGathered);
+}
+
+export async function getSingleTokenSymbolFromBlockchain(loan): Promise<string> {
+  const {
+    parameters: { loanToken }
+  } = loan;
+  return loanToken.symbol();
+}
+
+
