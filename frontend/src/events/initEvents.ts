@@ -9,27 +9,15 @@ export interface EventsProvider {
   afterSuccessfulInitialization(): void;
 }
 
-/**
- * We are binding events to the global Vue object because
- * we need there access to Vue's this.$rouuer
- */
-export function initEvents(vue: Vue): EventsProvider {
+export function initEvents(): EventsProvider {
   return {
-    metamaskNotInstalled: function (): void {
-      goToInstallMetamaskPage.call(vue);
-    },
-    metamaskLocked: function (): void {
-      goToUnlockMetamaskPage.call(vue);
-    },
-    unsupportedNetwork: function (): void {
-      goToUnsupportedNetworkPage.call(vue);
-    },
-    unknownError: function (): void {
-      goToErrorPage.call(vue);
-    },
+    metamaskNotInstalled: goToInstallMetamaskPage,
+    metamaskLocked: goToUnlockMetamaskPage,
+    unsupportedNetwork: goToUnsupportedNetworkPage,
+    unknownError: goToErrorPage,
     afterSuccessfulInitialization: function (): void {
-      if (isErrorPage.call(vue)) {
-        goToMainPage.call(vue);
+      if (isErrorPage()) {
+        goToMainPage();
       }
     }
   }
