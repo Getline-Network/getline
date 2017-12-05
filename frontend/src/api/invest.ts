@@ -5,18 +5,17 @@ import { LoanToInvestT } from '@/store/invest/types';
 import { getTokenSymbolsFromBlockchain, getAmountsWantedFromBlockchain, getAmountsGatheredFromBlockchain } from './utils';
 import { getSingleAmountWantedFromBlockchain, getSingleAmountGatheredFromBlockchain, getSingleTokenSymbolFromBlockchain } from './utils';
 
-
-export async function getLoansToInvest(cb) {
+export async function getLoansToInvest(cb: (loans: LoanToInvestT[]) => void): Promise<void> {
   const api = await API.instance();
-  let currentUser = await api.currentUser();
-  let blockchainLoans = await api.loansByState(LoanState.Fundraising);
+  const currentUser = await api.currentUser();
+  const blockchainLoans = await api.loansByState(LoanState.Fundraising);
   await Promise.all(blockchainLoans.map(loan => loan.updateStateFromBlockchain()));
 
   const amountsWanted: BigNumber[] = await getAmountsWantedFromBlockchain(blockchainLoans);
   const amountsGathered: BigNumber[] = await getAmountsGatheredFromBlockchain(blockchainLoans);
   const loanTokenSymbols: string[] = await getTokenSymbolsFromBlockchain(blockchainLoans);
 
-  let loansToInvest: LoanToInvestT[] =
+  const loansToInvest: LoanToInvestT[] =
     blockchainLoans.map(({
       shortId,
       owner,

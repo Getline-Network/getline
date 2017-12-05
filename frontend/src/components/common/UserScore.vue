@@ -11,7 +11,6 @@ import { goToBlogspotScore } from '@/router/redirects';
  */
 export default {
   name: 'UserScore',
-  // props: ['value'],
   methods: {
     goToBlogspotScore,
     getClass: function getClass() {
