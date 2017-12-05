@@ -5,4 +5,6 @@ export { Loan, LoanState, Client };
 export * from './my-loans';
 export * from './demo-tokens';
 export * from './collateral';
+export * from './invest';
+
 export default API;
