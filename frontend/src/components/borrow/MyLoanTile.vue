@@ -1,7 +1,7 @@
 <template>
   <div class="my-loan-tile">
     <div class="mlt-details">
-        <div class="mlt-short-desc">{{ loan.description }}</div>
+        <div class="mlt-short-desc">{{ loan.description || "No description provided" }}</div>
     </div>
     <div class="mlt-financial-data">
       <div>
@@ -32,7 +32,7 @@
       <md-input-container class="mlt-collateral-input">
         <label> AMOUNT </label>
         <md-input v-model="collateralAmount" type="number" />
-        <div class="rl-input-right-text"> DEMO TKN </div>
+        <div class="rl-input-right-text"> DEMO TKN </div> <!-- TODO 58 -->
       </md-input-container>
       <purple-button class="mlt-send-collateral-button" @click.native='transferCollateral' text="TRANSFER COLLATERAL DEMO TOKEN" />
       <div class="mlt-spinner-container">
@@ -46,10 +46,10 @@
 </template>
 
 <script lang="ts">
-import PurpleButton from '../common/PurpleButton.vue';
-import FundraisingBar from '../common/FundraisingBar.vue';
-import Spinner from '../common/Spinner.vue';
-import { gatherCollateral } from '../../api';
+import PurpleButton from '@/components/common/PurpleButton.vue';
+import FundraisingBar from '@/components/common/FundraisingBar.vue';
+import Spinner from '@/components/common/Spinner.vue';
+import { gatherCollateral } from '@/api';
 
 export default {
   name: 'MyLoanTile',
@@ -61,7 +61,7 @@ export default {
   },
   data() {
     return {
-      collateralAmount: '0.01',
+      collateralAmount: '30',
       sendingCollateral: false,
     };
   },
@@ -70,7 +70,7 @@ export default {
       this.sendingCollateral = true;
       const { shortId } = this.loan;
       await gatherCollateral(shortId, this.collateralAmount);
-      // TODO send action to refresh this loan
+      // TODO 58
       this.sendingCollateral = false;
     },
     isSendingCollateral: function isSendingCollateral():string {
@@ -90,8 +90,10 @@ export default {
     .mlt-fin-line-b { font-size: 13px; font-weight: 600; color: var(--color-black-cod); }
     .mlt-fin-line-c { font-size: 10px; font-weight: 300; line-height: 2.2; color: #858585; }
   }
-  .mit-collateral { padding: 23px 30px;
-    .mit-collateral-text { font-size: 18px; font-weight: 300; line-height: 1.22; letter-spacing: -0.2px; color: var(--color-black-cod); }
+  .mit-collateral {
+    .mit-collateral-text { padding: 23px 23px 0px 23px; font-size: 18px; font-weight: 300; line-height: 1.22; letter-spacing: -0.2px; color: var(--color-black-cod); }
+    .mlt-collateral-input { width: calc(100% - 46px); margin: 23px; }
+    .mlt-send-collateral-button { margin: 23px;}
     .mlt-spinner-container { display: none; }
   }
   .mit-collateral.mlt-sending-collateral  { padding: 23px 30px;
