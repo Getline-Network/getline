@@ -1,54 +1,66 @@
 <template>
   <div class="loan-list">
     <div class="ll-title"> Loan listing </div>
-    <no-loans v-if="!loans" />
-    <div v-else class="ll-container">
-      <md-table md-sort="percent-needed">
-        <md-table-header>
-          <md-table-row>
-            <md-table-head md-sort-by="name" class="ll-th"> NAME </md-table-head>
-            <md-table-head md-sort-by="score" class="ll-th"> SCORE </md-table-head>
-            <md-table-head md-sort-by="amount-needed" class="ll-th"> AMOUNT NEEDED </md-table-head>
-            <md-table-head md-sort-by="time" class="ll-th"> TIME </md-table-head>
-            <md-table-head md-sort-by="percent-funded" class="ll-th"> % FUNDED </md-table-head>
-            <md-table-head md-sort-by="percent-needed" class="ll-th"> % NEEDED </md-table-head>
-          </md-table-row>
-        </md-table-header>
-        <md-table-body>
-          <md-table-row @click.native='goToLoan(loan.id)' v-for="loan in loans" :key="loan.id">
-            <md-table-cell class="ll-td">{{ loan.userName }}</md-table-cell>
-            <md-table-cell class="ll-td ll-score"> <user-score :value="loan.userScore"/> </md-table-cell>
-            <md-table-cell class="ll-td">{{ loan.amountNeeded }}</md-table-cell>
-            <md-table-cell class="ll-td ll-time">{{ loan.time }}</md-table-cell>
-            <md-table-cell class="ll-td">{{ loan.percentFunded }}</md-table-cell>
-            <md-table-cell class="ll-td">{{ loan.percentNeeded }}</md-table-cell>
-          </md-table-row>
-        </md-table-body>
-      </md-table>
+    <spinner v-if="isLoading"/>
+    <div v-else>
+      <no-loans v-if="!loansToInvest" />
+      <div v-else class="ll-container">
+        <md-table md-sort="percent-needed">
+          <md-table-header>
+            <md-table-row>
+              <md-table-head md-sort-by="name" class="ll-th"> NAME </md-table-head>
+              <md-table-head md-sort-by="score" class="ll-th"> SCORE </md-table-head>
+              <md-table-head md-sort-by="amount-needed" class="ll-th"> AMOUNT WANTED </md-table-head>
+              <md-table-head md-sort-by="time" class="ll-th"> FUNDRAISING DEADLINE </md-table-head>
+              <md-table-head md-sort-by="percent-funded" class="ll-th"> % FUNDED </md-table-head>
+              <md-table-head md-sort-by="percent-needed" class="ll-th"> % NEEDED </md-table-head>
+            </md-table-row>
+          </md-table-header>
+          <md-table-body>
+            <md-table-row @click.native='goToLoan(loan.id)' v-for="loan in loansToInvest" :key="loan.id">
+              <md-table-cell class="ll-td">{{ loan.userName }}</md-table-cell>
+              <md-table-cell class="ll-td ll-score"> <user-score :value="loan.userScore"/> </md-table-cell>
+              <md-table-cell class="ll-td">{{ loan.amountWantedWithToken }}</md-table-cell>
+              <md-table-cell class="ll-td ll-time">{{ loan.fundraisingDeadline }}</md-table-cell>
+              <md-table-cell class="ll-td">{{ loan.percentageFunded }}</md-table-cell>
+              <md-table-cell class="ll-td">{{ loan.percentageWanted }}</md-table-cell>
+            </md-table-row>
+          </md-table-body>
+        </md-table>
+      </div>
     </div>
   </div>
 </template>
 
-<script>
-import UserScore from '@/components/common/UserScore';
-import loans from '@/server/getGatheringLoans';
+<script lang="ts">
+import Vue from 'vue'
+import { mapState } from 'vuex'
+
+import UserScore from '../../common/UserScore.vue';
 import { goToLoan } from '@/router/redirects';
-import NoLoans from './NoLoans';
+import NoLoans from './NoLoans.vue';
+import Spinner from '@/components/common/Spinner.vue';
+
+import { StateT } from '@/store';
+import { GET_LOANS_TO_INVEST_ACTION } from '@/store/invest/actions';
 
 export default {
   name: 'LoanList',
   components: {
     'no-loans': NoLoans,
     'user-score': UserScore,
+    'spinner': Spinner,
   },
   methods: {
     goToLoan,
   },
-  data() {
-    return {
-      loans,
-    };
+  created() {
+    this.$store.dispatch(GET_LOANS_TO_INVEST_ACTION);
   },
+   computed: mapState({
+    loansToInvest: (state:StateT) => state.invest.loansToInvest,
+    isLoading: (state:StateT) => state.invest.isLoading
+  })
 };
 </script>
 <style scoped lang="scss">
