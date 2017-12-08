@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { BigNumber } from 'bignumber.js';
 
 import { mutations } from '../src/store/account/mutations';
 import { AccountStateT } from '../src/store/account/types';

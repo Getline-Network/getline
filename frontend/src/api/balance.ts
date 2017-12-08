@@ -1,5 +1,3 @@
-import { BigNumber } from "bignumber.js";
-
 import API, { Loan } from './index';
 
 export async function getMyBalance(cb: ({ balance, tokenName }: { balance: string, tokenName: string }) => void): Promise<void> {
