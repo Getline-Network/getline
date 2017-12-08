@@ -4,6 +4,7 @@ import { MyLoansStateT, MyLoanT, LoanState } from '../src/store/my-loans/types';
 import { } from 'jasmine'; // For describe(...) and it(...) types
 
 const mockLoan: MyLoanT = {
+  shortId: "123",
   description: "desc",
   interestPermil: 12,
   loanState: LoanState.Finished,
@@ -11,7 +12,6 @@ const mockLoan: MyLoanT = {
   amountWanted: "2",
   isCollateralCollection: false,
   isFundraising: true,
-  tokenSymbol: "btc"
 }
 
 describe('mutations', () => {

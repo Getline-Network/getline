@@ -55,10 +55,10 @@
 import Vue from 'vue'
 import * as moment from 'moment';
 
-import PurpleButton from '../common/PurpleButton.vue';
-import Spinner from '../common/Spinner.vue';
-import API, { Loan } from '../../api';
-import { goToLoan } from '../../router';
+import PurpleButton from '@/components/common/PurpleButton.vue';
+import Spinner from '@/components/common/Spinner.vue';
+import API, { Loan } from '@/api';
+import { goToLoan } from '@/router';
 
 const Component = Vue.extend({
   name: 'RequestLoan',
@@ -91,7 +91,7 @@ const Component = Vue.extend({
         fundraisingEnd,
         paybackEnd
       );
-      goToLoan.call(this, loan.shortId);
+      goToLoan(loan.shortId);
     },
   },
 });

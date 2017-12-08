@@ -24,7 +24,7 @@ import Vue from 'vue'
 import Spinner from '@/components/common/Spinner.vue';
 import PurpleButton from '@/components/common/PurpleButton.vue';
 import API, { Loan, printMeDemoTokens } from '@/api';
-import { goToLoan } from '@/router';
+import { goToHome } from '@/router';
 
 const Component = Vue.extend({
   name: 'PrintDemoTokens',
@@ -44,8 +44,7 @@ const Component = Vue.extend({
     requestTokens: async function requestTokens() {
       this.loading = true;
       await printMeDemoTokens();
-      // TODO 58
-      this.loading = false;
+      goToHome();
     },
   },
 });
