@@ -2,7 +2,7 @@
   <error>
     <span slot="title"> Metamask not found </span>
     <div slot="text">
-      <div> Please install metamsk.</div>
+      <div> Please install metamask.</div>
       <a href="https://metamask.io/">
         <img class="install-metamask" :src="require('../../assets/download-metamask.png')" />
       </a>
