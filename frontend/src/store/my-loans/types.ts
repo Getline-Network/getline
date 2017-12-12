@@ -5,6 +5,7 @@ export interface MyLoansStateT {
 
 export interface MyLoanT {
   // Data received immediately.
+  shortId: string;
   description: string;
   interestPermil: number;
   loanState: LoanState;

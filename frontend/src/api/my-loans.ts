@@ -13,13 +13,14 @@ export async function getMyLoans(cb) {
   const amountsGathered: BigNumber[] = await getAmountsGatheredFromBlockchain(blockchainLoans);
   const amountsWanted: BigNumber[] = await getAmountsWantedFromBlockchain(blockchainLoans);
   const loanTokenSymbols: string[] = await getTokenSymbolsFromBlockchain(blockchainLoans);
-
   let viewLoans: MyLoanT[] =
     blockchainLoans.map(({
+      shortId,
       description,
       parameters: { interestPermil },
       blockchainState: { loanState }
     }, index): MyLoanT => ({
+        shortId,
         description,
         interestPermil,
         loanState,

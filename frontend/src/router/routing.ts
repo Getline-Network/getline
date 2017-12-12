@@ -10,11 +10,16 @@ import UnlockMetamask from '@/components/error/UnlockMetamask.vue';
 import BadNetwork from '@/components/error/BadNetwork.vue';
 import UnknownError from '@/components/error/UnknownError.vue';
 import InstallMetamask from '@/components/error/InstallMetamask.vue';
+import PrintDemoTokens from '@/components/demo-tokens/PrintDemoTokens.vue';
 
 const routing: RouterOptions = {
   routes: [
     {
       path: '', redirect: '/invest',
+    },
+    {
+      path: '/print',
+      component: PrintDemoTokens,
     },
     {
       path: '/borrow',
