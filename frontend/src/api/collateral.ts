@@ -1,6 +1,4 @@
-import { BigNumber } from "bignumber.js";
-
-import API, { Loan } from './index';
+import API, { Loan, BigNumber } from './index';
 
 export async function gatherCollateral(shortId: string, amount) {
   const api = await API.instance();

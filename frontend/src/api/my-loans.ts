@@ -1,5 +1,4 @@
-import API, { LoanState } from './index';
-import { BigNumber } from 'bignumber.js';
+import API, { LoanState, BigNumber } from './index';
 
 import { MyLoanT } from '../store/my-loans';
 import { getTokenSymbolsFromBlockchain, getAmountsWantedFromBlockchain, getAmountsGatheredFromBlockchain } from './utils';

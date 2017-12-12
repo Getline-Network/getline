@@ -1,4 +1,5 @@
-import { BigNumber } from 'bignumber.js/bignumber';
+import { BigNumber } from '@/api/index';
+
 export interface InvestStateT {
   loansToInvest: LoanToInvestT[];
   isLoading: boolean;
