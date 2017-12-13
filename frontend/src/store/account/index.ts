@@ -4,7 +4,8 @@ import { AccountStateT } from './types';
 
 const state: AccountStateT = {
   balance: '',
-  balanceToken: '',
+  balanceTokenName: '',
+  demoPrintValue: '',
   isLoading: false,
 }
 
