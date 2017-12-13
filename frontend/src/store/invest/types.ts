@@ -1,5 +1,6 @@
-import { BigNumber } from 'bignumber.js/bignumber';
 import * as moment from "moment";
+import { BigNumber } from '@/api';
+
 export interface InvestStateT {
   loansToInvest: LoanToInvestT[];
   isLoading: boolean;

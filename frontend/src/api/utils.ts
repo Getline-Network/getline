@@ -1,4 +1,4 @@
-import { BigNumber } from 'bignumber.js';
+import { BigNumber } from './index';
 
 export async function getAmountsWantedFromBlockchain(loans): Promise<BigNumber[]> {
   const amountsWantedPromises: Promise<BigNumber>[] =

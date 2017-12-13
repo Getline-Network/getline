@@ -5,7 +5,7 @@
       <div class="pt-subtitle">To start get your free test tokens</div>
       <div class="pt-image-container">
         <img class="pt-token-image" :src="require('../../assets/blue-triangle.png')" />
-        <div class="pt-token-amount"> 1000 </div>
+        <div class="pt-token-amount"> {{ printValue }} </div>
       </div>
       <purple-button class="pt-button" text="GET TEST TOKENS" @click.native='requestTokens'  />
       <div class="pt-loader">
@@ -20,11 +20,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex';
 
 import Spinner from '@/components/common/Spinner.vue';
 import PurpleButton from '@/components/common/PurpleButton.vue';
 import API, { Loan, printMeDemoTokens } from '@/api';
 import { goToHome } from '@/router';
+import { GET_MY_BALANCE_ACTION } from '@/store/account/actions';
+import { StateT } from '@/store';
 
 const Component = Vue.extend({
   name: 'PrintDemoTokens',
@@ -37,6 +40,9 @@ const Component = Vue.extend({
       loading: false,
     };
   },
+  computed: mapState({
+    printValue: (state:StateT) => state.account.demoPrintValue
+  }),
   methods: {
     isLoading: function isLoading():string {
       return this.loading ? 'pt-loading' : '';
@@ -44,6 +50,7 @@ const Component = Vue.extend({
     requestTokens: async function requestTokens() {
       this.loading = true;
       await printMeDemoTokens();
+      this.$store.dispatch(GET_MY_BALANCE_ACTION);
       goToHome();
     },
   },

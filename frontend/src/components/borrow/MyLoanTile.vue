@@ -32,7 +32,7 @@
       <md-input-container class="mlt-collateral-input">
         <label> AMOUNT </label>
         <md-input v-model="collateralAmount" type="number" />
-        <div class="rl-input-right-text"> DEMO TKN </div> <!-- TODO 58 -->
+        <div class="rl-input-right-text"> {{ balanceTokenName }}</div>
       </md-input-container>
       <purple-button class="mlt-send-collateral-button" @click.native='transferCollateral' text="TRANSFER COLLATERAL DEMO TOKEN" />
       <div class="mlt-spinner-container">
@@ -46,10 +46,14 @@
 </template>
 
 <script lang="ts">
+import { mapState } from 'vuex';
+
 import PurpleButton from '@/components/common/PurpleButton.vue';
 import FundraisingBar from '@/components/common/FundraisingBar.vue';
 import Spinner from '@/components/common/Spinner.vue';
 import { gatherCollateral } from '@/api';
+import { StateT } from '@/store';
+import { GET_MY_BALANCE_ACTION } from '@/store/account/actions';
 
 export default {
   name: 'MyLoanTile',
@@ -65,12 +69,15 @@ export default {
       sendingCollateral: false,
     };
   },
+  computed: mapState({
+    balanceTokenName: (state:StateT) => state.account.balanceTokenName
+  }),
   methods: {
     transferCollateral: async function transferCollateral() {
       this.sendingCollateral = true;
       const { shortId } = this.loan;
       await gatherCollateral(shortId, this.collateralAmount);
-      // TODO 58
+      this.$store.dispatch(GET_MY_BALANCE_ACTION);
       this.sendingCollateral = false;
     },
     isSendingCollateral: function isSendingCollateral():string {
