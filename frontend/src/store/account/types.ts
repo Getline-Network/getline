@@ -1,5 +1,6 @@
 export interface AccountStateT {
   balance: string,
-  balanceToken: string,
+  balanceTokenName: string,
+  demoPrintValue: string,
   isLoading: boolean;
 }
