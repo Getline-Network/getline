@@ -22,7 +22,7 @@ export async function getLoansToInvest(cb: (loans: LoanToInvestT[]) => void): Pr
         id: shortId,
         userName: owner.ascii,
         interestPermil: parameters.interestPermil,
-        fundraisingDeadline: parameters.fundraisingDeadline.format('LL'),
+        fundraisingDeadline: parameters.fundraisingDeadline,
         amountGathered: amountsGathered[index],
         amountWanted: amountsWanted[index],
         tokenSymbol: loanTokenSymbols[index]

@@ -1,6 +1,8 @@
 import * as api from '../../api'
 
 export const GET_LOANS_TO_INVEST_ACTION = "getLoansToInvestAction";
+export const SORT_LOANS_TO_INVEST_ACTION = "sortLoansToInvestAction";
+import { sortColumnT } from './types';
 
 const actions = {
   [GET_LOANS_TO_INVEST_ACTION]({ commit }) {
@@ -10,6 +12,9 @@ const actions = {
         loans
       })
     });
+  },
+  [SORT_LOANS_TO_INVEST_ACTION]({ commit }, sortType: sortColumnT) {
+    commit('SORT_LOANS_TO_INVEST', sortType)
   }
 }
 

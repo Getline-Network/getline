@@ -5,15 +5,15 @@
     <div v-else>
       <no-loans v-if="!loansToInvest" />
       <div v-else class="ll-container">
-        <md-table md-sort="percent-needed">
+        <md-table @sort="onSort">
           <md-table-header>
             <md-table-row>
-              <md-table-head md-sort-by="name" class="ll-th"> NAME </md-table-head>
-              <md-table-head md-sort-by="score" class="ll-th"> SCORE </md-table-head>
-              <md-table-head md-sort-by="amount-needed" class="ll-th"> AMOUNT WANTED </md-table-head>
-              <md-table-head md-sort-by="time" class="ll-th"> FUNDRAISING DEADLINE </md-table-head>
-              <md-table-head md-sort-by="percent-funded" class="ll-th"> % FUNDED </md-table-head>
-              <md-table-head md-sort-by="percent-needed" class="ll-th"> % NEEDED </md-table-head>
+              <md-table-head class="ll-th" md-sort-by="NAME"> NAME </md-table-head>
+              <md-table-head class="ll-th"> SCORE </md-table-head>
+              <md-table-head class="ll-th" md-sort-by="AMOUNT_WANTED"> AMOUNT WANTED </md-table-head>
+              <md-table-head class="ll-th" md-sort-by="TIME"> FUNDRAISING DEADLINE </md-table-head>
+              <md-table-head class="ll-th" md-sort-by="FUNDED"> % FUNDED </md-table-head>
+              <md-table-head class="ll-th" md-sort-by="NEEDED"> % NEEDED </md-table-head>
             </md-table-row>
           </md-table-header>
           <md-table-body>
@@ -21,7 +21,7 @@
               <md-table-cell class="ll-td">{{ loan.userName }}</md-table-cell>
               <md-table-cell class="ll-td ll-score"> <user-score :value="loan.userScore"/> </md-table-cell>
               <md-table-cell class="ll-td">{{ loan.amountWantedWithToken }}</md-table-cell>
-              <md-table-cell class="ll-td ll-time">{{ loan.fundraisingDeadline }}</md-table-cell>
+              <md-table-cell class="ll-td ll-time">{{ loan.fundraisingDeadline.format('LL') }}</md-table-cell>
               <md-table-cell class="ll-td">{{ loan.percentageFunded }}</md-table-cell>
               <md-table-cell class="ll-td">{{ loan.percentageWanted }}</md-table-cell>
             </md-table-row>
@@ -42,7 +42,8 @@ import NoLoans from './NoLoans.vue';
 import Spinner from '@/components/common/Spinner.vue';
 
 import { StateT } from '@/store';
-import { GET_LOANS_TO_INVEST_ACTION } from '@/store/invest/actions';
+import { GET_LOANS_TO_INVEST_ACTION, SORT_LOANS_TO_INVEST_ACTION } from '@/store/invest/actions';
+import { sortColumnT } from '@/store/invest/types';
 
 export default {
   name: 'LoanList',
@@ -52,6 +53,9 @@ export default {
     'spinner': Spinner,
   },
   methods: {
+    onSort: function onSort(sortType: sortColumnT) {
+      this.$store.dispatch(SORT_LOANS_TO_INVEST_ACTION, sortType);
+    },
     goToLoan,
   },
   created() {
