@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { BigNumber } from 'bignumber.js/bignumber';
 import * as moment from "moment";
 
-import { InvestStateT, LoanToInvestT, sortColumnT } from './types';
+import { InvestStateT, LoanToInvestT, sortColumnT, sorterT } from './types';
 
 export const mutations = {
   'RECEIVE_LOANS_TO_INVEST': function (state: InvestStateT, { loans }: { loans: LoanToInvestT[] }): void {
@@ -17,7 +17,7 @@ export const mutations = {
   }
 }
 
-function getSortCmp(column: sortColumnT) {
+function getSortCmp(column: sortColumnT): sorterT {
   const sortType: string = column.type;
   function reverseIfDesc(sub: number): number {
     return sortType == 'asc' ? sub : -sub;
@@ -62,6 +62,12 @@ function getSortCmp(column: sortColumnT) {
         }
         return reverseIfDesc(sub);
       }
+    default:
+      // Just in case
+      return function (a: LoanToInvestT, b: LoanToInvestT): number {
+        return reverseIfDesc(a < b ? -1 : 1);
+      }
+
   }
 }
 

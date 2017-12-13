@@ -23,5 +23,9 @@ export interface sortColumnT {
   type: string; // 'asc' or 'desc'
 }
 
+export interface sorterT {
+  (a: LoanToInvestT, b: LoanToInvestT): number;
+}
+
 import { LoanState } from '../../../../getline.ts';
 export { LoanState } from '../../../../getline.ts';
