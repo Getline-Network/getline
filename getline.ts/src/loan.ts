@@ -187,7 +187,7 @@ export class Loan {
             throw new Error("Loan is not gathering collateral anymore");
         }
         if (!await this.isOwner()) {
-            throw new Error("setCollateralAmount can only be called by owner of loan");
+            throw new Error("sendCollateral can only be called by owner of loan");
         }
 
         // First, ensure that collateral allowance is set correctly.
@@ -197,6 +197,31 @@ export class Loan {
 
         // Now, call gatherCollateral and wait for state change.
         await this.contract.mutate("gatherCollateral");
+        await this.updateStateFromBlockchain();
+    }
+
+    /**
+     * Sends investment to the loan.
+     *
+     * This function will block until the new state is saved on the blockchain.
+     *
+     */
+    public async invest(amount: BigNumber): Promise<void> {
+        if (this.blockchainState === undefined) {
+            await this.updateStateFromBlockchain();
+        }
+
+        if (this.blockchainState.loanState !== LoanState.Fundraising) {
+            throw new Error("Loan is not currently fundraising");
+        }
+
+        // First, ensure that loan allowance is set correctly.
+        const loan = this.parameters.loanToken;
+        await loan.approve(this.address, amount);
+        await this.updateStateFromBlockchain();
+
+        // Now, call invest and wait for state change.
+        await this.contract.mutate("invest");
         await this.updateStateFromBlockchain();
     }
 

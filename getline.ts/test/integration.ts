@@ -127,6 +127,34 @@ class EndToEndTests {
     }
 
     /**
+     * Checks if the user can invest in a loan.
+     */
+    @test(timeout(30000), slow(15000)) async loanInvest() {
+        const c = await this.createClient();
+        const loan = await this.createSampleLoan(c);
+        const user = await c.currentUser();
+
+        // Print some money.
+        await c.testToken.print(user);
+
+        // Send collateral and check if we are fundraising.
+        await loan.sendCollateral(new BigNumber(5000));
+        assert(loan.blockchainState.loanState == LoanState.Fundraising, "loan state is fundraising");
+        assert(loan.blockchainState.fundraising, "loan is fundraising");
+
+        // Send investment.
+        await loan.invest(new BigNumber(500));
+        assert(loan.blockchainState.loanState == LoanState.Fundraising, "loan state is fundraising");
+        assert(loan.blockchainState.fundraising, "loan is fundraising");
+        assert(loan.blockchainState.amountGathered.eq(500), "loan has gathered right amount of funds");
+
+        // Finish investment.
+        await loan.invest(new BigNumber(500));
+        assert(loan.blockchainState.loanState == LoanState.Payback, "loan state is in payback");
+        assert(!loan.blockchainState.paidback, "loan has not been paid back yet");
+    }
+
+    /**
      * Checks if a loan is indexed correctly.
      */
     @test(timeout(30000), slow(15000)) async loanIndexSimple() {
