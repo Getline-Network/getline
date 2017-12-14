@@ -51,6 +51,14 @@ library InvestorLedger {
         var investor = account.investors[trustee];
         investor.amountInvested += investmentAmount;
         investor.reservedCollateral += collateralReseverved;
+
+        require(
+            account.loanToken.transferFrom(
+                trustee,
+                this,
+                investmentAmount
+            )
+        );
     }
 
     function gatherPayback(Ledger storage account) public {
