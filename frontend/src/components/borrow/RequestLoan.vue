@@ -5,26 +5,29 @@
       <div class="rl-amount-and-percentage"> Amount and percentage </div>
       <div class="rl-amount-container">
         <div class="rl-amount">
-          <md-input-container>
+          <md-input-container :class="amountInputClass">
             <label> AMOUNT </label>
             <md-input v-model="amount" type="number" />
             <div class="rl-input-right-text"> ETH </div>
+            <span class="md-error"> Must be a number bigger than 0 </span>
           </md-input-container>
         </div>
         <div class="rl-token">
-          <md-input-container>
+          <md-input-container :class="permilsInputClass">
             <label> INTEREST PERMILS </label>
             <md-input type="number" v-model="interestPermil" />
             <div class="rl-input-right-text">	&#8240;</div>
+            <span class="md-error"> Must be a number bigger than 0 </span>
           </md-input-container>
         </div>
       </div>
       <div class="rl-payback-container">
         <div class="rl-payback">
-        <md-input-container>
-          <label> PAYBACK TIME </label>
-          <md-input v-model="paybackTime" type="number" />
-          <div class="rl-input-right-text"> DAY(S) </div>
+          <md-input-container :class="paybackInputClass">
+            <label> PAYBACK TIME </label>
+            <md-input v-model="paybackTime" type="number" />
+            <div class="rl-input-right-text"> DAY(S) </div>
+            <span class="md-error"> Must be a number bigger than 0 </span>
           </md-input-container>
         </div>
       </div>
@@ -39,7 +42,7 @@
         </md-input-container>
       </div>
       <div class="rl-metamask" :class="isLoading()">
-        <purple-button class="rl-request-button" text="REQUEST LOAN"  @click.native='requestLoan' />
+        <purple-button class="rl-request-button" text="REQUEST LOAN" :disabled='!isValidForm' @click.native='requestLoan' />
         <div class="rl-loader">
           <spinner />
           <div class="rl-metamask-text">
@@ -60,6 +63,10 @@ import Spinner from '@/components/common/Spinner.vue';
 import API, { Loan } from '@/api';
 import { goToLoan } from '@/router';
 
+function getInputClass(value: number | string): string {
+  return value > 0 ? "" : "md-input-invalid";
+}
+
 const Component = Vue.extend({
   name: 'RequestLoan',
   data() {
@@ -75,11 +82,28 @@ const Component = Vue.extend({
     'purple-button': PurpleButton,
     'spinner': Spinner,
   },
+  computed: {
+    amountInputClass: function(): string {
+      return getInputClass(this.amount)
+    },
+    permilsInputClass: function(): string {
+      return getInputClass(this.interestPermil)
+    },
+    paybackInputClass: function(): string {
+      return getInputClass(this.paybackTime)
+    },
+    isValidForm: function():boolean {
+      // Form is valid if every input has no error class
+      const isValid: boolean = this.amountInputClass + this.permilsInputClass + this.paybackInputClass == "";
+      return isValid;
+    }
+  },
   methods: {
     isLoading: function isLoading():string {
       return this.loading ? 'rl-loading' : '';
     },
     requestLoan: async function requestLoan() {
+      if (!this.isValidForm) return;
       const api = await API.instance();
       this.loading = true;
       const fundraisingEnd: moment.Moment = moment().add(7, 'days');
