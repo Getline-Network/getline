@@ -380,6 +380,10 @@ func (l *Loan) LoadParametersFromBlockchain(ctx context.Context) error {
 		}
 	}
 
+	if l.Parameters.AmountWanted.Cmp(big.NewInt(0)) != 1 {
+		return fmt.Errorf("loan has invalid amount")
+	}
+
 	return nil
 }
 

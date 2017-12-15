@@ -267,4 +267,20 @@ class EndToEndTests {
             }
         }
     }
+
+    /**
+     * Checks if a loan is correctly rejected if invalid.
+     */
+    @test(timeout(30000), slow(15000)) async loanIndexRejectInvalid() {
+        const c = await this.createClient();
+        const user = await c.currentUser();
+
+        const description = "test loan";
+        const amount = new BigNumber(0);
+        const interestPermil = 50;
+        const fundraising = moment().add(7, 'days');
+        const payback = fundraising.add(7, 'days');
+
+        assert.isRejected(c.newLoan(description, amount, interestPermil, fundraising, payback), /non-positive amount/, "zero amount loan is rejected");
+    }
 }

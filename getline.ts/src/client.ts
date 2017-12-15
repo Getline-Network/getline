@@ -113,6 +113,9 @@ export class Client {
         if (paybackEnd.isBefore(fundraisingEnd)) {
             throw new Error("cannot place loan with payback deadline before fundraising deadline");
         }
+        if (amount.lte(0)) {
+            throw new Error("cannot place loan for non-positive amount");
+        }
 
         const currentBlock = (await this.blockchain.currentBlock()).toNumber();
         const blocksPerSecond = (1.0) / 15;
@@ -209,7 +212,9 @@ export class Client {
             loans.push(loan);
         });
         await Promise.all(promises);
-        return loans;
+        // Filter out invalid loan amounts - these should not end up being
+        // indexed, but some did before we started checking.
+        return loans.filter((loan: Loan) => loan.parameters.amountWanted.gt(0));
     }
 
     // TODO(q3k): Remove this after demo, require explicit initialization instead.
