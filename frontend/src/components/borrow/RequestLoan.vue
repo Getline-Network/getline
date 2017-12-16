@@ -5,29 +5,29 @@
       <div class="rl-amount-and-percentage"> Amount and percentage </div>
       <div class="rl-amount-container">
         <div class="rl-amount">
-          <md-input-container :class="amountInputClass">
+          <md-input-container :class="validators.nonNegativeNumber(this.amount).getClass()">
             <label> AMOUNT </label>
             <md-input v-model="amount" type="number" />
             <div class="rl-input-right-text"> ETH </div>
-            <span class="md-error"> Must be a number bigger than 0 </span>
+            <span class="md-error">{{ validators.nonNegativeNumber(this.amount).getErrorMsg() }}</span>
           </md-input-container>
         </div>
         <div class="rl-token">
-          <md-input-container :class="permilsInputClass">
+          <md-input-container :class="validators.nonNegativeNumber(this.interestPermil).getClass()">
             <label> INTEREST PERMILS </label>
             <md-input type="number" v-model="interestPermil" />
             <div class="rl-input-right-text">	&#8240;</div>
-            <span class="md-error"> Must be a number bigger than 0 </span>
+            <span class="md-error"> {{ validators.nonNegativeNumber(this.interestPermil).getErrorMsg() }}</span>
           </md-input-container>
         </div>
       </div>
       <div class="rl-payback-container">
         <div class="rl-payback">
-          <md-input-container :class="paybackInputClass">
+          <md-input-container :class="validators.nonNegativeInteger(this.paybackTime).getClass()">
             <label> PAYBACK TIME </label>
             <md-input v-model="paybackTime" type="number" />
             <div class="rl-input-right-text"> DAY(S) </div>
-            <span class="md-error"> Must be a number bigger than 0 </span>
+            <span class="md-error">{{ validators.nonNegativeInteger(this.paybackTime).getErrorMsg() }}</span>
           </md-input-container>
         </div>
       </div>
@@ -62,15 +62,13 @@ import PurpleButton from '@/components/common/PurpleButton.vue';
 import Spinner from '@/components/common/Spinner.vue';
 import API, { Loan } from '@/api';
 import { goToLoan } from '@/router';
-
-function getInputClass(value: number | string): string {
-  return value > 0 ? "" : "md-input-invalid";
-}
+import validators from '@/utils/inputValidators';
 
 const Component = Vue.extend({
   name: 'RequestLoan',
   data() {
     return {
+      validators,
       amount: '0.01',
       interestPermil: '5',
       description: '',
@@ -83,19 +81,12 @@ const Component = Vue.extend({
     'spinner': Spinner,
   },
   computed: {
-    amountInputClass: function(): string {
-      return getInputClass(this.amount)
-    },
-    permilsInputClass: function(): string {
-      return getInputClass(this.interestPermil)
-    },
-    paybackInputClass: function(): string {
-      return getInputClass(this.paybackTime)
-    },
     isValidForm: function():boolean {
-      // Form is valid if every input has no error class
-      const isValid: boolean = this.amountInputClass + this.permilsInputClass + this.paybackInputClass == "";
-      return isValid;
+      return (
+        validators.nonNegativeNumber(this.amountInputClass).isValid() &&
+        validators.nonNegativeNumber(this.permilsInputClass).isValid() &&
+        validators.nonNegativeInteger(this.paybackInputClass).isValid()
+      );
     }
   },
   methods: {

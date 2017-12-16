@@ -1,5 +1,5 @@
 import API, { BigNumber, LoanState } from './index';
-import { LoanToInvestT } from '@/store/invest/types';
+import { LoanToInvestT } from '../store/invest/types';
 import { getTokenSymbolsFromBlockchain, getAmountsWantedFromBlockchain, getAmountsGatheredFromBlockchain } from './utils';
 import { getSingleAmountWantedFromBlockchain, getSingleAmountGatheredFromBlockchain, getSingleTokenSymbolFromBlockchain } from './utils';
 

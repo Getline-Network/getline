@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 import { InvestStateT, LoanToInvestT, sortColumnT, sorterT } from './types';
-import { BigNumber } from '@/api';
+import { BigNumber } from '../../api';
 
 export const mutations = {
   'RECEIVE_LOANS_TO_INVEST': function (state: InvestStateT, { loans }: { loans: LoanToInvestT[] }): void {
