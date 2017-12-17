@@ -29,12 +29,21 @@
     </div>
     <div v-if="loan.isCollateralCollection" :class="isSendingCollateral()" class="mit-collateral">
       <div class="mit-collateral-text"> Things to do before loan: </div>
-      <md-input-container class="mlt-collateral-input">
+      <md-input-container
+        class="mlt-collateral-input"
+        :class="validators.nonNegativeInteger(this.collateralAmount).getClass()"
+      >
         <label> AMOUNT </label>
         <md-input v-model="collateralAmount" type="number" />
         <div class="rl-input-right-text"> {{ balanceTokenName }}</div>
+        <span class="md-error">{{ validators.nonNegativeNumber(this.collateralAmount).getErrorMsg() }}</span>
       </md-input-container>
-      <purple-button class="mlt-send-collateral-button" @click.native='transferCollateral' text="TRANSFER COLLATERAL DEMO TOKEN" />
+      <purple-button
+        class="mlt-send-collateral-button"
+        @click.native='transferCollateral'
+        text="TRANSFER COLLATERAL DEMO TOKEN"
+        :disabled='!validators.nonNegativeNumber(this.collateralAmount).isValid()'
+      />
       <div class="mlt-spinner-container">
         <spinner />
         <div class="mlt-sending-text">
@@ -54,6 +63,7 @@ import Spinner from '@/components/common/Spinner.vue';
 import { gatherCollateral } from '@/api';
 import { StateT } from '@/store';
 import { GET_MY_BALANCE_ACTION } from '@/store/account/actions';
+import validators from '@/utils/inputValidators';
 
 export default {
   name: 'MyLoanTile',
@@ -65,6 +75,7 @@ export default {
   },
   data() {
     return {
+      validators,
       collateralAmount: '30',
       sendingCollateral: false,
     };

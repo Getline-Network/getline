@@ -40,15 +40,19 @@
       </div>
       <div class="li-row-b">
         <div class="li-lent">
-          <md-input-container>
+          <md-input-container class="validators.nonNegativeInteger(this.amount).getClass()">
             <label>INVEST AMOUNT:</label>
             <md-input v-model="amount" type="number"></md-input>
             <div class="li-input-text">{{ loan.currency }}</div>
+            <span class="md-error">{{ validators.nonNegativeNumber(this.amount).getErrorMsg() }}</span>
           </md-input-container>
-          <div class="li-amount-left">1000 {{ loan.tokenSymbol }} available </div>
+          <div class="li-amount-left"> {{ account.balance }} {{ account.balanceTokenName }} available </div>
         </div>
         <div class="li-action">
-          <purple-button :text="'INVEST'" />
+          <purple-button
+            :text="'INVEST'"
+            :disabled='!validators.nonNegativeNumber(this.amount).isValid() || parseInt(this.amount) > parseInt(account.balance)'
+            />
         </div>
       </div>
     </div>
@@ -64,6 +68,7 @@ import PurpleButton from '../common/PurpleButton.vue';
 import FundraisingBar from '../common/FundraisingBar.vue';
 import { StateT } from '@/store';
 import { getLoanToInvest } from '@/api/invest';
+import validators from '@/utils/inputValidators';
 
 export default {
   name: 'LoanInvest',
@@ -90,8 +95,12 @@ export default {
       this.isLoading = false;
     }
   },
+  computed: mapState({
+    account: (state:StateT) => state.account
+  }),
   data() {
     return {
+      validators,
       loan: {},
       amount: 1,
       isLoading: true,
