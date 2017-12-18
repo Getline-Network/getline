@@ -83,9 +83,9 @@ const Component = Vue.extend({
   computed: {
     isValidForm: function():boolean {
       return (
-        validators.nonNegativeNumber(this.amountInputClass).isValid() &&
-        validators.nonNegativeNumber(this.permilsInputClass).isValid() &&
-        validators.nonNegativeInteger(this.paybackInputClass).isValid()
+        validators.nonNegativeNumber(this.amount).isValid() &&
+        validators.nonNegativeNumber(this.interestPermil).isValid() &&
+        validators.nonNegativeInteger(this.paybackTime).isValid()
       );
     }
   },
