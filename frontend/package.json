@@ -8,7 +8,7 @@
     "dev": "node build/dev-server.js",
     "start": "yarn run dev",
     "build": "node build/build.js",
-    "unit": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}'  mocha --compilers ts:ts-node/register,tsx:ts-node/register  --compilerOptions  --require ts-node/register test/**/*.spec.ts*",
+    "unit": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\", \"baseUrl\": \"./src\"}'  mocha --compilers ts:ts-node/register,tsx:ts-node/register  --compilerOptions  --require ts-node/register -P tsconfig.json test/**/*.spec.ts*",
     "test": "yarn run unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs"
   },

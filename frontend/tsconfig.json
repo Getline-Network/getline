@@ -6,7 +6,8 @@
     "moduleResolution": "node",
     "noImplicitAny": false,
     "noImplicitThis": false,
-    "sourceMap": true
+    "sourceMap": true,
+    "baseUrl": "./src"
   },
   "include": [
     "./src/**/*"

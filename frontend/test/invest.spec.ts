@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { BigNumber } from 'bignumber.js';
+import { BigNumber } from '../src/api';
 import * as moment from "moment";
 import { } from 'jasmine'; // For describe(...) and it(...) types
 

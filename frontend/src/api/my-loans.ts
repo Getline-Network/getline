@@ -1,6 +1,6 @@
 import API, { LoanState, BigNumber } from './index';
 
-import { MyLoanT } from '../store/my-loans';
+import { MyLoanT } from 'store/my-loans';
 import { getTokenSymbolsFromBlockchain, getAmountsWantedFromBlockchain, getAmountsGatheredFromBlockchain } from './utils';
 
 export async function getMyLoans(cb) {
