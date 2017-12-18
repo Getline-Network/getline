@@ -13,4 +13,12 @@ const actions = {
   }
 }
 
+export function getMyBalance(): Promise<number> {
+  return new Promise(function (resolve, reject) {
+    api.getMyBalance(({ balance }: { balance: string }) => {
+      resolve(parseInt(balance));
+    })
+  });
+}
+
 export default actions;

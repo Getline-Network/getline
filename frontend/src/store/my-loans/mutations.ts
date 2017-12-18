@@ -9,4 +9,30 @@ export const mutations = {
   'REQUEST_MY_LOANS': function (state): void {
     state.isLoading = true;
   },
+  'START_TRANSFERING_COLLATERAL': function (state: MyLoansStateT, { shortId }): void {
+    state.myLoansList = state.myLoansList.map(loan => {
+      if (loan.shortId == shortId) {
+        return {
+          ...loan,
+          isTransferingCollateral: true
+        }
+      } else {
+        return loan;
+      }
+    })
+  },
+  'COLLATERAL_TRANSFERED': function (state: MyLoansStateT, { shortId }): void {
+    state.myLoansList = state.myLoansList.map(loan => {
+      if (loan.shortId == shortId) {
+        return {
+          ...loan,
+          isFundraising: true,
+          isCollateralCollection: false,
+          isTransferingCollateral: false
+        }
+      } else {
+        return loan;
+      }
+    })
+  }
 }

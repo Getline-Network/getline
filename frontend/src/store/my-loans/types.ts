@@ -14,6 +14,7 @@ export interface MyLoanT {
   amountGathered?: string;
   amountWanted?: string;
   isCollateralCollection?: boolean;
+  isTransferingCollateral?: boolean;
   isFundraising?: boolean;
   tokenSymbol?: string;
 };

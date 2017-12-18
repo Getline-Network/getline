@@ -27,7 +27,7 @@
         <div class="mit-fundraising-amount"> 3.75 {{ loan.tokenSymbol }} </div>
       </div>
     </div>
-    <div v-if="loan.isCollateralCollection" :class="isSendingCollateral()" class="mit-collateral">
+    <div v-if="loan.isCollateralCollection" :class="transferingCollateralClass(loan.isTransferingCollateral)" class="mit-collateral">
       <div class="mit-collateral-text"> Things to do before loan: </div>
       <md-input-container
         class="mlt-collateral-input"
@@ -60,9 +60,10 @@ import { mapState } from 'vuex';
 import PurpleButton from '@/components/common/PurpleButton.vue';
 import FundraisingBar from '@/components/common/FundraisingBar.vue';
 import Spinner from '@/components/common/Spinner.vue';
-import { gatherCollateral } from '@/api';
+
 import { StateT } from '@/store';
 import { GET_MY_BALANCE_ACTION } from '@/store/account/actions';
+import { TRANSFER_COLLATERAL } from '@/store/my-loans/actions';
 import validators from '@/utils/inputValidators';
 
 export default {
@@ -84,15 +85,21 @@ export default {
     balanceTokenName: (state:StateT) => state.account.balanceTokenName
   }),
   methods: {
-    transferCollateral: async function transferCollateral() {
-      this.sendingCollateral = true;
-      const { shortId } = this.loan;
-      await gatherCollateral(shortId, this.collateralAmount);
-      this.$store.dispatch(GET_MY_BALANCE_ACTION);
-      this.sendingCollateral = false;
+    getLoan: function () {
+      return this.loan;
     },
-    isSendingCollateral: function isSendingCollateral():string {
-      return this.sendingCollateral ? 'mlt-sending-collateral' : '';
+    transferCollateral: async function transferCollateral() {
+      const payload = {
+        shortId: this.getLoan().shortId,
+        amount: this.collateralAmount,
+        onSuccess: (function onSucces() {
+          this.$store.dispatch(GET_MY_BALANCE_ACTION);
+        }).bind(this)
+      }
+      this.$store.dispatch(TRANSFER_COLLATERAL, payload);
+    },
+    transferingCollateralClass: function transferingCollateralClass(isSending): string {
+      return isSending ? 'mlt-sending-collateral' : '';
     },
   }
 };
