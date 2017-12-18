@@ -15,9 +15,13 @@ const actions = {
 
 export function getMyBalance(): Promise<number> {
   return new Promise(function (resolve, reject) {
-    api.getMyBalance(({ balance }: { balance: string }) => {
-      resolve(parseInt(balance));
-    })
+    try {
+      api.getMyBalance(({ balance }: { balance: string }) => {
+        resolve(parseInt(balance));
+      });
+    } catch (e) {
+      return reject('Error occurred while receiving balance: ' + e);
+    }
   });
 }
 
