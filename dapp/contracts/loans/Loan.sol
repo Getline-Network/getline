@@ -51,6 +51,7 @@ contract Loan {
         uint256 _fundraisingBlocksCount,
         uint256 _paybackBlocksCount
     ) {
+        require(_amountWanted > 0);
         //require(_atestator.isVerified(_liege));
         
         ledger = InvestorLedger.openAccount(
