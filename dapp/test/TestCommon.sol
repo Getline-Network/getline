@@ -5,6 +5,7 @@ import "truffle/DeployedAddresses.sol";
 import "../contracts/common/AccessControl.sol";
 import "../contracts/common/Math.sol";
 
+
 contract TestCommon {
     function testAccessControl() public {
         AccessControl access = new AccessControl();

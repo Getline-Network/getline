@@ -41,9 +41,15 @@ library InvestorLedger {
             account.loanToken.allowance(trustee, this),
             account.totalLoanNeeded - account.totalAmountGathered
         );
+        require(
+            account.loanToken.transferFrom(
+                trustee,
+                this,
+                investmentAmount)
+        );
         var investmentPermil = investmentAmount * PERMIL / account.totalLoanNeeded;
         var collateralReseverved = investmentPermil * account.totalCollateral / PERMIL;
-        
+
         account.totalAmountGathered += investmentAmount;
         account.totalCollateralReserved += collateralReseverved;
         account.totalPaybackNeeded += calculateInterest(account, investmentAmount);
@@ -82,8 +88,6 @@ library InvestorLedger {
         require(!account.loanCancelled && !account.loanDefaulted);
 
         account.loanDefaulted = true;
-
-        collateralToLiege(account);
     }
 
     function collateralToLiege(Ledger storage account) public {
@@ -94,22 +98,23 @@ library InvestorLedger {
         require(account.collateralToken.transfer(account.liege, amountToTransfer));
     }
 
-    function withdrawInvestment(Ledger storage account, address trustee) public {
+    function collateralToTrustee(Ledger storage account, address trustee) public {
         var investor = account.investors[trustee];
-        
-        if (account.loanDefaulted) {
-            var reservedCollateral = investor.reservedCollateral;
-            investor.reservedCollateral = 0;
-            require(account.collateralToken.transfer(trustee, reservedCollateral));
-        } else {
-            var amountInvested = investor.amountInvested;
-            if (!account.loanCancelled) {
-                amountInvested += calculateInterest(account, amountInvested);
-            }
-            investor.amountInvested = 0;
-            require(account.loanToken.transfer(trustee, amountInvested));
-        }
+        var reservedCollateral = investor.reservedCollateral;
+        investor.reservedCollateral = 0;
+        require(account.collateralToken.transfer(trustee, reservedCollateral));
+        delete account.investors[trustee];
+    }
 
+    function withdrawInvestment(Ledger storage account, address trustee) public {
+        require(!account.loanDefaulted);
+        var investor = account.investors[trustee];
+        var amountInvested = investor.amountInvested;
+        if (!account.loanCancelled) {
+            amountInvested += calculateInterest(account, amountInvested);
+        }
+        investor.amountInvested = 0;
+        require(account.loanToken.transfer(trustee, amountInvested));
         delete account.investors[trustee];
     }
 
