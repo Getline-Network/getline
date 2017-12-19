@@ -1,7 +1,8 @@
 import Vue from 'vue'
+import { BigNumber } from 'api';
 
 import { LoanState, InvestStateT, LoanToInvestT, sortColumnT, sorterT } from './types';
-import { BigNumber } from '../../api';
+import { countPercentage } from 'utils/calc';
 
 export const mutations = {
   'RECEIVE_LOANS_TO_INVEST': function (state: InvestStateT, { loans }: { loans: LoanToInvestT[] }): void {
@@ -98,5 +99,5 @@ function getPercentageFunded(loan: LoanToInvestT): number {
 }
 
 function getPercentageWanted(loan: LoanToInvestT): number {
-  return (new BigNumber(100)).sub(loan.amountGathered.times(100).dividedBy(loan.amountWanted)).toNumber();
+  return countPercentage(loan.amountGathered, loan.amountWanted);
 }
