@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { BigNumber } from 'api';
 
 import { LoanState, InvestStateT, LoanToInvestT, sortColumnT, sorterT } from './types';
-import { countPercentage } from 'utils/calc';
+import { countPercentageGathered, countPercentageWanted } from 'utils/calc';
 
 export const mutations = {
   'RECEIVE_LOANS_TO_INVEST': function (state: InvestStateT, { loans }: { loans: LoanToInvestT[] }): void {
@@ -26,8 +26,9 @@ export const mutations = {
   },
   'RECEIVED_MY_INVESTMENTS': function (state: InvestStateT, { loans }) {
     state.isLoading = false;
-    state.myActiveInvestements = loans.filter(loan => loan.loanState == LoanState.Payback);
-    state.myCompletedInvestments = loans.filter(loan => loan.loanState == LoanState.Finished);
+    state.pendingInvestments = loans.filter(loan => loan.loanState == LoanState.Fundraising);
+    state.activeInvestments = loans.filter(loan => loan.loanState == LoanState.Payback);
+    state.finishedInvestments = loans.filter(loan => loan.loanState == LoanState.Finished);
   }
 }
 
@@ -51,16 +52,16 @@ function getSortCmp(column: sortColumnT): sorterT {
 
     case "FUNDED":
       return function (a: LoanToInvestT, b: LoanToInvestT): number {
-        const percentageA = getPercentageFunded(a);
-        const percentageB = getPercentageFunded(b);
+        const percentageA = getLoanPercentageFunded(a);
+        const percentageB = getLoanPercentageFunded(b);
         const sub = percentageA - percentageB;
         return reverseIfDesc(sub);
       }
 
     case "NEEDED":
       return function (a: LoanToInvestT, b: LoanToInvestT): number {
-        const percentageA = getPercentageWanted(a);
-        const percentageB = getPercentageWanted(b);
+        const percentageA = getLoanPercentageWanted(a);
+        const percentageB = getLoanPercentageWanted(b);
         const sub = percentageA - percentageB;
         return reverseIfDesc(sub);
       }
@@ -89,15 +90,14 @@ function extendLoan(loan: LoanToInvestT): LoanToInvestT {
   return {
     ...loan,
     amountWantedWithToken: loan.amountWanted.toString() + " " + loan.tokenSymbol,
-    percentageFunded: getPercentageFunded(loan),
-    percentageWanted: getPercentageWanted(loan),
+    percentageFunded: countPercentageGathered(loan.amountGathered, loan.amountWanted),
+    percentageWanted: countPercentageWanted(loan.amountGathered, loan.amountWanted),
   }
 }
 
-function getPercentageFunded(loan: LoanToInvestT): number {
-  return loan.amountGathered.times(100).dividedBy(loan.amountWanted).toNumber();
+function getLoanPercentageWanted(loan: LoanToInvestT) {
+  return countPercentageWanted(loan.amountGathered, loan.amountWanted);
 }
-
-function getPercentageWanted(loan: LoanToInvestT): number {
-  return countPercentage(loan.amountGathered, loan.amountWanted);
+function getLoanPercentageFunded(loan: LoanToInvestT) {
+  return countPercentageGathered(loan.amountGathered, loan.amountWanted);
 }

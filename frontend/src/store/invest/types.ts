@@ -5,9 +5,9 @@ export interface InvestStateT {
   loansToInvest: LoanToInvestT[];
   isLoading: boolean;
   activeLoan: LoanToInvestT | {};
-  myActiveInvestements: LoanToInvestT[];
-  myCompletedInvestments: LoanToInvestT[];
-
+  pendingInvestments: LoanToInvestT[];
+  activeInvestments: LoanToInvestT[];
+  finishedInvestments: LoanToInvestT[];
 }
 
 export interface LoanToInvestT {

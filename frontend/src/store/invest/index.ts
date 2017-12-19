@@ -6,8 +6,9 @@ const state: InvestStateT = {
   loansToInvest: [],
   isLoading: false,
   activeLoan: {},
-  myActiveInvestements: [],
-  myCompletedInvestments: []
+  pendingInvestments: [],
+  activeInvestments: [],
+  finishedInvestments: []
 }
 
 export default {

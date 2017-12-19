@@ -1,10 +1,10 @@
 
 import { BigNumber } from 'api';
 
-export function countPercentage(amountGathered: BigNumber, amountWanted: BigNumber): number {
+export function countPercentageGathered(amountGathered: BigNumber, amountWanted: BigNumber): number {
   return (amountGathered.times(100).dividedBy(amountWanted)).toNumber();;
 }
-export function countPercentageRemaining(amountGathered: BigNumber, amountWanted: BigNumber): number {
+export function countPercentageWanted(amountGathered: BigNumber, amountWanted: BigNumber): number {
   return (new BigNumber(100)).sub(amountGathered.times(100).dividedBy(amountWanted)).toNumber();;
 }
 

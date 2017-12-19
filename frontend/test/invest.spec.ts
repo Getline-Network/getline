@@ -23,12 +23,19 @@ const mockLoan2: LoanToInvestT = {
   loanState: LoanState.Finished
 };
 
+const mockLoan3: LoanToInvestT = {
+  ...mockLoan1,
+  id: '3',
+  loanState: LoanState.Fundraising
+};
+
 const initialState = {
   loansToInvest: [],
   isLoading: false,
   activeLoan: {},
-  myActiveInvestements: [],
-  myCompletedInvestments: []
+  pendingInvestments: [],
+  activeInvestments: [],
+  finishedInvestments: []
 }
 
 describe('Invest', () => {
@@ -50,9 +57,10 @@ describe('Invest', () => {
     mutations['REQUEST_MY_INVESTMENTS'](state);
     expect(state.isLoading).to.equal(true)
 
-    mutations['RECEIVED_MY_INVESTMENTS'](state, { loans: [mockLoan1, mockLoan2] });
+    mutations['RECEIVED_MY_INVESTMENTS'](state, { loans: [mockLoan1, mockLoan2, mockLoan3] });
     expect(state.isLoading).to.equal(false)
-    expect(state.myActiveInvestements.length).to.equal(1);
-    expect(state.myCompletedInvestments.length).to.equal(1);
+    expect(state.pendingInvestments.length).to.equal(1);
+    expect(state.activeInvestments.length).to.equal(1);
+    expect(state.finishedInvestments.length).to.equal(1);
   })
 })
