@@ -54,7 +54,7 @@ export class Client {
         this.metabackend = new MetabackendClient(metabackend, network);
         this.network = network;
         this.blockchain = new GetlineBlockchain(this.metabackend, network, provider);
-        this.testToken = new PrintableToken(this.blockchain, "0x02c9ccaa1034a64e3a83df9ddce30e6d4bc40515");
+        this.testToken = new PrintableToken(this.blockchain, "0x26db251ab51fc63321927946e999f4f4ec75dae0");
         this.initialized = false;
     }
 
