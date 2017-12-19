@@ -36,9 +36,17 @@ const mockLoan3: LoanToInvestT = {
 
 const mockLoans = [mockLoan1, mockLoan2, mockLoan3];
 
+const mockState: InvestStateT = {
+  loansToInvest: mockLoans,
+  isLoading: false,
+  activeLoan: {},
+  myActiveInvestements: [],
+  myCompletedInvestments: []
+}
+
 describe('Loans to invest list', () => {
   it('Should get loans to invest', () => {
-    const state: InvestStateT = { loansToInvest: [], isLoading: false, activeLoan: {} };
+    const state: InvestStateT = { ...mockState };
 
     mutations['REQUEST_LOANS_TO_INVEST'](state);
     expect(state.isLoading).to.equal(true)
@@ -51,7 +59,7 @@ describe('Loans to invest list', () => {
   })
 
   it('Should sort loans to invest by amount wanted', () => {
-    const state: InvestStateT = { loansToInvest: mockLoans, isLoading: false, activeLoan: {} };
+    const state: InvestStateT = { ...mockState };
     const sortType1: sortColumnT = {
       name: 'AMOUNT_WANTED',
       type: 'asc'
@@ -74,7 +82,7 @@ describe('Loans to invest list', () => {
   })
 
   it('Should sort loans to invest by fundraising deadline', () => {
-    const state: InvestStateT = { loansToInvest: mockLoans, isLoading: false, activeLoan: {} };
+    const state: InvestStateT = { ...mockState };
     const sortType1: sortColumnT = {
       name: 'TIME',
       type: 'asc'
@@ -95,7 +103,7 @@ describe('Loans to invest list', () => {
   })
 
   it('Should sort loans to invest by user name', () => {
-    const state: InvestStateT = { loansToInvest: mockLoans, isLoading: false, activeLoan: {} };
+    const state: InvestStateT = { ...mockState };
     const sortType1: sortColumnT = {
       name: 'NAME',
       type: 'asc'
@@ -116,7 +124,7 @@ describe('Loans to invest list', () => {
   })
 
   it('Should sort loans to invest by percentage funded', () => {
-    const state: InvestStateT = { loansToInvest: mockLoans, isLoading: false, activeLoan: {} };
+    const state: InvestStateT = { ...mockState };
     const sortType1: sortColumnT = {
       name: 'FUNDED',
       type: 'asc'
@@ -139,7 +147,7 @@ describe('Loans to invest list', () => {
   })
 
   it('Should sort loans to invest by percentage needed', () => {
-    const state: InvestStateT = { loansToInvest: mockLoans, isLoading: false, activeLoan: {} };
+    const state: InvestStateT = { ...mockState };
     const sortType1: sortColumnT = {
       name: 'NEEDED',
       type: 'asc'

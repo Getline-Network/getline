@@ -16,8 +16,8 @@
           <div class="li-bar-container">
             <fundraising-bar :percentage="loan.percentageFunded" barHeight="12px"/>
             <div class="li-bar-labels">
-              <div> {{ loan.percentageFunded }}% FUNDED </div>
-              <div> {{ 100 - loan.percentageFunded }}% LEFT </div>
+              <div> {{ formatPercentage(loan.percentageFunded) }}% FUNDED </div>
+              <div> {{ formatPercentage(100 - loan.percentageFunded) }}% LEFT </div>
             </div>
           </div>
         </div>
@@ -74,16 +74,16 @@
 <script lang="ts">
 import { mapState } from 'vuex'
 
-
 import Spinner from '../common/Spinner.vue';
 import UserScore from '../common/UserScore.vue';
 import PurpleButton from '../common/PurpleButton.vue';
 import FundraisingBar from '../common/FundraisingBar.vue';
-import { StateT } from '@/store';
-import validators from '@/utils/inputValidators';
+import { StateT } from 'store';
+import validators from 'utils/inputValidators';
 
-import { GET_LOAN_TO_INVEST_ACTION } from '@/store/invest/actions';
-import { investInLoan } from '@/api/invest';
+import { GET_LOAN_TO_INVEST_ACTION } from 'store/invest/actions';
+import { investInLoan } from 'api/invest';
+import { formatPercentage } from 'utils/calc';
 
 export default {
   name: 'LoanInvest',
@@ -102,6 +102,7 @@ export default {
     loan: (state:StateT) => state.invest.activeLoan
   }),
   methods: {
+    formatPercentage,
     invest: async function invest() {
       const { shortId } = this.$route.params;
       this.isInvesting = true;
