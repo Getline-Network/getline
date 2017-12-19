@@ -98,6 +98,10 @@ contract Loan {
         return currentState == State.Finished && ledger.loanDefaulted;
     }
 
+    function getCurrentState() timedTransitions constant returns (uint _state) {
+        return uint(currentState);
+    }
+
     function amountGathered() constant returns (uint256 _totalAmount) {
         return ledger.totalAmountGathered;
     }

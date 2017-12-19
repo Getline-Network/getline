@@ -366,17 +366,22 @@ func (l *Loan) LoadParametersFromBlockchain(ctx context.Context) error {
 		return fmt.Errorf("getting Loan contract failed: %v", err)
 	}
 
-	errs := []error{}
-	errs = append(errs, loanContract.Call(nil, &l.Parameters.BorrowedToken, "borrowedToken"))
-	errs = append(errs, loanContract.Call(nil, &l.Parameters.CollateralToken, "collateralToken"))
-	errs = append(errs, loanContract.Call(nil, &l.Parameters.AmountWanted, "amountWanted"))
-	errs = append(errs, loanContract.Call(nil, &l.Parameters.Borrower, "borrower"))
-	errs = append(errs, loanContract.Call(nil, &l.Parameters.InterestPermil, "interestPermil"))
-	errs = append(errs, loanContract.Call(nil, &l.Parameters.FundraisingBlocksCount, "fundraisingBlocksCount"))
-	errs = append(errs, loanContract.Call(nil, &l.Parameters.PaybackBlocksCount, "paybackBlocksCount"))
-	for _, err := range errs {
+	getters := []struct {
+		target interface{}
+		name   string
+	}{
+		{&l.Parameters.BorrowedToken, "borrowedToken"},
+		{&l.Parameters.CollateralToken, "collateralToken"},
+		{&l.Parameters.AmountWanted, "amountWanted"},
+		{&l.Parameters.Borrower, "borrower"},
+		{&l.Parameters.InterestPermil, "interestPermil"},
+		{&l.Parameters.FundraisingBlocksCount, "fundraisingBlocksCount"},
+		{&l.Parameters.PaybackBlocksCount, "paybackBlocksCount"},
+	}
+	for _, getter := range getters {
+		err = loanContract.Call(nil, getter.target, getter.name)
 		if err != nil {
-			return fmt.Errorf("calling getter failed: %v", err)
+			return fmt.Errorf("calling getter %q failed: %v", getter.name, err)
 		}
 	}
 
@@ -394,8 +399,41 @@ func (l *Loan) LoadStateFromBlockchain(ctx context.Context) error {
 	}
 
 	var state uint8
-	if err = loanContract.Call(nil, &state, "currentState"); err != nil {
-		return fmt.Errorf("calling currentState failed: %v", err)
+
+	// Try to first call the `getCurrentState` method that performs a
+	// timedTransitions check. This method is not present on all contracts,
+	// so we need to refresh manually then.
+	needsRefresh := false
+	if err = loanContract.Call(nil, &state, "getCurrentState"); err != nil {
+		needsRefresh = true
+	}
+
+	if needsRefresh {
+		if err = loanContract.Call(nil, &state, "currentState"); err != nil {
+			return fmt.Errorf("calling currentState failed: %v", err)
+		}
+		var fundraising, paidback, defaulted bool
+		errs := []error{}
+		errs = append(errs, loanContract.Call(nil, &fundraising, "isFundraising"))
+		errs = append(errs, loanContract.Call(nil, &paidback, "isPaidback"))
+		errs = append(errs, loanContract.Call(nil, &defaulted, "isDefaulted"))
+		failed := false
+		for _, err := range errs {
+			if err != nil {
+				glog.Warningf("Manual refresh of loan status failed: %v", err)
+				failed = true
+				continue
+			}
+		}
+		// The only state transition that occurs automatically is a loan going
+		// into the finished state -- either because we paidback or defaulted.
+		// All other state transitions occur only when a mutable function is
+		// called.
+		if !failed {
+			if !fundraising && (paidback || defaulted) {
+				state = 3
+			}
+		}
 	}
 
 	switch state {

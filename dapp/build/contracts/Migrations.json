@@ -210,7 +210,7 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1729,
+                              "referencedDeclaration": 1751,
                               "type": "function (bool) pure",
                               "value": "require"
                             },
@@ -251,7 +251,7 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 1726,
+                                      "referencedDeclaration": 1748,
                                       "type": "msg",
                                       "value": "msg"
                                     },
@@ -393,7 +393,7 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1726,
+                                  "referencedDeclaration": 1748,
                                   "type": "msg",
                                   "value": "msg"
                                 },
@@ -851,13 +851,7 @@
     "name": "solc",
     "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
   },
-  "networks": {
-    "4": {
-      "events": {},
-      "links": {},
-      "address": "0x094fcb549345bb934e257f5bbdd3f0fc77320d9c"
-    }
-  },
+  "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2017-11-13T20:26:32.600Z"
+  "updatedAt": "2017-12-19T16:17:20.046Z"
 }
