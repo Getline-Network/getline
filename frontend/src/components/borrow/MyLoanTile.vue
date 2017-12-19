@@ -5,26 +5,26 @@
     </div>
     <div class="mlt-financial-data">
       <div>
-        <div class="mlt-fin-line-a"> AMOUNT BORROWED </div>
-        <div class="mlt-fin-line-b">{{ loan.amountWanted }} {{ loan.tokenSymbol }}</div>
+        <div class="mlt-fin-line-a"> AMOUNT WANTED </div>
+        <div class="mlt-fin-line-b">{{ loan.amountWanted.toString() }} {{ loan.tokenSymbol }}</div>
       </div>
       <div>
         <div class="mlt-fin-line-a"> RATE </div>
         <div class="mlt-fin-line-b">{{ loan.interestPermil }}%</div>
       </div>
       <div>
-        <div class="mlt-fin-line-a"> EARNED </div>
-        <div class="mlt-fin-line-b"> 0 {{ loan.tokenSymbol }}</div>
+        <div class="mlt-fin-line-a"> AMOUNT GATHERED </div>
+        <div class="mlt-fin-line-b"> {{ loan.amountGathered.toString() }} {{ loan.tokenSymbol }}</div>
       </div>
     </div>
     <div v-if="loan.isFundraising" class="mit-fundraising-container">
       <div class="mit-fundraising">
         <div class="mit-fundraising-line-a">
           <div class="mit-fundraising-text"> This loan is looking for investors </div>
-          <div class="mit-fundraising-percentage"> 34% </div>
+          <div class="mit-fundraising-percentage">{{countPercentage(loan.amountGathered, loan.amountWanted)}}%</div>
         </div>
-        <fundraising-bar percentage="11" barHeight="8px"/>
-        <div class="mit-fundraising-amount"> 3.75 {{ loan.tokenSymbol }} </div>
+        <fundraising-bar :percentage="countPercentage(loan.amountGathered, loan.amountWanted)" barHeight="8px"/>
+        <div class="mit-fundraising-amount"> Remaining: {{(loan.amountWanted - loan.amountGathered).toString()}} {{ loan.tokenSymbol }} </div>
       </div>
     </div>
     <div v-if="loan.isCollateralCollection" :class="transferingCollateralClass(loan.isTransferingCollateral)" class="mit-collateral">
@@ -57,14 +57,15 @@
 <script lang="ts">
 import { mapState } from 'vuex';
 
-import PurpleButton from '@/components/common/PurpleButton.vue';
-import FundraisingBar from '@/components/common/FundraisingBar.vue';
-import Spinner from '@/components/common/Spinner.vue';
+import PurpleButton from 'components/common/PurpleButton.vue';
+import FundraisingBar from 'components/common/FundraisingBar.vue';
+import Spinner from 'components/common/Spinner.vue';
 
-import { StateT } from '@/store';
-import { GET_MY_BALANCE_ACTION } from '@/store/account/actions';
-import { TRANSFER_COLLATERAL } from '@/store/my-loans/actions';
-import validators from '@/utils/inputValidators';
+import { StateT } from 'store';
+import { GET_MY_BALANCE_ACTION } from 'store/account/actions';
+import { TRANSFER_COLLATERAL } from 'store/my-loans/actions';
+import validators from 'utils/inputValidators';
+import { countPercentage } from 'utils/calc';
 
 export default {
   name: 'MyLoanTile',
@@ -85,6 +86,7 @@ export default {
     balanceTokenName: (state:StateT) => state.account.balanceTokenName
   }),
   methods: {
+    countPercentage,
     getLoan: function () {
       return this.loan;
     },

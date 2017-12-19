@@ -40,9 +40,10 @@ export async function getLoanToInvest(shortId: string, cb: (loan: LoanToInvestT)
 
 export async function investInLoan(shortId: string, amount: number) {
   const api = await API.instance();
+  const testToken = api.testToken;
   let currentUser = await api.currentUser();
   let loan = await api.loan(shortId);
-  await loan.invest(new BigNumber(amount));
+  await loan.invest(await testToken.integerize(new BigNumber(amount)));
 }
 
 export async function getMyInvestments(cb: (loans: LoanToInvestT[]) => void) {

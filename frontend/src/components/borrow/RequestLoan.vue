@@ -8,7 +8,7 @@
           <md-input-container :class="validators.nonNegativeNumber(this.amount).getClass()">
             <label> AMOUNT </label>
             <md-input v-model="amount" type="number" />
-            <div class="rl-input-right-text"> ETH </div>
+            <div class="rl-input-right-text"> {{ account.balanceTokenName }} </div>
             <span class="md-error">{{ validators.nonNegativeNumber(this.amount).getErrorMsg() }}</span>
           </md-input-container>
         </div>
@@ -55,14 +55,18 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue from 'vue';
+import { mapState } from 'vuex'
 import * as moment from 'moment';
 
-import PurpleButton from '@/components/common/PurpleButton.vue';
-import Spinner from '@/components/common/Spinner.vue';
-import API, { Loan } from '@/api';
-import { goToMyLoans } from '@/router';
-import validators from '@/utils/inputValidators';
+import PurpleButton from 'components/common/PurpleButton.vue';
+import Spinner from 'components/common/Spinner.vue';
+
+import API, { Loan } from 'api';
+import { goToMyLoans } from 'router';
+import validators from 'utils/inputValidators';
+import {BigNumber } from 'api';
+import { StateT } from 'store';
 
 const Component = Vue.extend({
   name: 'RequestLoan',
@@ -81,13 +85,16 @@ const Component = Vue.extend({
     'spinner': Spinner,
   },
   computed: {
+    ...mapState({
+      account: (state:StateT) => state.account,
+    }),
     isValidForm: function():boolean {
       return (
         validators.nonNegativeNumber(this.amount).isValid() &&
         validators.nonNegativeNumber(this.interestPermil).isValid() &&
         validators.nonNegativeInteger(this.paybackTime).isValid()
       );
-    }
+    },
   },
   methods: {
     isLoading: function isLoading():string {
@@ -99,16 +106,17 @@ const Component = Vue.extend({
       this.loading = true;
       const fundraisingEnd: moment.Moment = moment().add(7, 'days');
       const paybackEnd: moment.Moment = moment().add(7 + this.paybackTime, 'days');
+      const testToken = api.testToken;
       const loan: Loan = await api.newLoan(
         this.description,
-        this.amount,
+        await testToken.integerize(new BigNumber(this.amount)),
         this.interestPermil,
         fundraisingEnd,
         paybackEnd
       );
       goToMyLoans();
-    },
-  },
+    }
+  }
 });
 export default Component;
 </script>
