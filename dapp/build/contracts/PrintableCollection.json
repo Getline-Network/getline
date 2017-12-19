@@ -161,7 +161,7 @@
       },
       {
         "attributes": {
-          "SourceUnit": 1715,
+          "SourceUnit": 1737,
           "absolutePath": "/home/q3k/Work/getline/getline/dapp/contracts/tokens/PrintableToken.sol",
           "file": "../tokens/PrintableToken.sol",
           "scope": 378,
@@ -249,7 +249,7 @@
                     "attributes": {
                       "contractScope": null,
                       "name": "PrintableToken",
-                      "referencedDeclaration": 1714,
+                      "referencedDeclaration": 1736,
                       "type": "contract PrintableToken"
                     },
                     "id": 325,
@@ -301,7 +301,7 @@
                             "attributes": {
                               "contractScope": null,
                               "name": "PrintableToken",
-                              "referencedDeclaration": 1714,
+                              "referencedDeclaration": 1736,
                               "type": "contract PrintableToken"
                             },
                             "id": 327,
@@ -430,7 +430,7 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "PrintableToken",
-                          "referencedDeclaration": 1714,
+                          "referencedDeclaration": 1736,
                           "type": "contract PrintableToken"
                         },
                         "id": 337,
@@ -507,7 +507,7 @@
                             "attributes": {
                               "argumentTypes": [
                                 {
-                                  "typeIdentifier": "t_contract$_PrintableToken_$1714",
+                                  "typeIdentifier": "t_contract$_PrintableToken_$1736",
                                   "typeString": "contract PrintableToken"
                                 }
                               ],
@@ -827,7 +827,7 @@
                                       "isPure": false,
                                       "lValueRequested": false,
                                       "member_name": "print",
-                                      "referencedDeclaration": 1713,
+                                      "referencedDeclaration": 1735,
                                       "type": "function (address) external"
                                     },
                                     "children": [
@@ -937,13 +937,7 @@
     "name": "solc",
     "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
   },
-  "networks": {
-    "4": {
-      "events": {},
-      "links": {},
-      "address": "0xb928dc27c483b973030d2e4d50823c98173ffeda"
-    }
-  },
+  "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2017-11-13T20:12:48.218Z"
+  "updatedAt": "2017-12-19T16:17:20.046Z"
 }
