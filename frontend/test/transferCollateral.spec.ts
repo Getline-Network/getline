@@ -19,7 +19,7 @@ const mockLoan2: MyLoanT = {
   shortId: "124"
 }
 
-describe('mutations', () => {
+describe('Transfering collateral', () => {
   it('Should start transfering collateral', () => {
     const state: MyLoansStateT = { myLoansList: [mockLoan1, mockLoan2], isLoading: false };
     mutations['START_TRANSFERING_COLLATERAL'](state, { shortId: "123" });

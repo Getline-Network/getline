@@ -13,7 +13,13 @@ export const mutations = {
   },
   'SORT_LOANS_TO_INVEST': function (state: InvestStateT, byColumn: sortColumnT): void {
     state.loansToInvest.sort(getSortCmp(byColumn));
-  }
+  },
+  'REQUEST_LOAN_TO_INVEST': function (state: InvestStateT): void {
+    state.activeLoan = Object.assign({}, state.activeLoan, { isLoading: true })
+  },
+  'RECEIVE_LOAN_TO_INVEST': function (state: InvestStateT, { loan }: { loan: LoanToInvestT }): void {
+    state.activeLoan = Object.assign({}, extendLoan(loan), { isLoading: false });
+  },
 }
 
 function getSortCmp(column: sortColumnT): sorterT {

@@ -30,12 +30,11 @@ export async function getLoansToInvest(cb: (loans: LoanToInvestT[]) => void): Pr
   cb(loansToInvest);
 }
 
-export async function getLoanToInvest(shortId) {
+export async function getLoanToInvest(shortId: string, cb: (loan: LoanToInvestT) => void) {
   const api = await API.instance();
   let currentUser = await api.currentUser();
   let blockchainLoan = await api.loan(shortId);
   await blockchainLoan.updateStateFromBlockchain();
-
   const amountWanted: BigNumber = await getSingleAmountWantedFromBlockchain(blockchainLoan);
   const amountGathered: BigNumber = await getSingleAmountGatheredFromBlockchain(blockchainLoan);
   const tokenSymbol: string = await getSingleTokenSymbolFromBlockchain(blockchainLoan);
@@ -43,10 +42,19 @@ export async function getLoanToInvest(shortId) {
     id: blockchainLoan.shortId,
     userName: blockchainLoan.owner.ascii,
     interestPermil: blockchainLoan.parameters.interestPermil,
-    fundraisingDeadline: blockchainLoan.parameters.fundraisingDeadline.format('ll'),
-    amountWanted,
-    amountGathered,
+    fundraisingDeadline: blockchainLoan.parameters.fundraisingDeadline,
+    amountGathered: amountGathered,
+    amountWanted: amountWanted,
     tokenSymbol,
+    description: blockchainLoan.description
   }
-  return loan;
+  return cb(loan);
 }
+
+export async function investInLoan(shortId: string, amount: number) {
+  const api = await API.instance();
+  let currentUser = await api.currentUser();
+  let loan = await api.loan(shortId);
+  await loan.invest(new BigNumber(amount));
+}
+

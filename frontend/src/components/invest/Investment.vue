@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="loan-invest-spinner" v-if="isLoading">
+    <div class="loan-invest-spinner" v-if="loan.isLoading">
       <spinner />
     </div>
     <div class="loan-invest" v-else>
@@ -9,22 +9,22 @@
           <div class="li-details">
             <user-score :value="loan.userScore" />
             <div class="li-details-right">
-              <div class="li-short-desc">Loan {{ loan.shortDesc }}</div>
+              <div class="li-short-desc">Loan {{ loan.description }}</div>
               <div class="li-user">Who: {{ loan.userName }}</div>
             </div>
           </div>
           <div class="li-bar-container">
-            <fundraising-bar :percentage="loan.percentFunded" barHeight="12px"/>
+            <fundraising-bar :percentage="loan.percentageFunded" barHeight="12px"/>
             <div class="li-bar-labels">
-              <div> {{ loan.percentFunded }}% FUNDED </div>
-              <div> {{ loan.gatheringTimeLeft }} LEFT </div>
+              <div> {{ loan.percentageFunded }}% FUNDED </div>
+              <div> {{ 100 - loan.percentageFunded }}% LEFT </div>
             </div>
           </div>
         </div>
         <div class="li-amount-rate-time">
           <div class="li-amount">
             <div class="li-title"> AMOUNT </div>
-            <div class="li-value">{{ loan.amountWanted }} {{loan.tokenSymbol}} </div>
+            <div class="li-value">{{ loan.amountWanted.toString() }} {{loan.tokenSymbol}} </div>
           </div>
           <div class="li-rate-time">
             <div class="li-rate">
@@ -33,14 +33,14 @@
             </div>
             <div class="li-time">
               <div class="li-title"> FUNDRAISING DEADLINE </div>
-              <div class="li-value">{{ loan.fundraisingDeadline }}</div>
+              <div class="li-value">{{ loan.fundraisingDeadline.format('ll') }}</div>
             </div>
           </div>
         </div>
       </div>
       <div class="li-row-b">
-        <div class="li-lent">
-          <md-input-container class="validators.nonNegativeInteger(this.amount).getClass()">
+        <div class="li-lent" v-if="!invested">
+          <md-input-container :class="validators.nonNegativeNumber(this.amount).getClass()">
             <label>INVEST AMOUNT:</label>
             <md-input v-model="amount" type="number"></md-input>
             <div class="li-input-text">{{ loan.currency }}</div>
@@ -49,10 +49,22 @@
           <div class="li-amount-left"> {{ account.balance }} {{ account.balanceTokenName }} available </div>
         </div>
         <div class="li-action">
-          <purple-button
-            :text="'INVEST'"
-            :disabled='!validators.nonNegativeNumber(this.amount).isValid() || parseInt(this.amount) > parseInt(account.balance)'
-            />
+          <div class="li-invested" v-if="invested">
+            You have successfully invested in this loan! It will now appear in <a href="#/invest/my-investments">My Investments </a> tab
+          </div>
+          <div v-else>
+            <div v-if="isInvesting">
+              <spinner />
+              <div class="rl-metamask-text">
+                Please don't close this window and wait until we process your order. It usually takes about 10 seconds
+              </div>
+            </div>
+            <purple-button v-else
+              :text="'INVEST'"
+              :disabled='!validators.nonNegativeNumber(this.amount).isValid() || parseInt(this.amount) > parseInt(account.balance)'
+              @click.native='invest'
+              />
+          </div>
         </div>
       </div>
     </div>
@@ -62,13 +74,16 @@
 <script lang="ts">
 import { mapState } from 'vuex'
 
+
 import Spinner from '../common/Spinner.vue';
 import UserScore from '../common/UserScore.vue';
 import PurpleButton from '../common/PurpleButton.vue';
 import FundraisingBar from '../common/FundraisingBar.vue';
 import { StateT } from '@/store';
-import { getLoanToInvest } from '@/api/invest';
 import validators from '@/utils/inputValidators';
+
+import { GET_LOAN_TO_INVEST_ACTION } from '@/store/invest/actions';
+import { investInLoan } from '@/api/invest';
 
 export default {
   name: 'LoanInvest',
@@ -80,30 +95,27 @@ export default {
   },
   created() {
     const { shortId } = this.$route.params;
-    this.getLoan(shortId);
-  },
-  methods: {
-    getLoan: async function getLoan(shortId) {
-      this.isLoading = true;
-      let loan = await getLoanToInvest(shortId);
-      this.loan = {
-        ...loan,
-        percentFunded: loan.amountGathered.mul(100).div(loan.amountWanted).toString(),
-        amountGathered: loan.amountGathered.toString(),
-        amountWanted: loan.amountWanted.toString(),
-      }
-      this.isLoading = false;
-    }
+    this.$store.dispatch(GET_LOAN_TO_INVEST_ACTION, {shortId});
   },
   computed: mapState({
-    account: (state:StateT) => state.account
+    account: (state:StateT) => state.account,
+    loan: (state:StateT) => state.invest.activeLoan
   }),
+  methods: {
+    invest: async function invest() {
+      const { shortId } = this.$route.params;
+      this.isInvesting = true;
+      await investInLoan(shortId, this.amount);
+      this.$store.dispatch(GET_LOAN_TO_INVEST_ACTION, {shortId});
+      this.invested = true;
+    }
+  },
   data() {
     return {
       validators,
-      loan: {},
-      amount: 1,
-      isLoading: true,
+      amount: 0.01,
+      invested: false,
+      isInvesting: false
     }
   }
 };
@@ -140,7 +152,9 @@ export default {
       .li-input-text { font-size: 13px; font-weight: 600; color: var(--color-black-cod); }
       .li-amount-left { margin-top: -10px; font-size: 12px; font-weight: 300; line-height: 1.83; color: #858585; }
     }
-    .li-action { display: flex; justify-content: center; margin: 20px; }
+    .li-action { display: flex; justify-content: center; margin: 20px; padding-bottom: 20px;
+      .li-invested { margin: 40px 0px 20px; }
+    }
   }
 }
 </style>
