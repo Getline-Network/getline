@@ -35,20 +35,7 @@ export async function getLoanToInvest(shortId: string, cb: (loan: LoanToInvestT)
   let currentUser = await api.currentUser();
   let blockchainLoan = await api.loan(shortId);
   await blockchainLoan.updateStateFromBlockchain();
-  const amountWanted: BigNumber = await getSingleAmountWantedFromBlockchain(blockchainLoan);
-  const amountGathered: BigNumber = await getSingleAmountGatheredFromBlockchain(blockchainLoan);
-  const tokenSymbol: string = await getSingleTokenSymbolFromBlockchain(blockchainLoan);
-  let loan = {
-    id: blockchainLoan.shortId,
-    userName: blockchainLoan.owner.ascii,
-    interestPermil: blockchainLoan.parameters.interestPermil,
-    fundraisingDeadline: blockchainLoan.parameters.fundraisingDeadline,
-    amountGathered: amountGathered,
-    amountWanted: amountWanted,
-    tokenSymbol,
-    description: blockchainLoan.description
-  }
-  return cb(loan);
+  return cb(await blockchainLoanToVueLoan(blockchainLoan));
 }
 
 export async function investInLoan(shortId: string, amount: number) {
@@ -58,3 +45,27 @@ export async function investInLoan(shortId: string, amount: number) {
   await loan.invest(new BigNumber(amount));
 }
 
+export async function getMyInvestments(cb: (loans: LoanToInvestT[]) => void) {
+  const api = await API.instance();
+  let user = await api.currentUser();
+  let blockchainLoans = await api.loansByOwner(user);
+  await Promise.all(blockchainLoans.map(loan => loan.updateStateFromBlockchain()));
+  cb(await Promise.all(blockchainLoans.map(blockchainLoanToVueLoan)));
+}
+
+async function blockchainLoanToVueLoan(blockchainLoan): Promise<LoanToInvestT> {
+  const amountWanted: BigNumber = await getSingleAmountWantedFromBlockchain(blockchainLoan);
+  const amountGathered: BigNumber = await getSingleAmountGatheredFromBlockchain(blockchainLoan);
+  const tokenSymbol: string = await getSingleTokenSymbolFromBlockchain(blockchainLoan);
+  return {
+    id: blockchainLoan.shortId,
+    userName: blockchainLoan.owner.ascii,
+    interestPermil: blockchainLoan.parameters.interestPermil,
+    fundraisingDeadline: blockchainLoan.parameters.fundraisingDeadline,
+    amountGathered: amountGathered,
+    amountWanted: amountWanted,
+    tokenSymbol,
+    description: blockchainLoan.description,
+    loanState: blockchainLoan.blockchainState.loanState
+  }
+}

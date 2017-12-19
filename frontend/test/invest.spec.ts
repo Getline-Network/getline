@@ -4,7 +4,7 @@ import * as moment from "moment";
 import { } from 'jasmine'; // For describe(...) and it(...) types
 
 import { mutations } from '../src/store/invest/mutations';
-import { InvestStateT, LoanToInvestT, sortColumnT } from '../src/store/invest/types';
+import { LoanState, InvestStateT, LoanToInvestT, sortColumnT } from '../src/store/invest/types';
 
 const mockLoan1: LoanToInvestT = {
   id: '1',
@@ -13,13 +13,27 @@ const mockLoan1: LoanToInvestT = {
   fundraisingDeadline: moment().add(1, 'days'),
   amountGathered: new BigNumber("30"),
   amountWanted: new BigNumber("50"),
-  tokenSymbol: "BTC"
+  tokenSymbol: "BTC",
+  loanState: LoanState.Payback
 };
 
+const mockLoan2: LoanToInvestT = {
+  ...mockLoan1,
+  id: '2',
+  loanState: LoanState.Finished
+};
 
-describe('Loading loan to invest', () => {
+const initialState = {
+  loansToInvest: [],
+  isLoading: false,
+  activeLoan: {},
+  myActiveInvestements: [],
+  myCompletedInvestments: []
+}
+
+describe('Invest', () => {
   it('Should start loading single loan', () => {
-    const state: InvestStateT = { loansToInvest: [], isLoading: false, activeLoan: {} };
+    const state: InvestStateT = { ...initialState }
 
     mutations['REQUEST_LOAN_TO_INVEST'](state);
     let activeLoan: LoanToInvestT = <LoanToInvestT>state.activeLoan;
@@ -30,11 +44,15 @@ describe('Loading loan to invest', () => {
     expect(activeLoan.isLoading).to.equal(false)
     expect(activeLoan.interestPermil).to.equal(500);
   })
-  it('Should invest in loan', () => {
-    const state: InvestStateT = { loansToInvest: [], isLoading: false, activeLoan: mockLoan1 };
+  it('Should load my investments', () => {
+    const state: InvestStateT = { ...initialState };
 
-    mutations['INVEST_IN_LOAN'](state, 10);
-    let activeLoan: LoanToInvestT = <LoanToInvestT>state.activeLoan;
-    expect(activeLoan.isInvesting).to.equal(true)
+    mutations['REQUEST_MY_INVESTMENTS'](state);
+    expect(state.isLoading).to.equal(true)
+
+    mutations['RECEIVED_MY_INVESTMENTS'](state, { loans: [mockLoan1, mockLoan2] });
+    expect(state.isLoading).to.equal(false)
+    expect(state.myActiveInvestements.length).to.equal(1);
+    expect(state.myCompletedInvestments.length).to.equal(1);
   })
 })

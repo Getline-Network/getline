@@ -5,6 +5,9 @@ export interface InvestStateT {
   loansToInvest: LoanToInvestT[];
   isLoading: boolean;
   activeLoan: LoanToInvestT | {};
+  myActiveInvestements: LoanToInvestT[];
+  myCompletedInvestments: LoanToInvestT[];
+
 }
 
 export interface LoanToInvestT {
@@ -20,6 +23,7 @@ export interface LoanToInvestT {
   percentageWanted?: number;
   isLoading?: boolean;
   description?: string;
+  loanState?: number;
 };
 
 export interface sortColumnT {

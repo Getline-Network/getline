@@ -3,23 +3,22 @@
     <div class="mit-details">
       <user-score :value="investment.userScore" />
       <div class="mit-details-right">
-        <div class="mit-short-desc">{{ investment.shortDesc }}</div>
+        <div class="mit-short-desc">Demo Loan {{ investment.description }}</div>
         <div class="mit-user">{{ investment.userName }}</div>
       </div>
     </div>
     <div class="mit-financial-data">
       <div>
-        <div class="mit-fin-line-a"> CURRENT RATE </div>
-        <div class="mit-fin-line-b">{{ investment.currentRate }}</div>
+        <div class="mit-fin-line-a"> <div> CURRENT </div> <div> RATE </div> </div>
+        <div class="mit-fin-line-b">{{ investment.interestPermil }} %</div>
       </div>
       <div>
-        <div class="mit-fin-line-a"> RATE </div>
-        <div class="mit-fin-line-b">{{ investment.rate }}</div>
-        <div class="mit-fin-line-c">{{ investment.apr }} APR</div>
+        <div class="mit-fin-line-a"> <div> AMOUNT </div> <div> WANTED </div> </div>
+        <div class="mit-fin-line-b">{{ investment.amountWanted.toString() }} {{ investment.tokenSymbol }}</div>
       </div>
       <div>
-        <div class="mit-fin-line-a"> EARNED </div>
-        <div class="mit-fin-line-b">{{ investment.earned }}</div>
+        <div class="mit-fin-line-a"> <div> AMOUNT </div> <div> PAID BACK </div> </div>
+        <div class="mit-fin-line-b">0  {{ investment.tokenSymbol }} </div>
       </div>
     </div>
   </div>
@@ -38,7 +37,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.my-investement-tile { width: 400px; margin: 20px; border-radius: 2px; background-color: #ffffff;  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.02);
+.my-investement-tile { margin: 20px; border-radius: 2px; background-color: #ffffff;  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.02);
   .mit-details { display: flex; align-items: center; padding: 30px; border-bottom: 1px solid var(--color-white-smoke);
     .mit-details-right { margin-left: 20px;
       .mit-short-desc { font-size: 18px; font-weight: 600; line-height: 1.22; letter-spacing: -0.2px; color: var(--color-black-cod); }

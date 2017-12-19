@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-import { InvestStateT, LoanToInvestT, sortColumnT, sorterT } from './types';
+import { LoanState, InvestStateT, LoanToInvestT, sortColumnT, sorterT } from './types';
 import { BigNumber } from '../../api';
 
 export const mutations = {
@@ -20,6 +20,14 @@ export const mutations = {
   'RECEIVE_LOAN_TO_INVEST': function (state: InvestStateT, { loan }: { loan: LoanToInvestT }): void {
     state.activeLoan = Object.assign({}, extendLoan(loan), { isLoading: false });
   },
+  'REQUEST_MY_INVESTMENTS': function (state: InvestStateT) {
+    state.isLoading = true;
+  },
+  'RECEIVED_MY_INVESTMENTS': function (state: InvestStateT, { loans }) {
+    state.isLoading = false;
+    state.myActiveInvestements = loans.filter(loan => loan.loanState == LoanState.Payback);
+    state.myCompletedInvestments = loans.filter(loan => loan.loanState == LoanState.Finished);
+  }
 }
 
 function getSortCmp(column: sortColumnT): sorterT {

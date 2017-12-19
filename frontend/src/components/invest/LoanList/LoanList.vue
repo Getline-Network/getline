@@ -61,7 +61,7 @@ export default {
   created() {
     this.$store.dispatch(GET_LOANS_TO_INVEST_ACTION);
   },
-   computed: mapState({
+  computed: mapState({
     loansToInvest: (state:StateT) => state.invest.loansToInvest,
     isLoading: (state:StateT) => state.invest.isLoading
   })
