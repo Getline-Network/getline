@@ -61,7 +61,7 @@ import * as moment from 'moment';
 import PurpleButton from '@/components/common/PurpleButton.vue';
 import Spinner from '@/components/common/Spinner.vue';
 import API, { Loan } from '@/api';
-import { goToLoan } from '@/router';
+import { goToMyLoans } from '@/router';
 import validators from '@/utils/inputValidators';
 
 const Component = Vue.extend({
@@ -106,7 +106,7 @@ const Component = Vue.extend({
         fundraisingEnd,
         paybackEnd
       );
-      goToLoan(loan.shortId);
+      goToMyLoans();
     },
   },
 });
