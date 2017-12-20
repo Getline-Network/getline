@@ -12,6 +12,8 @@ import API from './api';
 import store from './store';
 import { initEvents } from './events';
 import registerPurpleTheme from './theme';
+import { SET_LOGGED_IN_VIEW_ACTION } from 'store/account/actions';
+
 Vue.use(VueMaterial);
 
 registerPurpleTheme(Vue);
@@ -27,9 +29,8 @@ const vue: Vue = new Vue({
   components: { App },
 });
 
-
 bindRedirects(vue);
 
 window.addEventListener('load', async () => {
-  API.init(initEvents());
+  API.init(initEvents(vue));
 });

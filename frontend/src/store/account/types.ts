@@ -3,4 +3,5 @@ export interface AccountStateT {
   balanceTokenName: string,
   demoPrintValue: string,
   isLoading: boolean;
+  loggedIn: boolean;
 }

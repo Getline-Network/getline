@@ -7,6 +7,7 @@ const state: AccountStateT = {
   balanceTokenName: '',
   demoPrintValue: '',
   isLoading: false,
+  loggedIn: false
 }
 
 export default {
