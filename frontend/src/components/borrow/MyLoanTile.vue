@@ -21,7 +21,7 @@
       <div class="mit-fundraising">
         <div class="mit-fundraising-line-a">
           <div class="mit-fundraising-text"> This loan is looking for investors </div>
-          <div class="mit-fundraising-percentage">{{countPercentageGathered(loan.amountGathered, loan.amountWanted)}}%</div>
+          <div class="mit-fundraising-percentage">{{formatPercentage(countPercentageGathered(loan.amountGathered, loan.amountWanted))}}%</div>
         </div>
         <fundraising-bar :percentage="countPercentageGathered(loan.amountGathered, loan.amountWanted)" barHeight="8px"/>
         <div class="mit-fundraising-amount"> Remaining: {{(loan.amountWanted - loan.amountGathered).toString()}} {{ loan.tokenSymbol }} </div>
@@ -65,7 +65,7 @@ import { StateT } from 'store';
 import { GET_MY_BALANCE_ACTION } from 'store/account/actions';
 import { TRANSFER_COLLATERAL } from 'store/my-loans/actions';
 import validators from 'utils/inputValidators';
-import { countPercentageGathered } from 'utils/calc';
+import { countPercentageGathered, formatPercentage } from 'utils/calc';
 
 export default {
   name: 'MyLoanTile',
@@ -86,6 +86,7 @@ export default {
     balanceTokenName: (state:StateT) => state.account.balanceTokenName
   }),
   methods: {
+    formatPercentage,
     countPercentageGathered,
     getLoan: function () {
       return this.loan;

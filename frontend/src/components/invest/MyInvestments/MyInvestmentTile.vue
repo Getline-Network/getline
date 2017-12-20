@@ -3,7 +3,7 @@
     <div class="mit-details">
       <user-score :value="investment.userScore" />
       <div class="mit-details-right">
-        <div class="mit-short-desc">Demo Loan {{ investment.description }}</div>
+        <div class="mit-short-desc">{{ investment.description || "No description" }}</div>
         <div class="mit-user">{{ investment.userName }}</div>
       </div>
     </div>
@@ -17,8 +17,8 @@
         <div class="mit-fin-line-b">{{ investment.amountWanted.toString() }} {{ investment.tokenSymbol }}</div>
       </div>
       <div>
-        <div class="mit-fin-line-a"> <div> AMOUNT </div> <div> PAID BACK </div> </div>
-        <div class="mit-fin-line-b">0  {{ investment.tokenSymbol }} </div>
+        <div class="mit-fin-line-a"> <div> AMOUNT </div> <div> GATHERED </div> </div>
+        <div class="mit-fin-line-b">{{ investment.amountGathered.toString() }} {{ investment.tokenSymbol }} </div>
       </div>
     </div>
   </div>
