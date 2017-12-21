@@ -73,7 +73,7 @@ const Component = Vue.extend({
   data() {
     return {
       validators,
-      amount: '0.01',
+      amount: '1000',
       interestPermil: '5',
       description: '',
       paybackTime: '7',
