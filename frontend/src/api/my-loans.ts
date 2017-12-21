@@ -27,5 +27,6 @@ export async function getMyLoans(): Promise<MyLoanT[]> {
       tokenSymbol: loanTokenSymbols[index],
       isCollateralCollection: (loanState === LoanState.CollateralCollection),
       isFundraising: (loanState === LoanState.Fundraising),
+      isPayback: (loanState === LoanState.Payback)
     }));
 }

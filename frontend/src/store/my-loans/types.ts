@@ -18,6 +18,7 @@ export interface MyLoanT {
   isCollateralCollection?: boolean;
   isTransferingCollateral?: boolean;
   isFundraising?: boolean;
+  isPayback?: boolean;
   tokenSymbol?: string;
 };
 

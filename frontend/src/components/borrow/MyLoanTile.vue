@@ -41,8 +41,41 @@
       <purple-button
         class="mlt-send-collateral-button"
         @click.native='transferCollateral'
-        text="TRANSFER COLLATERAL DEMO TOKEN"
+        text="TRANSFER COLLATERAL"
         :disabled='!validators.nonNegativeNumber(this.collateralAmount).isValid()'
+      />
+      <div class="mlt-spinner-container">
+        <spinner />
+        <div class="mlt-sending-text">
+          Please don't close this window and wait until we process your order. It usually takes about 10 seconds
+        </div>
+      </div>
+    </div>
+    <div  v-if="loan.isPayback" class="mlt-financial-data">
+      <div>
+        <div class="mlt-fin-line-a"> AMOUNT PAID BACK </div>
+        <div class="mlt-fin-line-b">0 {{ loan.tokenSymbol }}</div>
+      </div>
+      <div>
+        <div class="mlt-fin-line-a"> STILL TO PAY </div>
+        <div class="mlt-fin-line-b"> {{ loan.amountGathered.toString() }} {{ loan.tokenSymbol }}</div>
+      </div>
+    </div>
+    <div v-if="loan.isPayback" :class="transferingCollateralClass(loan.isTransferingCollateral)" class="mit-payback">
+      <md-input-container
+        class="mlt-payback-input"
+        :class="validators.nonNegativeInteger(this.payBackAmount).getClass()"
+      >
+        <label> AMOUNT </label>
+        <md-input v-model="payBackAmount" type="number" />
+        <div class="rl-input-right-text"> {{ balanceTokenName }}</div>
+        <span class="md-error">{{ validators.nonNegativeNumber(this.payBackAmount).getErrorMsg() }}</span>
+      </md-input-container>
+      <green-button
+        class="mlt-send-payback-button"
+        @click.native='transferPayback'
+        text="PAY BACK"
+        :disabled='!validators.nonNegativeNumber(this.payBackAmount).isValid()'
       />
       <div class="mlt-spinner-container">
         <spinner />
@@ -58,6 +91,7 @@
 import { mapState } from 'vuex';
 
 import PurpleButton from 'components/common/PurpleButton.vue';
+import GreenButton from 'components/common/GreenButton.vue';
 import FundraisingBar from 'components/common/FundraisingBar.vue';
 import Spinner from 'components/common/Spinner.vue';
 
@@ -72,6 +106,7 @@ export default {
   props: ['loan'],
   components: {
     'purple-button': PurpleButton,
+    'green-button': GreenButton,
     'fundraising-bar': FundraisingBar,
     'spinner': Spinner,
   },
@@ -79,6 +114,7 @@ export default {
     return {
       validators,
       collateralAmount: '30',
+      payBackAmount: '30',
       sendingCollateral: false,
     };
   },
@@ -92,6 +128,9 @@ export default {
     countPercentageGathered,
     getLoan: function () {
       return this.loan;
+    },
+    transferPayback: async function transferPayback() {
+      // TODO(balinskia): integrate with getline.ts
     },
     transferCollateral: async function transferCollateral() {
       const payload = {
@@ -128,6 +167,17 @@ export default {
   }
   .mit-collateral.mlt-sending-collateral  { padding: 23px 30px;
     .mlt-send-collateral-button, .mit-collateral-text, .mlt-collateral-input { display: none; }
+    .mlt-sending-text { display: flex; justify-content: center; font-size: 18px; font-weight: 300; line-height: 1.22; letter-spacing: -0.2px; color: var(--color-black-cod); text-align: center; }
+    .mlt-spinner-container { display: block; }
+  }
+  .mit-payback {
+    .mit-payback-text { padding: 23px 23px 0px 23px; font-size: 18px; font-weight: 300; line-height: 1.22; letter-spacing: -0.2px; color: var(--color-black-cod); }
+    .mlt-payback-input { width: calc(100% - 46px); margin: 23px; }
+    .mlt-send-payback-button { margin: 23px;}
+    .mlt-spinner-container { display: none; }
+  }
+  .mit-payback.mlt-sending-payback  { padding: 23px 30px;
+    .mlt-send-payback-button, .mit-collateral-text, .mlt-collateral-input { display: none; }
     .mlt-sending-text { display: flex; justify-content: center; font-size: 18px; font-weight: 300; line-height: 1.22; letter-spacing: -0.2px; color: var(--color-black-cod); text-align: center; }
     .mlt-spinner-container { display: block; }
   }
