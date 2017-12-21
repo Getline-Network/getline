@@ -10,7 +10,7 @@
       </div>
       <div>
         <div class="mlt-fin-line-a"> RATE </div>
-        <div class="mlt-fin-line-b">{{ loan.interestPermil }}%</div>
+        <div class="mlt-fin-line-b">{{ permilsToPercentage(loan.interestPermil) }}%</div>
       </div>
       <div>
         <div class="mlt-fin-line-a"> AMOUNT GATHERED </div>
@@ -24,7 +24,7 @@
           <div class="mit-fundraising-percentage">{{formatPercentage(countPercentageGathered(loan.amountGathered, loan.amountWanted))}}%</div>
         </div>
         <fundraising-bar :percentage="countPercentageGathered(loan.amountGathered, loan.amountWanted)" barHeight="8px"/>
-        <div class="mit-fundraising-amount"> Remaining: {{(loan.amountWanted - loan.amountGathered).toString()}} {{ loan.tokenSymbol }} </div>
+        <div class="mit-fundraising-amount"> Remaining: {{ formatBigNumber(loan.amountWanted.sub(loan.amountGathered))}} {{ loan.tokenSymbol }} </div>
       </div>
     </div>
     <div v-if="loan.isCollateralCollection" :class="transferingCollateralClass(loan.isTransferingCollateral)" class="mit-collateral">
@@ -65,7 +65,7 @@ import { StateT } from 'store';
 import { GET_MY_BALANCE_ACTION } from 'store/account/actions';
 import { TRANSFER_COLLATERAL } from 'store/my-loans/actions';
 import validators from 'utils/inputValidators';
-import { countPercentageGathered, formatPercentage } from 'utils/calc';
+import { countPercentageGathered, formatPercentage, permilsToPercentage, formatBigNumber } from 'utils/calc';
 
 export default {
   name: 'MyLoanTile',
@@ -86,6 +86,8 @@ export default {
     balanceTokenName: (state:StateT) => state.account.balanceTokenName
   }),
   methods: {
+    formatBigNumber,
+    permilsToPercentage,
     formatPercentage,
     countPercentageGathered,
     getLoan: function () {

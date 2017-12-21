@@ -34,6 +34,9 @@ export default {
   components: {
     'user-score': UserScore,
   },
+  methods: {
+    permilsToPercentage
+  }
 };
 </script>
 

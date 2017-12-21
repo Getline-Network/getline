@@ -8,7 +8,11 @@ export function countPercentageWanted(amountGathered: BigNumber, amountWanted: B
   return (new BigNumber(100)).sub(amountGathered.times(100).dividedBy(amountWanted)).toNumber();;
 }
 
-export function formatPercentage(number: number) {
+export function formatBigNumber(number: BigNumber): string {
+  return number.toNumber().toFixed(2);
+}
+
+export function formatPercentage(number: number): string {
   return number.toFixed(2);
 }
 
