@@ -56,7 +56,6 @@ describe('Loans to invest list', () => {
     expect(state.isLoading).to.equal(false)
     const loan: LoanToInvestT = state.loansToInvest[0];
     expect(loan.percentageFunded).to.equal(60);
-    expect(loan.percentageWanted).to.equal(40);
   })
 
   it('Should sort loans to invest by amount wanted', () => {
