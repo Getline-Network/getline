@@ -11,4 +11,7 @@ export const mutations = {
   'REQUEST_MY_BALANCE': function (state): void {
     state.isLoading = true;
   },
+  'SET_LOGGED_IN_VIEW': function (state): void {
+    state.loggedIn = true;
+  }
 }

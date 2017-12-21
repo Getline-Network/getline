@@ -5,6 +5,10 @@ import { InvestStateT } from './types';
 const state: InvestStateT = {
   loansToInvest: [],
   isLoading: false,
+  activeLoan: {},
+  pendingInvestments: [],
+  activeInvestments: [],
+  finishedInvestments: []
 }
 
 export default {

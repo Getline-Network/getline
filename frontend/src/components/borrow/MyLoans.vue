@@ -13,11 +13,12 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-import Spinner from '../common/Spinner.vue';
+import Spinner from 'components/common/Spinner.vue';
 import MyLoanTile from './MyLoanTile.vue';
 
-import { GET_MY_LOANS_ACTION } from '@/store/my-loans/actions';
-import { StateT } from '@/store';
+import { GET_MY_LOANS_ACTION } from 'store/my-loans/actions';
+import { StateT } from 'store';
+
 
 const Component = Vue.extend({
   name: 'MyLoans',

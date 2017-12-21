@@ -1,9 +1,13 @@
 import * as moment from "moment";
-import { BigNumber } from '@/api';
+import { BigNumber } from 'api';
 
 export interface InvestStateT {
   loansToInvest: LoanToInvestT[];
   isLoading: boolean;
+  activeLoan: LoanToInvestT | {};
+  pendingInvestments: LoanToInvestT[];
+  activeInvestments: LoanToInvestT[];
+  finishedInvestments: LoanToInvestT[];
 }
 
 export interface LoanToInvestT {
@@ -17,6 +21,9 @@ export interface LoanToInvestT {
   interestPermil: number;
   percentageFunded?: number;
   percentageWanted?: number;
+  isLoading?: boolean;
+  description?: string;
+  loanState?: number;
 };
 
 export interface sortColumnT {

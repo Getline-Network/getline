@@ -14,6 +14,11 @@ export function goToLoan(id): void {
   vue.$router.push({ path: path + id });
 }
 
+export function goToMyLoans(): void {
+  const path = '/my-loans';
+  vue.$router.push({ path });
+}
+
 export function goToUnlockMetamaskPage(): void {
   const path = '/error/unlock-metamask/';
   vue.$router.push({ path });

@@ -22,8 +22,8 @@
               <md-table-cell class="ll-td ll-score"> <user-score :value="loan.userScore"/> </md-table-cell>
               <md-table-cell class="ll-td">{{ loan.amountWantedWithToken }}</md-table-cell>
               <md-table-cell class="ll-td ll-time">{{ loan.fundraisingDeadline.format('LL') }}</md-table-cell>
-              <md-table-cell class="ll-td">{{ loan.percentageFunded }}</md-table-cell>
-              <md-table-cell class="ll-td">{{ loan.percentageWanted }}</md-table-cell>
+              <md-table-cell class="ll-td">{{ parseInt(loan.percentageFunded) }}</md-table-cell>
+              <md-table-cell class="ll-td">{{ parseInt(loan.percentageWanted) }}</md-table-cell>
             </md-table-row>
           </md-table-body>
         </md-table>
@@ -36,10 +36,10 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-import UserScore from '../../common/UserScore.vue';
-import { goToLoan } from '@/router/redirects';
+import UserScore from 'components/common/UserScore.vue';
+import { goToLoan } from 'router/redirects';
 import NoLoans from './NoLoans.vue';
-import Spinner from '@/components/common/Spinner.vue';
+import Spinner from 'components/common/Spinner.vue';
 
 import { StateT } from '@/store';
 import { GET_LOANS_TO_INVEST_ACTION, SORT_LOANS_TO_INVEST_ACTION } from '@/store/invest/actions';
@@ -61,7 +61,7 @@ export default {
   created() {
     this.$store.dispatch(GET_LOANS_TO_INVEST_ACTION);
   },
-   computed: mapState({
+  computed: mapState({
     loansToInvest: (state:StateT) => state.invest.loansToInvest,
     isLoading: (state:StateT) => state.invest.isLoading
   })

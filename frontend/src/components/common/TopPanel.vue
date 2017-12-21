@@ -6,24 +6,32 @@
         <div class="tp-invest-text"> INVEST </div>
       </div>
     </div>
-    <div class="tp-menu-container">
+    <div class="tp-menu-container" v-if="account.loggedIn">
       <router-link class="tp-menu-text" to="/invest"> INVEST </router-link>
       <router-link class="tp-menu-text" to="/borrow"> BORROW </router-link>
       <router-link class="tp-menu-text" to="/my-loans"> MY LOANS </router-link>
     </div>
-    <balance />
+    <balance v-show="account.loggedIn" />
+    <div class="tp-gap-filler" v-if="!account.loggedIn" />
   </div>
 </div>
 </template>
 
 <script lang="ts">
-import Balance from '@/components/balance/Balance.vue';
+import Balance from 'components/balance/Balance.vue';
+import { mapState } from 'vuex';
+import { StateT } from 'store';
 
 export default {
   name: 'TopPanel',
   components: {
     'balance': Balance,
   },
+  computed: {
+    ...mapState({
+      account: (state:StateT) => state.account,
+    })
+  }
 };
 </script>
 
@@ -47,5 +55,6 @@ export default {
       .tp-profile-text-settings { font-size: 11px; font-weight: 300; letter-spacing: 0.4px; color: #858585; }
     }
   }
+  .tp-gap-filler { width: 70% }
 }
 </style>

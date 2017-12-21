@@ -14,7 +14,7 @@ const mockLoan: MyLoanT = {
   isFundraising: true,
 }
 
-describe('mutations', () => {
+describe('My Loans', () => {
   it('Should receive loans', () => {
     const state: MyLoansStateT = { myLoansList: [], isLoading: false };
 

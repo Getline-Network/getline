@@ -1,3 +1,5 @@
+import { BigNumber } from 'api';
+
 export interface MyLoansStateT {
   myLoansList: MyLoanT[];
   isLoading: boolean;
@@ -11,9 +13,10 @@ export interface MyLoanT {
   loanState: LoanState;
 
   // Data from promises.
-  amountGathered?: string;
-  amountWanted?: string;
+  amountGathered?: BigNumber;
+  amountWanted?: BigNumber;
   isCollateralCollection?: boolean;
+  isTransferingCollateral?: boolean;
   isFundraising?: boolean;
   tokenSymbol?: string;
 };
