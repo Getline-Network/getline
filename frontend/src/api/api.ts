@@ -12,7 +12,11 @@ let waiters: Array<Waiter> = [];
 
 export default {
   init: async function (events: EventsProvider): Promise<void> {
-    async function initClient({ onSuccess }) {
+    /**
+     * initClient() returns true if we succesfully initialize getline.ts
+     * Returns false if any problem occurs
+     */
+    async function initClient(): Promise<boolean> {
       try {
         api = new Client(METABACKEND.URL, METABACKEND.NETWORK);
         await api.initialize();
@@ -21,14 +25,17 @@ export default {
         for (let i = 0; i < waiters.length; i++) {
           waiters[i](api);
         }
-        onSuccess();
+        return true;
       } catch (error) {
         handleInitError(error, events);
+        return false;
       }
     }
     const interval = setInterval(function () {
-      initClient({
-        onSuccess: function () { clearInterval(interval); }
+      initClient().then(success => {
+        if (success) {
+          clearInterval(interval);
+        }
       });
     }, 1500);
   },

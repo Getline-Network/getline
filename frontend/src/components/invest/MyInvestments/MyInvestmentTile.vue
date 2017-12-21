@@ -10,7 +10,7 @@
     <div class="mit-financial-data">
       <div>
         <div class="mit-fin-line-a"> <div> CURRENT </div> <div> RATE </div> </div>
-        <div class="mit-fin-line-b">{{ investment.interestPermil }} %</div>
+        <div class="mit-fin-line-b">{{ permilsToPercentage(investment.interestPermil) }}</div>
       </div>
       <div>
         <div class="mit-fin-line-a"> <div> AMOUNT </div> <div> WANTED </div> </div>
@@ -26,6 +26,7 @@
 
 <script>
 import UserScore from '@/components/common/UserScore';
+import { permilsToPercentage } from 'utils/calc';
 
 export default {
   name: 'MyInvestments',

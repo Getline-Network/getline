@@ -5,3 +5,9 @@ export interface AccountStateT {
   isLoading: boolean;
   loggedIn: boolean;
 }
+
+export interface BalanceT {
+  balance: string;
+  tokenName: string;
+  demoPrintValue: string;
+}

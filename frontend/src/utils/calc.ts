@@ -11,3 +11,7 @@ export function countPercentageWanted(amountGathered: BigNumber, amountWanted: B
 export function formatPercentage(number: number) {
   return number.toFixed(2);
 }
+
+export function permilsToPercentage(number: number): string {
+  return (number / 10) + "%";
+}
