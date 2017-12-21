@@ -102,6 +102,10 @@ contract Loan {
         return uint(currentState);
     }
 
+    function paybackNeeded() constant returns (uint256 _totalPayback) {
+        return ledger.totalPaybackNeeded;
+    }
+
     function amountGathered() constant returns (uint256 _totalAmount) {
         return ledger.totalAmountGathered;
     }
