@@ -34,5 +34,32 @@ export const mutations = {
         return loan;
       }
     })
+  },
+  'START_TRANSFERING_PAYBACK': function (state: MyLoansStateT, { shortId }): void {
+    state.myLoansList = state.myLoansList.map(loan => {
+      if (loan.shortId == shortId) {
+        return {
+          ...loan,
+          isTransferingPayback: true
+        }
+      } else {
+        return loan;
+      }
+    })
+  },
+  'PAYBACK_TRANSFERED': function (state: MyLoansStateT, { shortId }): void {
+    state.myLoansList = state.myLoansList.map(loan => {
+      if (loan.shortId == shortId) {
+        return {
+          ...loan,
+          isFundraising: false,
+          isTransferingPayback: false,
+          isCollateralCollection: false,
+          isTransferingCollateral: false
+        }
+      } else {
+        return loan;
+      }
+    })
   }
 }

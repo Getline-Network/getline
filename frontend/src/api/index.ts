@@ -8,5 +8,6 @@ export * from './demo-tokens';
 export * from './collateral';
 export * from './invest';
 export * from './balance';
+export * from './payback';
 
 export default API;

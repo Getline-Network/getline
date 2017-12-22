@@ -15,10 +15,21 @@ export interface MyLoanT {
   // Data from promises.
   amountGathered?: BigNumber;
   amountWanted?: BigNumber;
+  paybackAmount?: BigNumber;
+
+  // collateral collection
   isCollateralCollection?: boolean;
   isTransferingCollateral?: boolean;
+
   isFundraising?: boolean;
+
+  // payback
   isPayback?: boolean;
+  isTransferingPayback?: boolean;
+
+  //finished
+  isFinished?: boolean;
+
   tokenSymbol?: string;
 };
 

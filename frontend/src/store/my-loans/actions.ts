@@ -1,9 +1,10 @@
 import * as api from '../../api'
 import { getMyBalance } from 'api/balance';
-import { gatherCollateral } from '../../api';
+import { gatherCollateral, payback } from 'api';
 
 export const GET_MY_LOANS_ACTION = "getMyLoansAction";
 export const TRANSFER_COLLATERAL = "transferCollateral";
+export const TRANSFER_PAYBACK_ACTION = "transferPayback";
 
 const actions = {
   [GET_MY_LOANS_ACTION]({ commit }) {
@@ -18,6 +19,15 @@ const actions = {
       commit('START_TRANSFERING_COLLATERAL', { shortId });
       await gatherCollateral(shortId, amount);
       commit('COLLATERAL_TRANSFERED', { shortId });
+      onSuccess();
+    })();
+  },
+  [TRANSFER_PAYBACK_ACTION]({ commit }, payload: { shortId: string, onSuccess: () => void }) {
+    (async function () {
+      const { shortId, onSuccess } = payload;
+      commit('START_TRANSFERING_PAYBACK', { shortId });
+      await payback(shortId);
+      commit('PAYBACK_TRANSFERED', { shortId });
       onSuccess();
     })();
   }

@@ -14,7 +14,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 
 import Spinner from 'components/common/Spinner.vue';
-import MyLoanTile from './MyLoanTile.vue';
+import MyLoanTile from './my-loan-tile/MyLoanTile.vue';
 
 import { GET_MY_LOANS_ACTION } from 'store/my-loans/actions';
 import { StateT } from 'store';
