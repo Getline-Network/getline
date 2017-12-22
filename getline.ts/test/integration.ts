@@ -167,6 +167,11 @@ class EndToEndTests {
         balance = await c.testToken.balanceOf(user);
         want = amountStart.sub(6000);
         assert(balance.eq(want), `user has ${balance}, should have ${want}`);
+
+        // Now pay the loan back.
+        await loan.payback();
+        assert(loan.blockchainState.loanState == LoanState.Finished, "loan state is finished");
+        assert(loan.blockchainState.paidback, "loan has been paid back");
     }
 
     /**
