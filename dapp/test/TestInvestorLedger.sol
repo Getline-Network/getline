@@ -42,7 +42,7 @@ contract TestInvestorLedger {
         Assert.equal(testLedger.totalAmountGathered, totalLoanNeeded, "It should invest some money");
         uint256 totalCollateral = printValue;
         Assert.equal(testLedger.totalCollateralReserved, totalCollateral, "It should update collateral");
-        uint256 expectedTotalPaybackNeeded = 20; /* TODO ERROR, it should be 120 */
+        uint256 expectedTotalPaybackNeeded = 120;
         Assert.equal(testLedger.totalPaybackNeeded, expectedTotalPaybackNeeded, "It should count intrests");
     }
 }

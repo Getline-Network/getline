@@ -46,7 +46,7 @@ library InvestorLedger {
         
         account.totalAmountGathered += investmentAmount;
         account.totalCollateralReserved += collateralReseverved;
-        account.totalPaybackNeeded += calculateInterest(account, investmentAmount);
+        account.totalPaybackNeeded += investmentAmount + calculateInterest(account, investmentAmount);
 
         var investor = account.investors[trustee];
         investor.amountInvested += investmentAmount;
