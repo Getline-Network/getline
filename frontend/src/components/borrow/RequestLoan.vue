@@ -42,7 +42,7 @@
         </md-input-container>
       </div>
       <div class="rl-metamask" :class="isLoading()">
-        <purple-button class="rl-request-button" text="REQUEST LOAN" :disabled='!isValidForm' @click.native='requestLoan' />
+        <purple-button class="rl-request-button" text="REQUEST LOAN" :disabled='!isValidForm' @click.native='requestLoanAction' />
         <div class="rl-loader">
           <spinner />
           <div class="rl-metamask-text">
@@ -57,7 +57,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapState } from 'vuex'
-import * as moment from 'moment';
 
 import PurpleButton from 'components/common/PurpleButton.vue';
 import Spinner from 'components/common/Spinner.vue';
@@ -65,7 +64,7 @@ import Spinner from 'components/common/Spinner.vue';
 import API, { Loan } from 'api';
 import { goToMyLoans } from 'router';
 import validators from 'utils/inputValidators';
-import {BigNumber } from 'api';
+import { requestLoan } from 'api/request-loan';
 import { StateT } from 'store';
 
 const Component = Vue.extend({
@@ -73,7 +72,7 @@ const Component = Vue.extend({
   data() {
     return {
       validators,
-      amount: '1000',
+      amount: '10',
       interestPermil: '5',
       description: '',
       paybackTime: '7',
@@ -100,20 +99,10 @@ const Component = Vue.extend({
     isLoading: function isLoading():string {
       return this.loading ? 'rl-loading' : '';
     },
-    requestLoan: async function requestLoan() {
-      if (!this.isValidForm) return;
-      const api = await API.instance();
+    requestLoanAction: async function requestLoanAction() {
       this.loading = true;
-      const fundraisingEnd: moment.Moment = moment().add(7, 'days');
-      const paybackEnd: moment.Moment = moment().add(7 + this.paybackTime, 'days');
-      const testToken = api.testToken;
-      const loan: Loan = await api.newLoan(
-        this.description,
-        await testToken.integerize(new BigNumber(this.amount)),
-        this.interestPermil,
-        fundraisingEnd,
-        paybackEnd
-      );
+      if (!this.isValidForm) return;
+      await requestLoan(this.amount, this.interestPermil, this.paybackTime, this.description);
       goToMyLoans();
     }
   }
