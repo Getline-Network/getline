@@ -110,7 +110,8 @@ func (n *Network) link() error {
 					unlinked = append(unlinked, contract.Name)
 				}
 			}
-			return fmt.Errorf("stuck at %v unlinked: %s", curUnlinkedCount, strings.Join(unlinked, ", "))
+			glog.Infof("Network %q done at %v unlinked: %s", n.ID, curUnlinkedCount, strings.Join(unlinked, ", "))
+			return nil
 		}
 		prevUnlinkedCount = len(n.unlinked())
 		if prevUnlinkedCount == 0 {
@@ -136,13 +137,11 @@ func (d *Deployment) linkAll() error {
 			}
 		}
 	}
-	// Now include all appropriate contracts into network structs.
+
+	// Include all contracts into all networks (ones that can't be linked or
+	// are absent from a given network will be removed in later passes).
 	for _, network := range d.Networks {
 		for _, source := range d.Sources {
-			if _, ok := source.Networks[network.ID]; !ok {
-				glog.Warningf("Contract %q does not exist on network %q", source.Name, network.ID)
-				continue
-			}
 			linkedContract := Contract{
 				JSONContract: *source,
 			}
@@ -150,20 +149,32 @@ func (d *Deployment) linkAll() error {
 		}
 	}
 
-	// Log network/contract mapping.
-	for _, network := range d.Networks {
-		contractNames := []string{}
-		for _, lc := range network.Contracts {
-			contractNames = append(contractNames, lc.Name)
-		}
-		glog.Infof("Network %q has contracts %s", network.ID, strings.Join(contractNames, ", "))
-	}
-
+	// Link contracts in each network.
 	for _, network := range d.Networks {
 		err := network.link()
 		if err != nil {
 			return fmt.Errorf("while linking network %q: %v", network.ID, err)
 		}
 	}
+
+	// Log network/contract mapping.
+	for _, network := range d.Networks {
+		deployedNames := []string{}
+		linkedNames := []string{}
+		abiOnlyNames := []string{}
+		for _, lc := range network.Contracts {
+			if lc.unlinked() {
+				abiOnlyNames = append(abiOnlyNames, lc.Name)
+			} else {
+				if lc.GetAddress(network.ID) != "" {
+					deployedNames = append(deployedNames, lc.Name)
+				} else {
+					linkedNames = append(linkedNames, lc.Name)
+				}
+			}
+		}
+		glog.Infof("Network %q has deployed contracts %q, linked contracts %q, ABI-only contracts %q", network.ID, deployedNames, linkedNames, abiOnlyNames)
+	}
+
 	return nil
 }

@@ -186,7 +186,7 @@
       "absolutePath": "/home/q3k/Work/getline/getline/dapp/contracts/tokens/IToken.sol",
       "exportedSymbols": {
         "IToken": [
-          1656
+          1673
         ]
       }
     },
@@ -200,42 +200,42 @@
             ".11"
           ]
         },
-        "id": 1652,
+        "id": 1669,
         "name": "PragmaDirective",
         "src": "0:24:11"
       },
       {
         "attributes": {
-          "SourceUnit": 1651,
+          "SourceUnit": 1668,
           "absolutePath": "/home/q3k/Work/getline/getline/dapp/contracts/tokens/ERC/IERC20Token.sol",
           "file": "./ERC/IERC20Token.sol",
-          "scope": 1657,
+          "scope": 1674,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 1653,
+        "id": 1670,
         "name": "ImportDirective",
         "src": "26:31:11"
       },
       {
         "attributes": {
           "contractDependencies": [
-            1650
+            1667
           ],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": false,
           "linearizedBaseContracts": [
-            1656,
-            1650
+            1673,
+            1667
           ],
           "name": "IToken",
           "nodes": [
             null
           ],
-          "scope": 1657
+          "scope": 1674
         },
         "children": [
           {
@@ -249,25 +249,25 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "IERC20Token",
-                  "referencedDeclaration": 1650,
+                  "referencedDeclaration": 1667,
                   "type": "contract IERC20Token"
                 },
-                "id": 1654,
+                "id": 1671,
                 "name": "UserDefinedTypeName",
                 "src": "79:11:11"
               }
             ],
-            "id": 1655,
+            "id": 1672,
             "name": "InheritanceSpecifier",
             "src": "79:11:11"
           }
         ],
-        "id": 1656,
+        "id": 1673,
         "name": "ContractDefinition",
         "src": "60:33:11"
       }
     ],
-    "id": 1657,
+    "id": 1674,
     "name": "SourceUnit",
     "src": "0:94:11"
   },
@@ -277,5 +277,5 @@
   },
   "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2017-12-19T16:17:20.049Z"
+  "updatedAt": "2017-12-22T17:57:04.825Z"
 }
