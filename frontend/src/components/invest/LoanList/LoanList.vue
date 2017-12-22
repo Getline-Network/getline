@@ -23,7 +23,7 @@
               <md-table-cell class="ll-td">{{ loan.amountWantedWithToken }}</md-table-cell>
               <md-table-cell class="ll-td ll-time">{{ loan.fundraisingDeadline.format('LL') }}</md-table-cell>
               <md-table-cell class="ll-td">{{ parseInt(loan.percentageFunded) }}</md-table-cell>
-              <md-table-cell class="ll-td">{{ parseInt(loan.percentageWanted) }}</md-table-cell>
+              <md-table-cell class="ll-td">{{ 100 - parseInt(loan.percentageFunded) }}</md-table-cell>
             </md-table-row>
           </md-table-body>
         </md-table>

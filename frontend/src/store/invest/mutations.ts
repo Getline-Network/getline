@@ -90,8 +90,7 @@ function extendLoan(loan: LoanToInvestT): LoanToInvestT {
   return {
     ...loan,
     amountWantedWithToken: loan.amountWanted.toString() + " " + loan.tokenSymbol,
-    percentageFunded: countPercentageGathered(loan.amountGathered, loan.amountWanted),
-    percentageWanted: countPercentageWanted(loan.amountGathered, loan.amountWanted),
+    percentageFunded: countPercentageGathered(loan.amountGathered, loan.amountWanted)
   }
 }
 

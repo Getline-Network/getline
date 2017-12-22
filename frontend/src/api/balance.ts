@@ -7,8 +7,8 @@ export async function getMyBalance(): Promise<BalanceT> {
   const user = await api.currentUser();
   let [balance, tokenName, demoPrintValue] = await Promise.all([token.balanceOf(user), token.name(), token.printValue()]);
   return ({
-    balance: balance.toString(),
+    balance: await token.humanize(balance),
     tokenName,
-    demoPrintValue: demoPrintValue.toString()
+    demoPrintValue: await token.humanize(demoPrintValue)
   });
 }

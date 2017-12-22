@@ -9,7 +9,7 @@
           <div class="li-details">
             <user-score :value="loan.userScore" />
             <div class="li-details-right">
-              <div class="li-short-desc">Loan {{ loan.description }}</div>
+              <div class="li-short-desc">{{ loan.description }}</div>
               <div class="li-user">Who: {{ loan.userName }}</div>
             </div>
           </div>

@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: metabackend
-          image: eu.gcr.io/third-hope-184611/metabackend:1513710454
+          image: eu.gcr.io/third-hope-184611/metabackend:1513878972
           command: ["./metabackend", "-logtostderr", "-db_data_source",
                     "user=$(DB_USER) password=$(DB_PASSWORD) dbname=metabackend host=127.0.0.1 sslmode=disable",
                     "-eth_remote", "http://demo-geth-service:8545"]

@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import { mutations } from '../src/store/my-loans/mutations';
+import { BigNumber } from '../src/api';
 import { MyLoansStateT, MyLoanT, LoanState } from '../src/store/my-loans/types';
 import { } from 'jasmine'; // For describe(...) and it(...) types
 
@@ -8,8 +9,8 @@ const mockLoan1: MyLoanT = {
   description: "desc",
   interestPermil: 12,
   loanState: LoanState.Finished,
-  amountGathered: "1",
-  amountWanted: "2",
+  amountGathered: new BigNumber(1),
+  amountWanted: new BigNumber(2),
   isCollateralCollection: false,
   isFundraising: true,
 }
