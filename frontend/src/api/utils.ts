@@ -1,4 +1,5 @@
 import { BigNumber } from './index';
+import { Loan } from 'api';
 
 export async function getAmountsWantedFromBlockchain(loans): Promise<BigNumber[]> {
   const amountsWantedPromises: Promise<BigNumber>[] =
@@ -16,6 +17,15 @@ export async function getTokenSymbolsFromBlockchain(loans): Promise<string[]> {
   const loanTokenSymbolPromises: Promise<string>[] =
     loans.map(getSingleTokenSymbolFromBlockchain);
   return Promise.all(loanTokenSymbolPromises);
+}
+
+export async function getPayBackAmountFromBlockchain(loans: Loan[]): Promise<BigNumber[]> {
+  const paybacks: BigNumber[] = await Promise.all(loans.map(loan => loan.paybackAmount()));
+
+  return Promise.all(loans.map((loan, index) => {
+    const { parameters: { loanToken } } = loan;
+    return loanToken.humanize(paybacks[index]);
+  }));
 }
 
 export async function getSingleAmountWantedFromBlockchain(loan): Promise<BigNumber> {

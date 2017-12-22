@@ -226,6 +226,43 @@ export class Loan {
     }
 
     /**
+     * Returns the payback amount required for the loan, in loan token units.
+     */
+    public async paybackAmount(): Promise<BigNumber> {
+        if (this.blockchainState === undefined) {
+            await this.updateStateFromBlockchain();
+        }
+        return this.contract.call<BigNumber>("paybackNeeded");
+    }
+
+    /**
+     * Pays back the loan.
+     *
+     * This function will block until the new state is saved on the blockchain.
+     *
+     */
+    public async payback(): Promise<void> {
+        if (this.blockchainState === undefined) {
+            await this.updateStateFromBlockchain();
+        }
+
+        if (this.blockchainState.loanState !== LoanState.Payback) {
+            throw new Error("Loan is not currently fundraising");
+        }
+
+        const amount = await this.paybackAmount();
+
+        // First, ensure that payback allowance is set correctly.
+        const loan = this.parameters.loanToken;
+        await loan.approve(this.address, amount);
+        await this.updateStateFromBlockchain();
+
+        // Now, call invest and wait for state change.
+        await this.contract.mutate("payback");
+        await this.updateStateFromBlockchain();
+    }
+
+    /**
      * Returns whether the current API client is the owner/liege of the loan.
      *
      * @returns Whether the current API client is the owner/liege of the loan.
