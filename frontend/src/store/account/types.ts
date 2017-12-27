@@ -6,6 +6,7 @@ export interface AccountStateT {
   demoPrintValue: string,
   isLoading: boolean;
   loggedIn: boolean;
+  errorReceivingBalance: boolean;
 }
 
 export interface BalanceT {

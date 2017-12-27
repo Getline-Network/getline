@@ -11,7 +11,8 @@
       <router-link class="tp-menu-text" to="/borrow"> BORROW </router-link>
       <router-link class="tp-menu-text" to="/my-loans"> MY LOANS </router-link>
     </div>
-    <balance v-show="account.loggedIn" />
+    <balance v-show="account.loggedIn && !account.errorReceivingBalance" />
+    <div class="tp-balance-error" v-if="account.errorReceivingBalance"> Error in receiving your balance </div>
     <div class="tp-gap-filler" v-if="!account.loggedIn" />
   </div>
 </div>
@@ -56,5 +57,6 @@ export default {
     }
   }
   .tp-gap-filler { width: 70% }
+  .tp-balance-error { max-width: 250px; text-align: right; font-size: 13px; color: #ff5722; letter-spacing: .01em; }
 }
 </style>
