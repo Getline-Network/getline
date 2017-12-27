@@ -6,8 +6,12 @@ export const mutations = {
     state.myLoansList = loans;
     state.isLoading = false;
   },
-  'REQUEST_MY_LOANS': function (state): void {
+  'REQUEST_MY_LOANS': function (state: MyLoansStateT): void {
     state.isLoading = true;
+  },
+  'REJECT_MY_LOANS_REQUEST': function (state: MyLoansStateT): void {
+    state.isLoading = false;
+    state.errorReceiving = true;
   },
   'START_TRANSFERING_COLLATERAL': function (state: MyLoansStateT, { shortId }): void {
     state.myLoansList = state.myLoansList.map(loan => {

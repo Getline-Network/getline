@@ -22,13 +22,13 @@ const mockLoan2: MyLoanT = {
 
 describe('Transfering collateral', () => {
   it('Should start transfering collateral', () => {
-    const state: MyLoansStateT = { myLoansList: [mockLoan1, mockLoan2], isLoading: false };
+    const state: MyLoansStateT = { myLoansList: [mockLoan1, mockLoan2], isLoading: false, errorReceiving: false };
     mutations['START_TRANSFERING_COLLATERAL'](state, { shortId: "123" });
     expect(state.myLoansList[0].isTransferingCollateral).to.equal(true);
     expect(state.myLoansList[1].isTransferingCollateral).not.to.equal(true);
   });
   it('Should receive collateral', () => {
-    const state: MyLoansStateT = { myLoansList: [mockLoan1, mockLoan2], isLoading: false };
+    const state: MyLoansStateT = { myLoansList: [mockLoan1, mockLoan2], isLoading: false, errorReceiving: false };
     mutations['COLLATERAL_TRANSFERED'](state, { shortId: "124" });
     expect(state.myLoansList[1].isFundraising).to.equal(true);
     expect(state.myLoansList[1].isCollateralCollection).to.equal(false);

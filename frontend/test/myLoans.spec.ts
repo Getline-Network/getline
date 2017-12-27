@@ -17,7 +17,7 @@ const mockLoan: MyLoanT = {
 
 describe('My Loans', () => {
   it('Should receive loans', () => {
-    const state: MyLoansStateT = { myLoansList: [], isLoading: false };
+    const state: MyLoansStateT = { myLoansList: [], isLoading: false, errorReceiving: false };
 
     mutations['REQUEST_MY_LOANS'](state);
     expect(state.isLoading).to.equal(true)

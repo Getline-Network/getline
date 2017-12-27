@@ -3,6 +3,7 @@ import { BigNumber } from 'api';
 export interface MyLoansStateT {
   myLoansList: MyLoanT[];
   isLoading: boolean;
+  errorReceiving: boolean;
 }
 
 export interface MyLoanT {

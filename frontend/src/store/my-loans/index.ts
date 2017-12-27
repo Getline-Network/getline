@@ -5,6 +5,7 @@ import { MyLoansStateT } from './types';
 const state: MyLoansStateT = {
   myLoansList: [],
   isLoading: false,
+  errorReceiving: false
 }
 
 export default {

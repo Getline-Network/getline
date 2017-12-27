@@ -10,7 +10,11 @@ const actions = {
   [GET_MY_LOANS_ACTION]({ commit }) {
     (async function () {
       commit('REQUEST_MY_LOANS');
-      commit('RECEIVE_MY_LOANS', { loans: await api.getMyLoans() });
+      try {
+        commit('RECEIVE_MY_LOANS', { loans: await api.getMyLoans() });
+      } catch (e) {
+        commit('REJECT_MY_LOANS_REQUEST');
+      }
     })();
   },
   [TRANSFER_COLLATERAL]({ commit }, payload: { shortId: string, amount: string, onSuccess: () => void }) {
