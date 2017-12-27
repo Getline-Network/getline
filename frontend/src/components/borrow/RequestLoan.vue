@@ -43,6 +43,7 @@
       </div>
       <div class="rl-metamask" :class="isLoading()">
         <purple-button class="rl-request-button" text="REQUEST LOAN" :disabled='!isValidForm' @click.native='requestLoanAction' />
+        <div v-if="showErrorMsg" class="rl-error-occured"> Error occured, please try again</div>
         <div class="rl-loader">
           <spinner />
           <div class="rl-metamask-text">
@@ -77,6 +78,7 @@ const Component = Vue.extend({
       description: '',
       paybackTime: '7',
       loading: false,
+      showErrorMsg: false
     };
   },
   components: {
@@ -100,10 +102,16 @@ const Component = Vue.extend({
       return this.loading ? 'rl-loading' : '';
     },
     requestLoanAction: async function requestLoanAction() {
-      this.loading = true;
       if (!this.isValidForm) return;
-      await requestLoan(this.amount, this.interestPermil, this.paybackTime, this.description);
-      goToMyLoans();
+      this.loading = true;
+      try {
+        await requestLoan(this.amount, this.interestPermil, this.paybackTime, this.description);
+        goToMyLoans();
+      } catch (e) {
+        this.showErrorMsg = true;
+        setTimeout(() => this.showErrorMsg = false, 1000);
+        this.loading = false;
+      }
     }
   }
 });
@@ -131,6 +139,7 @@ export default Component;
       .rl-metamask-text { display: flex; justify-content: center; font-size: 18px; font-weight: 300; line-height: 1.22; letter-spacing: -0.2px; color: var(--color-black-cod); text-align: center; }
       .rl-loader { display: none; }
       .rl-request-button { max-width: 200px; margin: 20px auto; }
+      .rl-error-occured { font-size: 12px; text-align: center; margin-top: -15px; color: #ff5722; transition: visibility 0s, opacity 0.5s linear; }
     }
     .rl-metamask.rl-loading {
       .rl-request-button { display: none; }

@@ -21,8 +21,9 @@ const actions = {
     (async function () {
       const { shortId, amount, onSuccess } = payload;
       commit('START_TRANSFERING_COLLATERAL', { shortId });
-      await gatherCollateral(shortId, amount);
+      await gatherCollateral(shortId, amount); // TODO(balinskia): handle error
       commit('COLLATERAL_TRANSFERED', { shortId });
+
       onSuccess();
     })();
   },
@@ -30,7 +31,7 @@ const actions = {
     (async function () {
       const { shortId, onSuccess } = payload;
       commit('START_TRANSFERING_PAYBACK', { shortId });
-      await payback(shortId);
+      await payback(shortId); // TODO(balinskia): handle error
       commit('PAYBACK_TRANSFERED', { shortId });
       onSuccess();
     })();
