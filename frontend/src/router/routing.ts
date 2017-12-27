@@ -11,11 +11,17 @@ import BadNetwork from '@/components/error/BadNetwork.vue';
 import UnknownError from '@/components/error/UnknownError.vue';
 import InstallMetamask from '@/components/error/InstallMetamask.vue';
 import PrintDemoTokens from '@/components/demo-tokens/PrintDemoTokens.vue';
+import HomePage from '@/components/home-page/HomePage.vue'
 
 const routing: RouterOptions = {
   routes: [
     {
-      path: '', redirect: '/invest',
+      path: '', redirect: '/',
+    },
+    {
+      path: '/home',
+      component: HomePage,
+      meta: { title: 'Welcome to Getline!' }
     },
     {
       path: '/print',

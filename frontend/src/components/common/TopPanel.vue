@@ -7,6 +7,7 @@
       </div>
     </div>
     <div class="tp-menu-container" v-if="account.loggedIn">
+      <router-link class="tp-menu-text" to="/home"> HOME </router-link>
       <router-link class="tp-menu-text" to="/invest"> INVEST </router-link>
       <router-link class="tp-menu-text" to="/borrow"> BORROW </router-link>
       <router-link class="tp-menu-text" to="/my-loans"> MY LOANS </router-link>
