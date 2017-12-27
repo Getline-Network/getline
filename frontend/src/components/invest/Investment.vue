@@ -1,70 +1,65 @@
 <template>
-  <div>
-    <div class="loan-invest-spinner" v-if="loan.isLoading">
-      <spinner />
-    </div>
-    <div class="loan-invest" v-else>
-      <div class="li-row-a">
-        <div class="li-details-funded">
-          <div class="li-details">
-            <user-score :value="loan.userScore" />
-            <div class="li-details-right">
-              <div class="li-short-desc">{{ loan.description }}</div>
-              <div class="li-user">Who: {{ loan.userName }}</div>
-            </div>
-          </div>
-          <div class="li-bar-container">
-            <fundraising-bar :percentage="loan.percentageFunded" barHeight="12px"/>
-            <div class="li-bar-labels">
-              <div> {{ formatPercentage(loan.percentageFunded) }}% FUNDED </div>
-              <div> {{ formatPercentage(100 - loan.percentageFunded) }}% LEFT </div>
-            </div>
+  <div class="loan-invest">
+    <div class="li-row-a">
+      <div class="li-details-funded">
+        <div class="li-details">
+          <user-score :value="loan.userScore" />
+          <div class="li-details-right">
+            <div class="li-short-desc">{{ loan.description }}</div>
+            <div class="li-user">Who: {{ loan.userName }}</div>
           </div>
         </div>
-        <div class="li-amount-rate-time">
-          <div class="li-amount">
-            <div class="li-title"> AMOUNT </div>
-            <div class="li-value">{{ loan.amountWanted.toString() }} {{loan.tokenSymbol}} </div>
-          </div>
-          <div class="li-rate-time">
-            <div class="li-rate">
-              <div class="li-title"> RATE </div>
-              <div class="li-value">{{ loan.interestPermil / 10 }}%</div>
-            </div>
-            <div class="li-time">
-              <div class="li-title"> FUNDRAISING DEADLINE </div>
-              <div class="li-value">{{ loan.fundraisingDeadline.format('ll') }}</div>
-            </div>
+        <div class="li-bar-container">
+          <fundraising-bar :percentage="loan.percentageFunded" barHeight="12px"/>
+          <div class="li-bar-labels">
+            <div> {{ formatPercentage(loan.percentageFunded) }}% FUNDED </div>
+            <div> {{ formatPercentage(100 - loan.percentageFunded) }}% LEFT </div>
           </div>
         </div>
       </div>
-      <div class="li-row-b">
-        <div class="li-lent" v-if="!invested">
-          <md-input-container :class="validators.nonNegativeNumber(this.amount).getClass()">
-            <label>INVEST AMOUNT:</label>
-            <md-input v-model="amount" type="number"></md-input>
-            <div class="li-input-text">{{ loan.currency }}</div>
-            <span class="md-error">{{ validators.nonNegativeNumber(this.amount).getErrorMsg() }}</span>
-          </md-input-container>
-          <div class="li-amount-left"> {{ account.balance }} {{ account.balanceTokenName }} available </div>
+      <div class="li-amount-rate-time">
+        <div class="li-amount">
+          <div class="li-title"> AMOUNT </div>
+          <div class="li-value">{{ loan.amountWanted.toString() }} {{loan.tokenSymbol}} </div>
         </div>
-        <div class="li-action">
-          <div class="li-invested" v-if="invested">
-            You have successfully invested in this loan! It will now appear in <a href="#/invest/my-investments">My Investments </a> tab
+        <div class="li-rate-time">
+          <div class="li-rate">
+            <div class="li-title"> RATE </div>
+            <div class="li-value">{{ loan.interestPermil / 10 }}%</div>
           </div>
-          <div v-else>
-            <div v-if="isInvesting">
-              <spinner />
-              <div class="rl-metamask-text">
-                Please don't close this window and wait until we process your order. It usually takes about 10 seconds
-              </div>
+          <div class="li-time">
+            <div class="li-title"> FUNDRAISING DEADLINE </div>
+            <div class="li-value">{{ loan.fundraisingDeadline.format('ll') }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="li-row-b">
+      <div class="li-lent" v-if="!invested">
+        <md-input-container :class="validators.nonNegativeNumber(this.amount).getClass()">
+          <label>INVEST AMOUNT:</label>
+          <md-input v-model="amount" type="number"></md-input>
+          <div class="li-input-text">{{ loan.currency }}</div>
+          <span class="md-error">{{ validators.nonNegativeNumber(this.amount).getErrorMsg() }}</span>
+        </md-input-container>
+        <div class="li-amount-left"> {{ account.balance }} {{ account.balanceTokenName }} available </div>
+      </div>
+      <div class="li-action">
+        <div class="li-invested" v-if="invested">
+          You have successfully invested in this loan! It will now appear in <a href="#/invest/my-investments">My Investments </a> tab
+        </div>
+        <div v-else>
+          <div v-if="isInvesting">
+            <spinner />
+            <div class="rl-metamask-text">
+              Please don't close this window and wait until we process your order. It usually takes about 10 seconds
             </div>
-            <purple-button v-else
-              :text="'INVEST'"
-              :disabled='!validators.nonNegativeNumber(this.amount).isValid() || parseInt(this.amount) > parseInt(account.balance)'
-              @click.native='invest'
-              />
           </div>
+          <purple-button v-else
+            :text="'INVEST'"
+            :disabled='!validators.nonNegativeNumber(this.amount).isValid() || parseInt(this.amount) > parseInt(account.balance)'
+            @click.native='invest'
+            />
         </div>
       </div>
     </div>
@@ -74,7 +69,6 @@
 <script lang="ts">
 import { mapState } from 'vuex'
 
-import Spinner from '../common/Spinner.vue';
 import UserScore from '../common/UserScore.vue';
 import PurpleButton from '../common/PurpleButton.vue';
 import FundraisingBar from '../common/FundraisingBar.vue';
@@ -91,7 +85,6 @@ export default {
     'user-score': UserScore,
     'purple-button': PurpleButton,
     'fundraising-bar': FundraisingBar,
-    'spinner': Spinner,
   },
   created() {
     const { shortId } = this.$route.params;
@@ -123,7 +116,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.loan-invest-spinner { margin-top: 200px; }
 .loan-invest { width: 70%; min-width: 800px; margin: 0 auto;
   .li-row-a { display: flex; margin: 54px 0 0 0;
     .li-details-funded { width: 55%;  background-color: #ffffff; margin-right: 3%;
