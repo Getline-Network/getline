@@ -1,158 +1,413 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.17;
 
 import "../tokens/IToken.sol";
 import "../common/Math.sol";
 
-
 library InvestorLedger {
+    event CollateralCollectionDone(
+        address indexed loan
+    );
+    
+    event NewInvestor(
+        address indexed loan,
+        address indexed investor
+    );
+
+    event InvestmentSent(
+        address indexed loan,
+        address indexed investor,
+        uint256 amount
+    );
+
+    event FundraisingDone(
+        address indexed loan
+    );
+
     uint constant PERMIL = 1000;
 
+    enum State {
+        // Loan is waiting for collateral to be received from borrower.
+        CollateralCollection,
+        // Loan is waiting to be funded by investors.
+        Fundraising,
+        // Loan is waiting for withdrawal from borrower.
+        Payback,
+        // Loan has been paid back succesfully and is waiting for investors
+        // to withdraw their investments and the borrower to withdraw their
+        // collateral.
+        Paidback,
+        // Loan has defaulted before it has been fully paid back, and is
+        // waiting for investors to withdraw their collateral.
+        Defaulted,
+        // Loan has been cancelled by borrower or has not gathered funds in
+        // time, and is waiting for investors to withdraw their investments
+        // and the borrower to withdraw their collateral.
+        Canceled,
+        // Loan has no funds left and is fully finished.
+        Finished
+    }
+
+    // legalTransition is a safeguard function to be used in functions that
+    // modify the Ledger state. It is not checked when the state does not
+    // change (so all A -> A transitions are implicitly allowed).
+    function legalTransition(State from, State to) pure private returns (bool legal) {
+        // No switch statements in Solidity. We'll use a bunch of if-else
+        // blocks, as the alternative is handcrafted assembly.
+        if (from == State.CollateralCollection) {
+            // Loan has collected collateral.
+            if (to == State.Fundraising) {
+                return true;
+            }
+            return false;
+        }
+        if (from == State.Fundraising) {
+            // Loan has raised funds succesfully.
+            if (to == State.Payback) {
+                return true;
+            }
+            // Loan has not raised funds succesfully - let borrower and
+            // investors (if any) collect their tokens back.
+            if (to == State.Canceled) {
+                return true;
+            }
+            return false;
+        }
+        if (from == State.Payback) {
+            // Loan has been paid back successfully.
+            if (to == State.Paidback) {
+                return true;
+            }
+            // Loan has defaulted.
+            if (to == State.Defaulted) {
+                return true;
+            }
+            return false;
+        }
+        if (from == State.Paidback) {
+            // Loan has had all collateral and investments withdrawn.
+            if (to == State.Finished) {
+                return true;
+            }
+            // Loan has still tokens left to withdraw.
+            if (to == State.Paidback) {
+                return true;
+            }
+            return false;
+        }
+        if (from == State.Defaulted) {
+            // Loan has had all collateral and investments withdrawn.
+            if (to == State.Finished) {
+                return true;
+            }
+            // Loan has still tokens left to withdraw.
+            if (to == State.Defaulted) {
+                return true;
+            }
+            return false;
+        }
+        if (from == State.Canceled) {
+            // Loan has had all collateral and investments withdrawn.
+            if (to == State.Finished) {
+                return true;
+            }
+            // Loan has still tokens left to withdraw.
+            if (to == State.Canceled) {
+                    return true;
+            }
+            return false;
+        }
+
+        return false;
+    }
+
+
+    // newState applies a state transition to the ledger FSM and ensures it is
+    // legal.
+    function newState(Ledger storage ledger, State next) private {
+        require(legalTransition(ledger.state, next));
+        ledger.state = next;
+    }
+
+    // Ledger is the main state object of an ongoing loan ledger.
+    struct Ledger {
+        /// Constant ledger parameters.
+        // Token used as collateral.
+        IToken collateralToken;
+        // Main loan Token.
+        IToken loanToken;
+        // Receiver of the loan.
+        address borrower;
+        // How much loanToken does borrower want to borrow.
+        uint256 totalLoanNeeded;
+        // Interst of loan in permils.
+        uint16  interestPermil;
+        // Delta (in seconds) between collateral collected and fundraising ending.
+        uint256 fundraisingDelta;
+        // Delta (in seconds)  between fundraising ending and payback needed.
+        uint256 paybackDelta;
+
+        /// Mutable ledger state.
+        // Total collateralToken gathered for loan. It increases from 0 to
+        // the loan collateral when its' gathered.
+        uint256 totalCollateral;
+        // List of investor addresses to key investorData.
+        address[] investors;
+        // Data about each investor. It gets upserted any time a new investment
+        // is added.
+        mapping(address => InvestorData) investorData;
+        // Absolute timestamp of fundraising deadline, in block time (seconds).
+        // Calculated when we switch to the fundraising state.
+        uint256 fundraisingDeadline;
+        // Absolute timestamp of payback deadline, in block time (seconds).
+        // Calculated when we switch to the payback state.
+        uint256 paybackDeadline;
+
+        /// Main ledger FSM state.
+        State state;
+    }
+
+    struct InvestorData {
+        uint256 amountInvested;
+    }
+
+    /// View functions for the Ledger structure that calculate denormalized
+    /// data based on investment status.
+    
+    // amountInvested() returns how much was invested into this loan in total
+    // (not counting interest rate).
+    function amountInvested(Ledger storage ledger) view public returns (uint256 amount) {
+        amount = 0;
+        for (uint i = 0; i < ledger.investors.length; i++ ) {
+            var investor = ledger.investorData[ledger.investors[i]];
+            amount += investor.amountInvested;
+        }
+        return amount;
+    }
+
+    // amountInvested(address) returns how much was invested into this loan by
+    // a particular address.
+    function amountInvested(Ledger storage ledger, address investor) view public returns (uint256 amount) {
+        return ledger.investorData[investor].amountInvested;
+    }
+
+    // paybackRequired returns how much payback is/will be required for this
+    // loan (loan amount + interest).
+    function paybackRequired(Ledger storage ledger) view public returns (uint256 amount) {
+        return ledger.totalLoanNeeded + calculateInterest(ledger, ledger.totalLoanNeeded);
+    }
+
+    // calculateInterest is a convenience function to calculate the interest
+    // of this loan on a given value.
+    function calculateInterest(Ledger storage ledger, uint256 investment) view private returns (uint256 interest) {
+        return investment * ledger.interestPermil / PERMIL;
+    }
+
+    // openAccount is a static constructor of the Ledger state object.
+    // @param collateralToken: Token to be used as collateral during the loan.
+    // @param loanToken: Token to be loaned.
+    // @param borrower: Receiver of the loan.
+    // @param totalLoanNeded: How much loanToken does borrower want to borrow.
+    // @param interestPermil: Loan interest, in permil (1/10th of a percent).
     function openAccount(
         IToken collateralToken,
         IToken loanToken,
-        address liege,
+        address borrower,
         uint256 totalLoanNeeded,
-        uint16 interestPermil) internal pure returns (Ledger account)
+        uint16 interestPermil,
+        uint fundraisingDelta,
+        uint paybackDelta) internal view returns (Ledger account)
     {
+        // Argument validation.
+        require(fundraisingDelta > 0);
+        require(paybackDelta > 0);
+        require(totalLoanNeeded > 0);
+
+        // Fill new state object.
         account.collateralToken = collateralToken;
         account.loanToken = loanToken;
         account.totalLoanNeeded = totalLoanNeeded;
         account.interestPermil = interestPermil;
+        account.borrower = borrower;
+        account.state = State.CollateralCollection;
+        account.fundraisingDelta = fundraisingDelta;
+        account.paybackDelta = paybackDelta;
+        account.fundraisingDeadline = 0;
+        account.paybackDeadline = 0;
 
-        account.liege = liege;
-
+        // And return it.
         return account;
     }
 
-    function gatherCollateral(Ledger storage account) public {
-        var allowance = account.collateralToken.allowance(account.liege, this);
-        account.totalCollateral += allowance;
-        require(
-            account.collateralToken.transferFrom(
-                account.liege,
-                this,
-                allowance
-            )
-        );
-    }
+    // collateralCollectionProcess performs processing within the
+    // CollateralCollection state of the loan FSM and possibly advances to its'
+    // next state. It can:
+    //  - mark the loan as Finished if the fundraising deadline is exceeded
+    //    (no tokens have been transfered to the contract, so we can close it
+    //    right away)
+    //  - collect the collateral from the borrower and mark the loan as
+    //    Fundraising (the loan now has a collateral it needs to send back)
+    function collateralCollectionProcess(Ledger storage ledger, address caller) public {
+        require(ledger.state == State.CollateralCollection);
+        // Only allow borrower to perform the state transition, otherwise we
+        // could permit races where a malicious actor performs the state
+        // transition when the borrower is not ready to do so.
+        if (caller == ledger.borrower) {
+            var allowance = ledger.collateralToken.allowance(ledger.borrower, this);
+            if (allowance > 0) {
+                ledger.totalCollateral += allowance;
+                newState(ledger, State.Fundraising);
+                ledger.fundraisingDeadline = block.timestamp + ledger.fundraisingDelta;
 
-    function gatherInvestment(Ledger storage account, address trustee) public {
-        var investmentAmount = Math.min(
-            account.loanToken.allowance(trustee, this),
-            account.totalLoanNeeded - account.totalAmountGathered
-        );
-        var investmentPermil = investmentAmount * PERMIL / account.totalLoanNeeded;
-        var collateralReseverved = investmentPermil * account.totalCollateral / PERMIL;
-        
-        account.totalAmountGathered += investmentAmount;
-        account.totalCollateralReserved += collateralReseverved;
-        account.totalPaybackNeeded += investmentAmount + calculateInterest(account, investmentAmount);
-
-        var investor = account.investors[trustee];
-        investor.amountInvested += investmentAmount;
-        investor.reservedCollateral += collateralReseverved;
-
-        require(
-            account.loanToken.transferFrom(
-                trustee,
-                this,
-                investmentAmount
-            )
-        );
-    }
-
-    function gatherPayback(Ledger storage account) public {
-        require(!account.loanCancelled && !account.loanDefaulted);
-
-        require(account.loanToken.allowance(account.liege, this) >= account.totalPaybackNeeded);
-        require(account.loanToken.transferFrom(account.liege, this, account.totalPaybackNeeded));
-
-        collateralToLiege(account);
-    }
-
-    function markCancelled(Ledger storage account) public {
-        require(!account.loanCancelled && !account.loanDefaulted);
-
-        account.loanCancelled = true;
-
-        collateralToLiege(account);
-    }
-
-    function markDefaulted(Ledger storage account) public {
-        require(!account.loanCancelled && !account.loanDefaulted);
-
-        account.loanDefaulted = true;
-
-        collateralToLiege(account);
-    }
-
-    function collateralToLiege(Ledger storage account) public {
-        var amountToTransfer = account.totalCollateral;
-        if (account.loanDefaulted) {
-            amountToTransfer -= account.totalCollateralReserved;
-        }
-        require(account.collateralToken.transfer(account.liege, amountToTransfer));
-    }
-
-    function withdrawInvestment(Ledger storage account, address trustee) public {
-        var investor = account.investors[trustee];
-        
-        if (account.loanDefaulted) {
-            var reservedCollateral = investor.reservedCollateral;
-            investor.reservedCollateral = 0;
-            require(account.collateralToken.transfer(trustee, reservedCollateral));
-        } else {
-            var amountInvested = investor.amountInvested;
-            if (!account.loanCancelled) {
-                amountInvested += calculateInterest(account, amountInvested);
+                CollateralCollectionDone(this);
+                require(
+                    ledger.collateralToken.transferFrom(
+                        ledger.borrower,
+                        this,
+                        allowance
+                    )
+                );
             }
-            investor.amountInvested = 0;
-            require(account.loanToken.transfer(trustee, amountInvested));
         }
-
-        delete account.investors[trustee];
     }
 
-    function releaseLoanToBorrower(Ledger storage account) public {
-        require(account.loanWidthdrawn == false);
+    function fundraisingProcess(Ledger storage ledger, address caller) public {
+        require(ledger.state == State.Fundraising);
 
-        account.loanWidthdrawn = true;
-
-        require(account.loanToken.transfer(account.liege, account.totalAmountGathered));
+        // Have we ran out of time?
+        if (block.timestamp > ledger.fundraisingDeadline) {
+            newState(ledger, State.Canceled);
+        } else {
+            uint256 amountNeeded = ledger.totalLoanNeeded - amountInvested(ledger);
+            address investor = caller;
+            // Do not invest more than required to fullfill totalLoanNeeded.
+            var investmentAmount = Math.min(
+                ledger.loanToken.allowance(investor, this),
+                amountNeeded
+            );
+            if (investmentAmount > 0) {
+                var investorData = ledger.investorData[investor];
+                if (investorData.amountInvested == 0) {
+                    NewInvestor(this, investor);
+                    ledger.investors.push(investor);
+                }
+                // Note down the investment.
+                investorData.amountInvested += investmentAmount;
+                // Did we just gather all investments required?
+                if (investmentAmount == amountNeeded) {
+                    newState(ledger, State.Payback);
+                    ledger.paybackDeadline = block.timestamp + ledger.paybackDelta;
+                }
+                // Transfer the investment to the receiving contract.
+                InvestmentSent(this, investor, investmentAmount);
+                require(
+                    ledger.loanToken.transferFrom(
+                        investor,
+                        this,
+                        investmentAmount
+                    )
+                );
+                // If this was the last required invesment, transfer all the
+                // invested money to the borrower.
+                if (investmentAmount == amountNeeded) {
+                    FundraisingDone(this);
+                    require(
+                        ledger.loanToken.transfer(
+                            ledger.borrower,
+                            ledger.totalLoanNeeded
+                        )
+                    );
+                }
+            }
+        }
     }
 
-    function isFullyFunded(Ledger storage account) constant public returns (bool fullyFunded) {
-        return account.totalAmountGathered == account.totalLoanNeeded;
-    }
-    
-    function calculateInterest(Ledger storage account, uint256 investment) private constant returns (uint256 interest) {
-        return investment * account.interestPermil / PERMIL;
-    }
+    function paybackProcess(Ledger storage ledger, address caller) public {
+        require(ledger.state == State.Payback);
 
-    struct Ledger {
-        // Config
-        IToken collateralToken;
-        IToken loanToken;
-
-        address liege;
-        uint256 totalCollateral;
-        uint256 totalLoanNeeded;
-        uint16  interestPermil;
-        uint256 paybackDeadlineBlock;
-        mapping(address => InvestorData) investors;
-
-        uint256 totalAmountGathered;
-
-        uint256 totalCollateralReserved;
-        uint256 totalPaybackNeeded;
-        
-        bool loanCancelled;
-        bool loanDefaulted;
-        bool loanWidthdrawn;
+        // Have we ran out of time?
+        if (block.timestamp > ledger.paybackDeadline) {
+            newState(ledger, State.Defaulted);
+        } else if (caller == ledger.borrower)  {
+            // Gather payback, if possible.
+            uint256 payback = paybackRequired(ledger);
+            if (ledger.loanToken.allowance(ledger.borrower, this) >= payback) {
+                newState(ledger, State.Paidback);
+                require(
+                    ledger.loanToken.transferFrom(
+                        ledger.borrower,
+                        this,
+                        payback
+                    )
+                );
+            }
+        }
     }
 
-    struct InvestorData {
-        uint256 reservedCollateral;
-        uint256 amountInvested;
+    function paidbackProcess(Ledger storage ledger) public {
+        require(ledger.state == State.Paidback);
+        newState(ledger, State.Finished);
+
+        // Send the collateral back to the borrower.
+        require(
+            ledger.collateralToken.transfer(
+                ledger.borrower,
+                ledger.totalCollateral
+            )
+        );
+        // Send the investments (with interest) back to the investors.
+        for (uint i = 0; i < ledger.investors.length; i++ ) {
+            address investor = ledger.investors[i];
+            uint256 invested = ledger.investorData[investor].amountInvested;
+            require(
+                ledger.loanToken.transfer(
+                    investor,
+                    invested + calculateInterest(ledger, invested)
+                )
+            );
+        }
+    }
+
+    function defaultedProcess(Ledger storage ledger) public {
+        require(ledger.state == State.Defaulted);
+        newState(ledger, State.Finished);
+
+        // Send the collateral, prorated over the investment amount by each
+        // investor.
+        uint256 totalInvested = amountInvested(ledger);
+        for (uint i = 0; i < ledger.investors.length; i++) {
+            address investor = ledger.investors[i];
+            uint256 invested = ledger.investorData[investor].amountInvested;
+            uint256 collateralBack = (ledger.totalCollateral * invested) / totalInvested;
+            require(
+                ledger.collateralToken.transfer(
+                    investor,
+                    collateralBack
+                )
+            );
+        }
+    }
+
+    function canceledProcess(Ledger storage ledger) public {
+        require(ledger.state == State.Canceled);
+        newState(ledger, State.Finished);
+
+        // Send the collateral back to the borrower.
+        require(
+            ledger.collateralToken.transfer(
+                ledger.borrower,
+                ledger.totalCollateral
+            )
+        );
+        // Send the investments back to the investors.
+        for (uint i = 0; i < ledger.investors.length; i++ ) {
+            address investor = ledger.investors[i];
+            uint256 invested = ledger.investorData[investor].amountInvested;
+            require(
+                ledger.loanToken.transfer(
+                    investor,
+                    invested
+                )
+            );
+        }
     }
 }

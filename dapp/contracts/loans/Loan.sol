@@ -1,179 +1,141 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.17;
 
-import "./IAtestor.sol";
 import "./InvestorLedger.sol";
 import "../tokens/IToken.sol";
 
 
 contract Loan {
-    // Set only during begining phases and not changed afterwards
-    uint256 public fundraisingBlocksCount;
-    uint256 public paybackBlocksCount;
-
-    // Contract changing state
-    uint256 public fundraisingDeadline = 0;
-    uint256 public paybackDeadline = 0;
-    State   public currentState = State.CollateralCollection;
-    
     using InvestorLedger for InvestorLedger.Ledger;
     InvestorLedger.Ledger ledger;   
 
-    event FundraisingBegins(address indexed liege);
-    event NewInvestment(address indexed liege, address indexed trustee);
-    event FundraisingSucessfull(address indexed liege);
-    event FundraisingFailed(address indexed liege);
-    event LoanPaidback(address indexed liege);
-    event LoanDefaulted(address indexed liege);
-
-    modifier atState(State _state) {
-        require(currentState == _state);
-
-        _;
-    }
-
-    modifier timedTransitions() {
-        if (currentState == State.Fundraising && fundraisingDeadline < block.number) {
-            onFundraisingFail();
-        } else if (currentState == State.Payback && paybackDeadline < block.number) {
-            onPaybackFailure();
-        }
-
-        _;
-    }
 
     function Loan(
         //IAtestor _atestator,
         IToken _collateralToken,
         IToken _loanToken,
-        address _liege,
+        address _borrower,
         uint256 _amountWanted,
         uint16  _interestPermil,
-        uint256 _fundraisingBlocksCount,
-        uint256 _paybackBlocksCount
-    ) {
+        uint256 _fundraisingDeadline,
+        uint256 _paybackDeadline
+    ) public {
         require(_amountWanted > 0);
-        //require(_atestator.isVerified(_liege));
         
         ledger = InvestorLedger.openAccount(
             _collateralToken,
             _loanToken,
-            _liege,
+            _borrower,
             _amountWanted,
-            _interestPermil
+            _interestPermil,
+            _fundraisingDeadline,
+            _paybackDeadline
         );
-        
-        fundraisingBlocksCount = _fundraisingBlocksCount;
-        paybackBlocksCount = _paybackBlocksCount;
     }
 
-    function collateralToken() constant returns (IToken tokenAddress) {
+    // View functions that directly return InvestorLedger data.
+
+    function collateralToken() view public returns (IToken _tokenAddress) {
         return ledger.collateralToken;
     }
 
-    function borrowedToken() constant returns (IToken tokenAddress) {
+    function loanToken() view public returns (IToken _tokenAddress) {
         return ledger.loanToken;
     }
 
-    function amountWanted() constant returns (uint256 _amountWanted) {
+    function totalLoanNeeded() view public returns (uint256 _amountWanted) {
         return ledger.totalLoanNeeded;
     }
 
-    function borrower() constant returns (address _borrower) {
-        return ledger.liege;
+    function borrower() view public returns (address _borrower) {
+        return ledger.borrower;
     }
 
-    function interestPermil() constant returns (uint16 _interestPermil) {
+    function interestPermil() view public returns (uint16 _interestPermil) {
         return ledger.interestPermil;
     }
 
-    function isFundraising() timedTransitions constant returns (bool _isFundraising) {
-        return currentState == State.Fundraising;
+    function state() view public returns (uint256 _state) {
+        return uint256(ledger.state);
     }
 
-    function isPaidback() timedTransitions constant returns (bool _isPaidback) {
-        return currentState == State.Finished && !ledger.loanDefaulted;
+    function paybackRequired() view public returns (uint256 _totalPayback) {
+        return ledger.paybackRequired();
     }
 
-    function isDefaulted() timedTransitions constant returns (bool _isDefaulted) {
-        return currentState == State.Finished && ledger.loanDefaulted;
+    function amountInvested() view public returns (uint256 _totalAmount) {
+        return ledger.amountInvested();
     }
 
-    function getCurrentState() timedTransitions constant returns (uint _state) {
-        return uint(currentState);
+    function amountInvested(address investor) view public returns (uint256 _amount) {
+        return ledger.amountInvested(investor);
     }
 
-    function paybackNeeded() constant returns (uint256 _totalPayback) {
-        return ledger.totalPaybackNeeded;
+    function fundraisingDeadline() view public returns (uint256 _fundraisingDeadline) {
+        return ledger.fundraisingDeadline;
     }
 
-    function amountGathered() constant returns (uint256 _totalAmount) {
-        return ledger.totalAmountGathered;
+    function paybackDeadline() view public returns (uint256 _paybackDeadline) {
+        return ledger.paybackDeadline;
     }
 
-    function gatherCollateral() atState(State.CollateralCollection) {
-        ledger.gatherCollateral();
-
-        currentState = State.Fundraising;
-        fundraisingDeadline = block.number + fundraisingBlocksCount;
-
-        FundraisingBegins(ledger.liege);
+    function fundraisingDelta() view public returns (uint256 _fundraisingDelta) {
+        return ledger.fundraisingDelta;
     }
 
-    function invest() timedTransitions atState(State.Fundraising) {
-        ledger.gatherInvestment(msg.sender);
-
-        NewInvestment(ledger.liege, msg.sender);
-
-        if (ledger.isFullyFunded())
-            onFundraisingSuccess();
+    function paybackDelta() view public returns (uint256 _paybackDelta) {
+        return ledger.paybackDelta;
     }
 
-    function payback() timedTransitions atState(State.Payback) {
-        ledger.gatherPayback();
-        currentState = State.Finished;
 
-        onPaybackSucess();
+    // Three explicit state changing functions. All of them call their
+    // respective ledger process functions, and then process any further new
+    // state that can arise and that might not require funds to be sent (ie.
+    // process a cancelement, default or post-payback condition).
+
+    // gatherCollateral should be called by the the borrower to submit the
+    // collateral for the loan.
+    function gatherCollateral() public {
+        ledger.collateralCollectionProcess(msg.sender);
     }
 
-    function widthrawInvestment() timedTransitions atState(State.Finished) {
-        ledger.withdrawInvestment(msg.sender);
+    // invest should be called by an investor to submit an investment. It can
+    // also advance the state to either payback (no further processing
+    // necessary) or canceled (state needs to be processed to send investments
+    // back).
+    function invest() public {
+        ledger.fundraisingProcess(msg.sender);
+        if (ledger.state == InvestorLedger.State.Canceled) {
+            ledger.canceledProcess();
+        }
     }
 
-    function withdrawLoan() timedTransitions atState(State.Payback) {
-        ledger.releaseLoanToBorrower();
+    // payback should be called by the borrower to submit the loan payback. It
+    // can also advance the state to either paidback (needs processing to send
+    // investment and collateral back) or defaulted (needs processing to send
+    // collateral back to investors).
+    function payback() public {
+        ledger.paybackProcess(msg.sender);
+        if (ledger.state == InvestorLedger.State.Paidback) {
+            ledger.paidbackProcess();
+        } else  if (ledger.state == InvestorLedger.State.Defaulted) {
+            ledger.defaultedProcess();
+        }
     }
 
-    function onFundraisingSuccess() private {
-        paybackDeadline = block.number + paybackBlocksCount;
-        currentState = State.Payback;
-        
-        FundraisingSucessfull(ledger.liege);
-    }
-
-    function onFundraisingFail() private {
-        ledger.markCancelled();
-        currentState = State.Finished;
-
-        FundraisingFailed(ledger.liege);
-    }
-
-    function onPaybackSucess() private {
-        currentState = State.Finished;
-
-        LoanPaidback(ledger.liege);
-    }
-
-    function onPaybackFailure() private {
-        ledger.markDefaulted();
-        currentState = State.Finished;
-
-        LoanDefaulted(ledger.liege);
-    }
-
-    enum State {
-        CollateralCollection,
-        Fundraising,
-        Payback,
-        Finished
+    // poke advances the state if possible. This can be called by clients to
+    // see if a timeout occured but hasen't been processed yet.
+    function poke() public {
+        if (ledger.state == InvestorLedger.State.Fundraising) {
+            ledger.fundraisingProcess(msg.sender);
+        } else if (ledger.state == InvestorLedger.State.Payback) {
+            ledger.paybackProcess(msg.sender);
+        }
+        // These two shouldn't happen (we advance them as soon as we see them
+        // in invest()/payback(), but let's allow for them anyway.
+        else if (ledger.state == InvestorLedger.State.Paidback) {
+            ledger.paidbackProcess();
+        } else if (ledger.state == InvestorLedger.State.Canceled) {
+            ledger.canceledProcess();
+        }
     }
 }

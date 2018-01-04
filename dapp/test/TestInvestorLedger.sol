@@ -5,45 +5,170 @@ import "truffle/DeployedAddresses.sol";
 import "../contracts/loans/InvestorLedger.sol";
 import "../contracts/tokens/PrintableToken.sol";
 
-
-contract TestInvestorLedger {
-    uint256 totalLoanNeeded = 100;
-    uint16 interestPermil = 200;
-    uint256 printValue = 100;
+contract Harness {
+    uint256 totalLoanNeeded = 10000;
+    uint16 interestPermil = 10;
+    uint256 printValue = 10000;
     PrintableToken collateralToken = new PrintableToken("collateralToken", 0, "token_symbol", printValue);
     PrintableToken loanToken = new PrintableToken("loanToken", 0, "token_symbol", printValue);
     TestPerson investor = new TestPerson(loanToken, collateralToken);
     TestPerson borrower = new TestPerson(loanToken, collateralToken);
-    InvestorLedger.Ledger testLedger = InvestorLedger.openAccount(
-        collateralToken, loanToken, address(borrower), totalLoanNeeded, interestPermil);
+    using InvestorLedger for InvestorLedger.Ledger;
+    InvestorLedger.Ledger l;
+}
 
-    function testInvestorLedger() public {
-        testLedger.loanToken = loanToken;
-        testLedger.collateralToken = collateralToken;
-        Assert.equal(testLedger.totalAmountGathered, 0, "It should be initialy empty");
-        bool isFullyFunded = InvestorLedger.isFullyFunded(testLedger);
-        Assert.equal(isFullyFunded, false, "Ledger should not be fully funded");
-        Assert.equal(testLedger.totalLoanNeeded, totalLoanNeeded, "Ledger be initialized with load needed");
+contract TestLedgerCreation is Harness {
+    // testLedgerCreation tests wheter a newly created ledger has its
+    // parameters set correctly.
+    function testLedgerCreation() public {
+        l = InvestorLedger.openAccount(collateralToken, loanToken,
+            address(borrower), totalLoanNeeded, interestPermil,
+            3600, 7200);
+
+        Assert.equal(l.collateralToken, collateralToken, "collateralToken should be set");
+        Assert.equal(l.loanToken, loanToken, "loanToken should be set");
+        Assert.equal(l.borrower, borrower, "borrower should be set");
+        Assert.equal(l.totalLoanNeeded, totalLoanNeeded, "totalLoanNeeded should be set");
+        Assert.equal(uint(l.interestPermil), uint(interestPermil), "interestPermil should be set");
+        Assert.equal(l.totalCollateral, 0, "totalCollateral should be zero");
+        Assert.equal(InvestorLedger.amountInvested(l), 0, "amountInvested should be zero");
+        Assert.equal(uint(l.state), uint(InvestorLedger.State.CollateralCollection), "Ledger should be in CollateralCollection");
+        Assert.equal(l.fundraisingDelta, 3600, "fundraisingDelta should be set");
+        Assert.equal(l.paybackDelta, 7200, "paybackDelta should be set");
     }
-    function testGatherCollateral() public {
-        borrower.printMeCollateralTokens();
-        Assert.equal(collateralToken.balanceOf(borrower), printValue, "It should print some tokens");
+}
 
-        InvestorLedger.gatherCollateral(testLedger);
-        Assert.equal(collateralToken.balanceOf(borrower), 0, "It should transfer tokens");
-        Assert.equal(testLedger.totalCollateral, printValue, "It should add collateral tokens");
+contract TestLedgerPayback is Harness {
+    // testLedgerPayback performs a full investment flow and does introspection
+    // of the ledger object to check against expected values.
+    function testLedgerPayback() public {
+        delete l;
+        l = InvestorLedger.openAccount(collateralToken, loanToken,
+            address(borrower), totalLoanNeeded, interestPermil,
+            3600, 7200);
+
+        borrower.ensureCollateralBalance(10000);
+        borrower.ensureLoanBalance(10000);
+        investor.ensureLoanBalance(10000);
+
+        uint256 borrowerCollateralStartBalance = collateralToken.balanceOf(borrower);
+        uint256 investorCollateralStartBalance = collateralToken.balanceOf(investor);
+        uint256 borrowerLoanStartBalance = loanToken.balanceOf(borrower);
+        uint256 investorLoanStartBalance = loanToken.balanceOf(investor);
+
+        // Collect collateral...
+
+        borrower.approveCollateral(this, 2137);
+        l.collateralCollectionProcess(borrower);
+        Assert.equal(l.totalCollateral, 2137, "totalCollateral should be set");
+        Assert.equal(uint(l.state), uint(InvestorLedger.State.Fundraising), "Ledger should be in Fundraising");
+        Assert.equal(collateralToken.balanceOf(borrower), borrowerCollateralStartBalance - 2137, "borrower should have sent collateral");
+        Assert.equal(l.fundraisingDeadline, block.timestamp + 3600, "fundraisingDeadline should be set");
+
+        // Send investment in two transfers...
+
+        investor.approveLoan(this, 5000);
+        l.fundraisingProcess(investor);
+        Assert.equal(uint(l.state), uint(InvestorLedger.State.Fundraising), "Ledger should be in Fundraising");
+        Assert.equal(loanToken.balanceOf(investor), investorLoanStartBalance - 5000, "investor should have sent loan");
+        Assert.equal(loanToken.balanceOf(this), 5000, "Ledger should have gathered loan");
+        Assert.equal(l.amountInvested(), 5000, "Ledger should have noted loan");
+        Assert.equal(l.amountInvested(investor), 5000, "Ledger should have noted loan");
+
+        investor.approveLoan(this, 6000);
+        l.fundraisingProcess(investor);
+        Assert.equal(uint(l.state), uint(InvestorLedger.State.Payback), "Ledger should be in Payback");
+        Assert.equal(l.amountInvested(), 10000, "Ledger should have noted loan");
+        Assert.equal(l.amountInvested(investor), 10000, "Ledger should have noted loan");
+        Assert.equal(loanToken.balanceOf(investor), investorLoanStartBalance - 10000, "investor should have sent loan");
+        Assert.equal(loanToken.balanceOf(this), 0, "Ledger should have sent out loan");
+        Assert.equal(loanToken.balanceOf(borrower), borrowerLoanStartBalance + 10000, "borrower should have received loan");
+        Assert.equal(l.paybackDeadline, block.timestamp + 7200, "fundraisingDeadline should be set");
+
+        // Send payback...
+
+        Assert.equal(l.paybackRequired(), 10100, "Ledger should have calculated correct payback");
+        borrower.approveLoan(this, 10100);
+        l.paybackProcess(borrower);
+        Assert.equal(uint(l.state), uint(InvestorLedger.State.Paidback), "Ledger should be in Paidback");
+        Assert.equal(loanToken.balanceOf(borrower), borrowerLoanStartBalance - 100, "Borrower should have sent payback");
+        Assert.equal(loanToken.balanceOf(this), 10100, "Ledger should have received payback");
+
+        // Trigger payback to investors...
+
+        l.paidbackProcess();
+        Assert.equal(uint(l.state), uint(InvestorLedger.State.Finished), "Ledger should be in Finished");
+        Assert.equal(collateralToken.balanceOf(borrower), borrowerCollateralStartBalance, "Borrower collateral should be back to start");
+        Assert.equal(collateralToken.balanceOf(investor), investorCollateralStartBalance, "Investor collateral should be back to start");
+        Assert.equal(loanToken.balanceOf(borrower), borrowerLoanStartBalance - 100, "Borrower loan token should be back to start diminished by interest");
+        Assert.equal(loanToken.balanceOf(investor), borrowerLoanStartBalance + 100, "Investor loan token should be back to start augmented by interest");
     }
-    function testGatherInvestment() public {
-        InvestorLedger.gatherInvestment(testLedger, address(investor));
-        Assert.equal(testLedger.totalAmountGathered, 0, "Empty when investor has no loan tokens");
+}
 
-        investor.printMeLoanTokens();
-        InvestorLedger.gatherInvestment(testLedger, address(investor));
-        Assert.equal(testLedger.totalAmountGathered, totalLoanNeeded, "It should invest some money");
-        uint256 totalCollateral = printValue;
-        Assert.equal(testLedger.totalCollateralReserved, totalCollateral, "It should update collateral");
-        uint256 expectedTotalPaybackNeeded = 120;
-        Assert.equal(testLedger.totalPaybackNeeded, expectedTotalPaybackNeeded, "It should count intrests");
+contract TestLedgerZeroCollateral is Harness {
+    function testLedgerZeroCollateral() public {
+        delete l;
+        l = InvestorLedger.openAccount(collateralToken, loanToken,
+            address(borrower), totalLoanNeeded, interestPermil,
+            3600, 7200);
+
+        borrower.ensureCollateralBalance(10000);
+        borrower.approveCollateral(this, 0);
+        l.collateralCollectionProcess(borrower);
+        Assert.equal(uint(l.state), uint(InvestorLedger.State.CollateralCollection), "Ledger should be in CollateralCollection");
+    }
+}
+
+contract TestLedgerUnderPayback is Harness {
+    function testLedgerUnderPayback() public {
+        delete l;
+        l = InvestorLedger.openAccount(collateralToken, loanToken,
+            address(borrower), totalLoanNeeded, interestPermil,
+            3600, 7200);
+
+        borrower.ensureCollateralBalance(10000);
+        borrower.ensureLoanBalance(10000);
+        investor.ensureLoanBalance(10000);
+
+        borrower.approveCollateral(this, 2137);
+        l.collateralCollectionProcess(borrower);
+        investor.approveLoan(this, 10000);
+        l.fundraisingProcess(investor);
+
+        Assert.equal(l.totalLoanNeeded, 10000, "dicks");
+        Assert.equal(l.investors.length, 1, "dicks2");
+
+
+        // Send payback that's too low - this shouldn't accept our tokens and
+        // should not advance the state.
+        uint256 beforePayback = loanToken.balanceOf(borrower);
+        borrower.approveLoan(this, 1337);
+        l.paybackProcess(borrower);
+        Assert.equal(uint(l.state), uint(InvestorLedger.State.Payback), "Ledger should be in Payback");
+        Assert.equal(loanToken.balanceOf(borrower), beforePayback, "Payback should have not been accepted");
+    }
+}
+
+contract TestInvestorLedger {
+    TestLedgerCreation tlc = new TestLedgerCreation();
+    TestLedgerPayback tlp = new TestLedgerPayback();
+    TestLedgerUnderPayback tlup = new TestLedgerUnderPayback();
+    TestLedgerZeroCollateral tlzc = new TestLedgerZeroCollateral();
+
+    function testLedgerCreation() public {
+        tlc.testLedgerCreation();
+    }
+
+    function testLedgerPayback() public {
+        tlp.testLedgerPayback();
+    }
+
+    function testLedgerUnderPayback() public {
+        tlup.testLedgerUnderPayback();
+    }
+
+    function testLedgerZeroCollateral() public {
+        tlzc.testLedgerZeroCollateral();
     }
 }
 
@@ -56,12 +181,32 @@ contract TestPerson {
         loanToken = _loanToken;
         collateralToken = _collateralToken;
     }
-    function printMeCollateralTokens() public {
-        collateralToken.print(this);
-        collateralToken.approve(msg.sender, collateralToken.printValue());
+
+    function ensureLoanBalance(uint256 amount) public {
+        while (loanToken.balanceOf(this) < amount) {
+            loanToken.print(this);
+        }
     }
-    function printMeLoanTokens() public {
-        loanToken.print(this);
-        loanToken.approve(msg.sender, loanToken.printValue());
+
+    function ensureCollateralBalance(uint256 amount) public {
+        while (collateralToken.balanceOf(this) < amount) {
+            collateralToken.print(this);
+        }
+    }
+
+    function sendCollateral(address target, uint256 amount) public {
+        require(collateralToken.transfer(target, amount));
+    }
+
+    function sendLoan(address target, uint256 amount) public {
+        require(loanToken.transfer(target, amount));
+    }
+
+    function approveCollateral(address target, uint256 amount) public {
+        require(collateralToken.approve(target, amount));
+    }
+
+    function approveLoan(address target, uint256 amount) public {
+        require(loanToken.approve(target, amount));
     }
 }
