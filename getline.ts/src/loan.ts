@@ -25,9 +25,27 @@ export enum LoanState {
      * Loan is being paid back by liege.
      */
     Payback,
+    /**
+     * Loan has been paid back by liege but the funds haven't been transferred
+     * back yet. This state shouldn't be reached, as the smart contract code
+     * should immediately transfer it to 'Finished'. However, a .poke() call
+     * can be used to update if it gets stuck for any reason.
+     */
     Paidback,
+    /**
+     * Loan has defaulted and there are funds to be transfered back to their
+     * respective owners. One needs to .poke() the contract to advance it.
+     */
     Defaulted,
+    /**
+     * Loan has been canceled and there are funds to be transfered back to
+     * their respective owners. One needs to .poke() the contract to advance
+     * it.
+     */
     Canceled,
+    /**
+     * Loan has finished its' lifetime, and no further action is possible.
+     */
     Finished
 }
 
@@ -49,7 +67,14 @@ export class Loan {
          * Address of ERC20-compatible token used as loan.
          */
         loanToken: Token,
+        /**
+         * Number of seconds between gathering collateral and fundraising
+         * deadline.
+         */
         fundraisingDelta: number,
+        /**
+         * Number of seconds between fundraising and payback being required.
+         */
         paybackDelta: number,
         /**
          * Amount of loan token wanted.
@@ -91,8 +116,8 @@ export class Loan {
         /**
          * Value of loan token gathered in fundraising.
          */
-        totalAmountInvested: BigNumber,
-        receivedCollateral: BigNumber,
+        amountInvested: BigNumber,
+        collateralReceived: BigNumber,
         /**
          * Date by which the loan needs to have all investment gathered.
          */
@@ -103,6 +128,11 @@ export class Loan {
         paybackDeadline: moment.Moment,
     };
 
+    /**
+     * Is there a new state for the loan that is pending and would be triggerd
+     * by calling .poke()? If so, mention the state here. Otherwise this field
+     * will be undefined.
+     */
     public pending: LoanState | undefined;
 
     private blockchain: Blockchain;
@@ -155,9 +185,9 @@ export class Loan {
     public async updateStateFromBlockchain(): Promise<void> {
         logger(`Loan.updateStateFromBlockchain() starting...`);
         this.blockchainState = {
-            totalAmountInvested: await this.contract.call<BigNumber>("totalAmountInvested"),
+            amountInvested: await this.contract.call<BigNumber>("totalAmountInvested"),
             loanState: (await this.contract.call<BigNumber>("state")).toNumber(),
-            receivedCollateral: await this.contract.call<BigNumber>("receivedCollateral"),
+            collateralReceived: await this.contract.call<BigNumber>("receivedCollateral"),
             fundraisingDeadline: moment.unix(await this.contract.call<number>("fundraisingDeadline")),
             paybackDeadline: moment.unix(await this.contract.call<number>("paybackDeadline")),
         };

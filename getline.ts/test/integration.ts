@@ -86,7 +86,7 @@ class EndToEndTests {
         // State on the blockchain.
         await loan.updateStateFromBlockchain();
         assert(loan.blockchainState.loanState == LoanState.CollateralCollection, "loan state set correctly");
-        assert(loan.blockchainState.totalAmountInvested.eq(0), "amount gathered zero");
+        assert(loan.blockchainState.amountInvested.eq(0), "amount gathered zero");
     }
 
     /**
@@ -147,7 +147,7 @@ class EndToEndTests {
         // Send investment.
         await loan.invest(new BigNumber(500));
         assert(loan.blockchainState.loanState == LoanState.Fundraising, "loan state is fundraising");
-        assert(loan.blockchainState.totalAmountInvested.eq(500), "loan has gathered right amount of funds");
+        assert(loan.blockchainState.amountInvested.eq(500), "loan has gathered right amount of funds");
 
         balance = await c.testToken.balanceOf(user);
         want = amountStart.sub(5500);

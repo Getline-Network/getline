@@ -89,14 +89,14 @@ function getSortCmp(column: sortColumnT): sorterT {
 function extendLoan(loan: LoanToInvestT): LoanToInvestT {
   return {
     ...loan,
-    amountWantedWithToken: loan.amountWanted.toString() + " " + loan.tokenSymbol,
-    percentageFunded: countPercentageGathered(loan.amountGathered, loan.amountWanted)
+    amountWantedWithToken: loan.amountWanted.toString() + " " + loan.loanTokenSymbol,
+    percentageFunded: countPercentageGathered(loan.amountInvested, loan.amountWanted)
   }
 }
 
 function getLoanPercentageWanted(loan: LoanToInvestT) {
-  return countPercentageWanted(loan.amountGathered, loan.amountWanted);
+  return countPercentageWanted(loan.amountInvested, loan.amountWanted);
 }
 function getLoanPercentageFunded(loan: LoanToInvestT) {
-  return countPercentageGathered(loan.amountGathered, loan.amountWanted);
+  return countPercentageGathered(loan.amountInvested, loan.amountWanted);
 }

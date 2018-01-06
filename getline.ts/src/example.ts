@@ -35,14 +35,14 @@ const main = async () => {
         const {loanToken, interestPermil, paybackDelta, fundraisingDelta} = loan.parameters;
         const amountWanted = await loan.parameters.loanToken.humanize(loan.parameters.amountWanted);
         const symbol = await loanToken.symbol();
-        const {loanState, totalAmountInvested} = loan.blockchainState;
+        const {loanState, amountInvested} = loan.blockchainState;
 
         console.log("  amount wanted:    " + amountWanted.toString() + " " + symbol);
         console.log("  interest     :    " + interestPermil / 10 + "%");
         console.log("  fundraising time: " + fundraisingDelta);
         console.log("  payback time:     " + paybackDelta);
         console.log("  state:            " + LoanState[loanState]);
-        console.log("  gathered funds:   " + totalAmountInvested.toString());
+        console.log("  gathered funds:   " + amountInvested.toString());
 
         if (loanState === LoanState.CollateralCollection) {
             console.log("  sending collateral...");

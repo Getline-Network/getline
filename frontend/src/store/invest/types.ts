@@ -14,10 +14,12 @@ export interface LoanToInvestT {
   id: string;
   userName: string;
   fundraisingDeadline: moment.Moment;
-  amountGathered: BigNumber;
+  amountInvested: BigNumber;
+  collateralReceived: BigNumber;
   amountWanted: BigNumber;
   amountWantedWithToken?: string,
-  tokenSymbol: string;
+  loanTokenSymbol: string;
+  collateralTokenSymbol: string;
   interestPermil: number;
   percentageFunded?: number;
   percentageWanted?: number;
