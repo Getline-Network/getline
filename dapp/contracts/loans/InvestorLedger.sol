@@ -118,7 +118,7 @@ library InvestorLedger {
         address borrower;
         // How much loanToken does borrower want to borrow.
         uint256 amountWanted;
-        // Interst of loan in permils.
+        // Interest of loan in permils.
         uint16  interestPermil;
         // Delta (in seconds) between collateral collected and fundraising ending.
         uint64 fundraisingDelta;
