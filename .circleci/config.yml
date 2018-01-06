@@ -11,7 +11,7 @@ jobs:
                 keys:
                     - dapp1-modules-{{ checksum "yarn.lock" }}
                     - dapp1-modules
-            - run: yarn
+            - run: yarn install --offline
             - save_cache:
                 key: dapp1-modules-{{ checksum "yarn.lock" }}
                 paths:
@@ -29,7 +29,7 @@ jobs:
                 keys:
                     - dapp1-modules-{{ checksum "yarn.lock" }}
                     - dapp1-modules
-            - run: yarn
+            - run: yarn install --offline
             - save_cache:
                 key: dapp1-modules-{{ checksum "yarn.lock" }}
                 paths:
@@ -50,7 +50,7 @@ jobs:
                 keys:
                     - dapp1-modules-{{ checksum "yarn.lock" }}
                     - dapp1-modules
-            - run: yarn
+            - run: yarn install --offline
             - save_cache:
                 key: dapp1-modules-{{ checksum "yarn.lock" }}
                 paths:
@@ -75,7 +75,7 @@ jobs:
                 keys:
                     - getlinets2-modules-{{ checksum "yarn.lock" }}
                     - getlinets2-modules
-            - run: yarn
+            - run: yarn install --offline
             - save_cache:
                 key: getlinets2-modules-{{ checksum "yarn.lock" }}
                 paths:
@@ -99,7 +99,7 @@ jobs:
                 keys:
                     - getlinets2-modules-{{ checksum "yarn.lock" }}
                     - getlinets2-modules
-            - run: yarn
+            - run: yarn install --offline
             - save_cache:
                 key: getlinets2-modules-{{ checksum "yarn.lock" }}
                 paths:
@@ -120,7 +120,7 @@ jobs:
                 keys:
                     - frontend2-modules-{{ checksum "yarn.lock" }}
                     - frontend2-modules
-            - run: yarn
+            - run: yarn install --offline
             - save_cache:
                 key: frontend2-modules-{{ checksum "yarn.lock" }}
                 paths:
