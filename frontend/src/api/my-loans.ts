@@ -30,6 +30,6 @@ export async function getMyLoans(): Promise<MyLoanT[]> {
       isCollateralCollection: (loanState === LoanState.CollateralCollection),
       isFundraising: (loanState === LoanState.Fundraising),
       isPayback: (loanState === LoanState.Payback),
-      isFinished: (loanState === LoanState.Finished)
+      isFinished: [LoanState.Canceled, LoanState.Defaulted, LoanState.Paidback].includes(loanState)
     }));
 }

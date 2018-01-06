@@ -28,7 +28,9 @@ export const mutations = {
     state.isLoading = false;
     state.pendingInvestments = loans.filter(loan => loan.loanState == LoanState.Fundraising);
     state.activeInvestments = loans.filter(loan => loan.loanState == LoanState.Payback);
-    state.finishedInvestments = loans.filter(loan => loan.loanState == LoanState.Finished);
+    state.finishedInvestments = loans.filter((loan) => {
+      [LoanState.Canceled, LoanState.Paidback, LoanState.Defaulted].includes(loan.loanState);
+    });
   }
 }
 
