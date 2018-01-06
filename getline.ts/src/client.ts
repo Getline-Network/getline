@@ -173,7 +173,9 @@ export class Client {
         stateMap[LoanState.CollateralCollection] = pb.LoanLifetimeState.COLLATERAL_COLLECTION;
         stateMap[LoanState.Fundraising] = pb.LoanLifetimeState.FUNDRAISING;
         stateMap[LoanState.Payback] = pb.LoanLifetimeState.PAYBACK;
-        stateMap[LoanState.Finished] = pb.LoanLifetimeState.FINISHED;
+        stateMap[LoanState.Paidback] = pb.LoanLifetimeState.PAIDBACK;
+        stateMap[LoanState.Canceled] = pb.LoanLifetimeState.CANCELED;
+        stateMap[LoanState.Defaulted] = pb.LoanLifetimeState.DEFAULTED;
 
         const req = new pb.GetLoansRequest();
         req.setNetworkId(this.network);

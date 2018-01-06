@@ -433,8 +433,6 @@ func (l *Loan) LoadStateFromBlockchain(ctx context.Context) error {
 		l.State.CurrentState = pb.LoanLifetimeState_DEFAULTED
 	case 5:
 		l.State.CurrentState = pb.LoanLifetimeState_CANCELED
-	case 6:
-		l.State.CurrentState = pb.LoanLifetimeState_FINISHED
 	default:
 		return fmt.Errorf("unexpected state: %d", state)
 	}

@@ -54,7 +54,8 @@ contract Loan {
         return ledger.interestPermil;
     }
 
-    function state() view public returns (uint256 _state) {
+    function state() public returns (uint256 _state) {
+        ledger.processTimeouts();
         return uint256(ledger.state);
     }
 
@@ -63,7 +64,7 @@ contract Loan {
     }
 
     function totalAmountInvested() view public returns (uint256 _totalAmount) {
-        return ledger.totalAmountInvested();
+        return ledger.totalAmountInvested;
     }
 
     function amountInvested(address investor) view public returns (uint256 _amount) {
@@ -108,9 +109,6 @@ contract Loan {
     // back).
     function invest() public {
         ledger.fundraisingProcess(msg.sender);
-        if (ledger.state == InvestorLedger.State.Canceled) {
-            ledger.canceledProcess();
-        }
     }
 
     // payback should be called by the borrower to submit the loan payback. It
@@ -119,32 +117,18 @@ contract Loan {
     // collateral back to investors).
     function payback() public {
         ledger.paybackProcess(msg.sender);
-        if (ledger.state == InvestorLedger.State.Paidback) {
-            ledger.paidbackProcess();
-        } else  if (ledger.state == InvestorLedger.State.Defaulted) {
-            ledger.defaultedProcess();
-        }
     }
 
-    // poke advances the state if possible. This can be called by clients to
-    // see if a timeout occured but hasen't been processed yet.
-    function poke() public returns (uint256 _newState) {
-        // We do not want to simulate if we act as an user, so let's tell the
-        // contract that we are address 0x0 - which should not have any loans
-        // approved for the contract and thus cannot influence state changes
-        // other than by timeouts.
-        if (ledger.state == InvestorLedger.State.Fundraising) {
-            ledger.fundraisingProcess(0x0);
-        } else if (ledger.state == InvestorLedger.State.Payback) {
-            ledger.paybackProcess(0x0);
-        }
-        // These two shouldn't happen (we advance them as soon as we see them
-        // in invest()/payback(), but let's allow for them anyway.
-        else if (ledger.state == InvestorLedger.State.Paidback) {
-            ledger.paidbackProcess();
-        } else if (ledger.state == InvestorLedger.State.Canceled) {
-            ledger.canceledProcess();
-        }
-        return uint256(ledger.state);
+    // withdrawable can be called by investors and the borrower at any point ti
+    // see if they can either withdraw some loan tokens or collateral tokens.
+    function withdrawable() public returns (uint256 _loanAmount, uint256 _collateralAmount) {
+        _loanAmount = ledger.canWithdrawLoanToken(msg.sender);
+        _collateralAmount = ledger.canWithdrawCollateralToken(msg.sender);
+    }
+
+    // withdraw can be called by investors and borrowers at any point to
+    // execute pending withdrawals.
+    function withdraw() public {
+        ledger.withdraw(msg.sender);
     }
 }

@@ -49,7 +49,6 @@ enum LoanLifetimeState {
     PAIDBACK = 4;
     DEFAULTED = 5;
     CANCELED = 6;
-    FINISHED = 7;
 }
 
 // Collection of all data in the Loan contract that can change.

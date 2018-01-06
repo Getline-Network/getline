@@ -31,7 +31,7 @@ contract TestLedgerCreation is Harness {
         Assert.equal(l.amountWanted, amountWanted, "amountWanted should be set");
         Assert.equal(uint(l.interestPermil), uint(interestPermil), "interestPermil should be set");
         Assert.equal(l.receivedCollateral, 0, "receivedCollateral should be zero");
-        Assert.equal(l.totalAmountInvested(), 0, "amountInvested should be zero");
+        Assert.equal(l.totalAmountInvested, 0, "amountInvested should be zero");
         Assert.equal(uint(l.state), uint(InvestorLedger.State.CollateralCollection), "Ledger should be in CollateralCollection");
         Assert.equal(uint(l.fundraisingDelta), 3600, "fundraisingDelta should be set");
         Assert.equal(uint(l.paybackDelta), 7200, "paybackDelta should be set");
@@ -65,6 +65,11 @@ contract TestLedgerPayback is Harness {
         Assert.equal(collateralToken.balanceOf(borrower), borrowerCollateralStartBalance - 2137, "borrower should have sent collateral");
         Assert.equal(l.fundraisingDeadline, block.timestamp + 3600, "fundraisingDeadline should be set");
 
+        Assert.equal(l.canWithdrawLoanToken(borrower), 0, "Borrower should not be able to withdraw loan token.");
+        Assert.equal(l.canWithdrawCollateralToken(borrower), 0, "Borrower should not be able to withdraw collateral token.");
+        Assert.equal(l.canWithdrawLoanToken(investor), 0, "Investor should not be able to withdraw loan token.");
+        Assert.equal(l.canWithdrawCollateralToken(investor), 0, "Borrower should not be able to withdraw collateral token.");
+
         // Send investment in two transfers...
 
         investor.approveLoan(this, 5000);
@@ -72,18 +77,23 @@ contract TestLedgerPayback is Harness {
         Assert.equal(uint(l.state), uint(InvestorLedger.State.Fundraising), "Ledger should be in Fundraising");
         Assert.equal(loanToken.balanceOf(investor), investorLoanStartBalance - 5000, "investor should have sent loan");
         Assert.equal(loanToken.balanceOf(this), 5000, "Ledger should have gathered loan");
-        Assert.equal(l.totalAmountInvested(), 5000, "Ledger should have noted loan");
+        Assert.equal(l.totalAmountInvested, 5000, "Ledger should have noted loan");
         Assert.equal(l.amountInvested(investor), 5000, "Ledger should have noted loan");
 
         investor.approveLoan(this, 6000);
         l.fundraisingProcess(investor);
         Assert.equal(uint(l.state), uint(InvestorLedger.State.Payback), "Ledger should be in Payback");
-        Assert.equal(l.totalAmountInvested(), 10000, "Ledger should have noted loan");
+        Assert.equal(l.totalAmountInvested, 10000, "Ledger should have noted loan");
         Assert.equal(l.amountInvested(investor), 10000, "Ledger should have noted loan");
         Assert.equal(loanToken.balanceOf(investor), investorLoanStartBalance - 10000, "investor should have sent loan");
         Assert.equal(loanToken.balanceOf(this), 0, "Ledger should have sent out loan");
         Assert.equal(loanToken.balanceOf(borrower), borrowerLoanStartBalance + 10000, "borrower should have received loan");
         Assert.equal(l.paybackDeadline, block.timestamp + 7200, "fundraisingDeadline should be set");
+
+        Assert.equal(l.canWithdrawLoanToken(borrower), 0, "Borrower should not be able to withdraw loan token.");
+        Assert.equal(l.canWithdrawCollateralToken(borrower), 0, "Borrower should not be able to withdraw collateral token.");
+        Assert.equal(l.canWithdrawLoanToken(investor), 0, "Investor should not be able to withdraw loan token.");
+        Assert.equal(l.canWithdrawCollateralToken(investor), 0, "Borrower should not be able to withdraw collateral token.");
 
         // Send payback...
 
@@ -94,14 +104,41 @@ contract TestLedgerPayback is Harness {
         Assert.equal(loanToken.balanceOf(borrower), borrowerLoanStartBalance - 100, "Borrower should have sent payback");
         Assert.equal(loanToken.balanceOf(this), 10100, "Ledger should have received payback");
 
-        // Trigger payback to investors...
-
-        l.paidbackProcess();
-        Assert.equal(uint(l.state), uint(InvestorLedger.State.Finished), "Ledger should be in Finished");
+        // Perform withdrawals... 
+        uint loanAmount;
+        uint collateralAmount;
+        loanAmount = l.canWithdrawLoanToken(borrower);
+        collateralAmount = l.canWithdrawCollateralToken(borrower);
+        Assert.equal(loanAmount, 0, "Borrower should not be able to get loan back");
+        Assert.equal(collateralAmount, 2137, "Borrower should be able to get collateral back");
+        l.withdraw(borrower);
         Assert.equal(collateralToken.balanceOf(borrower), borrowerCollateralStartBalance, "Borrower collateral should be back to start");
-        Assert.equal(collateralToken.balanceOf(investor), investorCollateralStartBalance, "Investor collateral should be back to start");
-        Assert.equal(loanToken.balanceOf(borrower), borrowerLoanStartBalance - 100, "Borrower loan token should be back to start diminished by interest");
-        Assert.equal(loanToken.balanceOf(investor), borrowerLoanStartBalance + 100, "Investor loan token should be back to start augmented by interest");
+
+        loanAmount = l.canWithdrawLoanToken(investor);
+        collateralAmount = l.canWithdrawCollateralToken(investor);
+        Assert.equal(loanAmount, 10100, "Investor should be able to get loan back");
+        Assert.equal(collateralAmount, 0, "Investor should not be able to get collateral back");
+        l.withdraw(investor);
+        Assert.equal(loanToken.balanceOf(investor), investorLoanStartBalance + 100, "Investor loan should be back to start + interest");
+
+        // Perform sanity checks...
+
+        loanAmount = l.canWithdrawLoanToken(borrower);
+        collateralAmount = l.canWithdrawCollateralToken(borrower);
+        Assert.equal(loanAmount, 0, "There should be no loan withdrawal left for borrower.");
+        Assert.equal(collateralAmount, 0, "There should be no colletaral withdrawal left for borrower.");
+
+        loanAmount = l.canWithdrawLoanToken(investor);
+        collateralAmount = l.canWithdrawCollateralToken(investor);
+        Assert.equal(loanAmount, 0, "There should be no loan withdrawal left for investor.");
+        Assert.equal(collateralAmount, 0, "There should be no colletaral withdrawal left for investor.");
+
+        Assert.equal(loanToken.balanceOf(borrower) + loanToken.balanceOf(investor),
+                     borrowerLoanStartBalance + investorLoanStartBalance,
+                     "Loan token transfers should be zero sum");
+        Assert.equal(collateralToken.balanceOf(borrower) + collateralToken.balanceOf(investor),
+                     borrowerCollateralStartBalance + investorCollateralStartBalance,
+                     "Collateral token transfers should be zero sum");
     }
 }
 
@@ -116,6 +153,11 @@ contract TestLedgerZeroCollateral is Harness {
         borrower.approveCollateral(this, 0);
         l.collateralCollectionProcess(borrower);
         Assert.equal(uint(l.state), uint(InvestorLedger.State.CollateralCollection), "Ledger should be in CollateralCollection");
+
+        Assert.equal(l.canWithdrawLoanToken(borrower), 0, "Borrower should not be able to withdraw loan token.");
+        Assert.equal(l.canWithdrawCollateralToken(borrower), 0, "Borrower should not be able to withdraw collateral token.");
+        Assert.equal(l.canWithdrawLoanToken(investor), 0, "Investor should not be able to withdraw loan token.");
+        Assert.equal(l.canWithdrawCollateralToken(investor), 0, "Borrower should not be able to withdraw collateral token.");
     }
 }
 
@@ -135,10 +177,6 @@ contract TestLedgerUnderPayback is Harness {
         investor.approveLoan(this, 10000);
         l.fundraisingProcess(investor);
 
-        Assert.equal(l.amountWanted, 10000, "dicks");
-        Assert.equal(l.investors.length, 1, "dicks2");
-
-
         // Send payback that's too low - this shouldn't accept our tokens and
         // should not advance the state.
         uint256 beforePayback = loanToken.balanceOf(borrower);
@@ -146,6 +184,11 @@ contract TestLedgerUnderPayback is Harness {
         l.paybackProcess(borrower);
         Assert.equal(uint(l.state), uint(InvestorLedger.State.Payback), "Ledger should be in Payback");
         Assert.equal(loanToken.balanceOf(borrower), beforePayback, "Payback should have not been accepted");
+
+        Assert.equal(l.canWithdrawLoanToken(borrower), 0, "Borrower should not be able to withdraw loan token.");
+        Assert.equal(l.canWithdrawCollateralToken(borrower), 0, "Borrower should not be able to withdraw collateral token.");
+        Assert.equal(l.canWithdrawLoanToken(investor), 0, "Investor should not be able to withdraw loan token.");
+        Assert.equal(l.canWithdrawCollateralToken(investor), 0, "Borrower should not be able to withdraw collateral token.");
     }
 }
 

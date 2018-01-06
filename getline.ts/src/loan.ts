@@ -26,27 +26,73 @@ export enum LoanState {
      */
     Payback,
     /**
-     * Loan has been paid back by liege but the funds haven't been transferred
-     * back yet. This state shouldn't be reached, as the smart contract code
-     * should immediately transfer it to 'Finished'. However, a .poke() call
-     * can be used to update if it gets stuck for any reason.
+     * Loan has been paid back by borrower and there might be funds to be
+     * transfered back to their respective owners.
      */
     Paidback,
     /**
-     * Loan has defaulted and there are funds to be transfered back to their
-     * respective owners. One needs to .poke() the contract to advance it.
+     * Loan has defaulted and there might be funds to be transfered back to 
+     * their respective owners.
      */
     Defaulted,
     /**
-     * Loan has been canceled and there are funds to be transfered back to
-     * their respective owners. One needs to .poke() the contract to advance
-     * it.
+     * Loan has been canceled and there might be funds to be transfered back to
+     * their respective owners.
      */
-    Canceled,
+    Canceled
+}
+
+/**
+ * Withdrawal possibilities, with their comments showing sample explanations.
+ */
+export enum WithdrawalReason {
     /**
-     * Loan has finished its' lifetime, and no further action is possible.
+     * You are entitled to get tokens from this loan.
      */
-    Finished
+    Unknown = 0,
+    /**
+     * You have paid back this loan, which entitles you to get the collateral
+     * back.
+     */
+    CollateralBackAfterPayback,
+    /**
+     * You have invested in this loan, which entitles you to get your invesment
+     * back with interest.
+     */
+    LoanBackAfterPayback,
+    /**
+     * The loan has not raised funds on time, but you can get your collateral
+     * back.
+     */
+    CollateralBackAfterCanceled,
+    /**
+     * The loan has not raised funds on time, so you can withdraw your
+     * investment back.
+     */
+    LoanBackAfterCanceled,
+    /**
+     * The loan has defaulted, but you're entitled to your share of the
+     * collateral.
+     */
+    CollateralBackAfterDefaulted,
+}
+
+/**
+ * Possible withdrawals from a loan.
+ */
+export interface Withdrawal {
+    /**
+     * Token that can be withdrawn.
+     */
+    token: Token,
+    /**
+     * Amount that can be withdrawn.
+     */
+    amount: BigNumber,
+    /**
+     * Reason for this withdrawal.
+     */
+    reason: WithdrawalReason,
 }
 
 /**
@@ -117,6 +163,9 @@ export class Loan {
          * Value of loan token gathered in fundraising.
          */
         amountInvested: BigNumber,
+        /**
+         * Value of the collateral token received as collateral.
+         */
         collateralReceived: BigNumber,
         /**
          * Date by which the loan needs to have all investment gathered.
@@ -127,13 +176,6 @@ export class Loan {
          */
         paybackDeadline: moment.Moment,
     };
-
-    /**
-     * Is there a new state for the loan that is pending and would be triggerd
-     * by calling .poke()? If so, mention the state here. Otherwise this field
-     * will be undefined.
-     */
-    public pending: LoanState | undefined;
 
     private blockchain: Blockchain;
 
@@ -174,7 +216,6 @@ export class Loan {
             loanToken: new Token(this.blockchain, params.getLoanToken()!.getAscii()),
             paybackDelta: params.getPaybackDelta(),
         };
-        this.pending = undefined;
 
         this.contract = await this.blockchain.existing("Loan", this.address);
     }
@@ -192,17 +233,6 @@ export class Loan {
             paybackDeadline: moment.unix(await this.contract.call<number>("paybackDeadline")),
         };
 
-        // Try to poke the loan - if we get a new state, it means that there is
-        // a timeout condition pending on the loan (ie. a default or cencelation).
-        const nextState: number = (await this.contract.call<BigNumber>("poke")).toNumber();
-        if (this.blockchainState.loanState != nextState) {
-            logger(`Loan blockchain state is ${this.blockchainState.loanState}. poke() state is ${nextState}`);
-            if (nextState != LoanState.Defaulted && nextState != LoanState.Canceled &&
-                nextState != LoanState.Finished) {
-                throw new Error("Unexpected loan state: " + nextState);
-            }
-            this.pending = nextState;
-        }
         logger(`Loan.updateStateFromBlockchain() done.`);
     }
 
@@ -249,8 +279,7 @@ export class Loan {
             await this.updateStateFromBlockchain();
         }
 
-        if (this.blockchainState.loanState !== LoanState.Fundraising ||
-            this.pending !== undefined) {
+        if (this.blockchainState.loanState !== LoanState.Fundraising) {
             throw new Error("Loan is not currently fundraising");
         }
 
@@ -287,8 +316,7 @@ export class Loan {
             await this.updateStateFromBlockchain();
         }
 
-        if (this.blockchainState.loanState !== LoanState.Payback ||
-            this.pending !== undefined) {
+        if (this.blockchainState.loanState !== LoanState.Payback) {
             throw new Error("Loan is not currently fundraising");
         }
 
@@ -303,6 +331,67 @@ export class Loan {
         await this.contract.mutate("payback");
         await this.updateStateFromBlockchain();
         logger(`Loan.payback() done.`);
+    }
+
+    /**
+     * Returns possible withdrawals for a given loan depending on the caller.
+     */
+    public async possibleWithdrawals(): Promise<Array<Withdrawal>> {
+        const [loanAmount, collateralAmount] = await this.contract.call<Array<BigNumber>>("withdrawable");
+
+        const state = this.blockchainState.loanState;
+
+        let result: Withdrawal[] = [];
+
+        if (collateralAmount.gt(0)) {
+            let collateralReason = WithdrawalReason.Unknown;
+            if (state == LoanState.Paidback) {
+                collateralReason = WithdrawalReason.CollateralBackAfterPayback;
+            } else if (state == LoanState.Defaulted) {
+                collateralReason = WithdrawalReason.CollateralBackAfterDefaulted;
+            } else if (state == LoanState.Canceled) {
+                collateralReason = WithdrawalReason.CollateralBackAfterCanceled;
+            }
+            result.push({
+                token: this.parameters.collateralToken,
+                amount: collateralAmount,
+                reason: collateralReason
+            });
+        }
+        if (loanAmount.gt(0)) {
+            let loanReason = WithdrawalReason.Unknown;
+            if (state == LoanState.Paidback) {
+                loanReason = WithdrawalReason.LoanBackAfterPayback;
+            } else if (state == LoanState.Canceled) {
+                loanReason = WithdrawalReason.LoanBackAfterCanceled;
+            }
+            result.push({
+                token: this.parameters.loanToken,
+                amount: loanAmount,
+                reason: loanReason
+            });
+        }
+
+        return result;
+    }
+
+    /**
+     * Withdraw all available funds from a loan.
+     */
+    public async withdrawAll(): Promise<void> {
+        let [prevLoan, prevCollateral] = [new BigNumber(0), new BigNumber(0)];
+
+        // Continue withdrawing until no change happens in what we can withdraw.
+        while (true) {
+            const amounts = await this.contract.call<Array<BigNumber>>("withdrawable");
+            const [loan, collateral] = amounts;
+            if (loan.eq(prevLoan) && collateral.eq(prevCollateral)) {
+                break;
+            }
+            [prevLoan, prevCollateral] = [loan, collateral];
+
+            await this.contract.mutate("withdraw");
+        }
     }
 
     /**

@@ -164,7 +164,12 @@ class EndToEndTests {
 
         // Now pay the loan back.
         await loan.payback();
-        assert(loan.blockchainState.loanState == LoanState.Finished, "loan state is finished");
+        assert(loan.blockchainState.loanState == LoanState.Paidback, "loan state is paidback");
+
+        // Withdraw everything. Amount of tokens should match start.
+        await loan.withdrawAll();
+        assert((await c.testToken.balanceOf(user)).eq(amountStart), "amount of tokens owner by user must match initial amount");
+
     }
 
     /**
@@ -209,7 +214,9 @@ class EndToEndTests {
             LoanState.CollateralCollection,
             LoanState.Fundraising,
             LoanState.Payback,
-            LoanState.Finished,
+            LoanState.Canceled,
+            LoanState.Defaulted,
+            LoanState.Paidback,
         ];
         const res: { [id: number]: string[] } = {}
         for (const state of states) {
@@ -243,7 +250,9 @@ class EndToEndTests {
             assert(loansByState[LoanState.CollateralCollection].includes(a), "new loan in collateral collection");
             assert(!loansByState[LoanState.Fundraising].includes(a), "new loan not in fundraising");
             assert(!loansByState[LoanState.Payback].includes(a), "new loan not in payback");
-            assert(!loansByState[LoanState.Finished].includes(a), "new loan not in finished");
+            assert(!loansByState[LoanState.Paidback].includes(a), "new loan not in paidback");
+            assert(!loansByState[LoanState.Canceled].includes(a), "new loan not in canceled");
+            assert(!loansByState[LoanState.Defaulted].includes(a), "new loan not in defaulted");
         }
 
         // Print some money, then send the collateral.
@@ -256,12 +265,16 @@ class EndToEndTests {
                 assert(!loansByState[LoanState.CollateralCollection].includes(a), "changed loan not in collection");
                 assert(loansByState[LoanState.Fundraising].includes(a), "changed loan in fundraising");
                 assert(!loansByState[LoanState.Payback].includes(a), "changed loan not in payback");
-                assert(!loansByState[LoanState.Finished].includes(a), "changed loan not in finished");
+                assert(!loansByState[LoanState.Paidback].includes(a), "changed loan not in paidback");
+                assert(!loansByState[LoanState.Canceled].includes(a), "changed loan not in canceled");
+                assert(!loansByState[LoanState.Defaulted].includes(a), "changed loan not in defaulted");
             } else {
                 assert(loansByState[LoanState.CollateralCollection].includes(a), "unchanged loan in collection");
                 assert(!loansByState[LoanState.Fundraising].includes(a), "unchanged loan not in fundraising");
                 assert(!loansByState[LoanState.Payback].includes(a), "unchanged loan not in payback");
-                assert(!loansByState[LoanState.Finished].includes(a), "unchanged loan not in finished");
+                assert(!loansByState[LoanState.Paidback].includes(a), "uchanged loan not in paidback");
+                assert(!loansByState[LoanState.Canceled].includes(a), "uchanged loan not in canceled");
+                assert(!loansByState[LoanState.Defaulted].includes(a), "uchanged loan not in defaulted");
             }
         }
     }
