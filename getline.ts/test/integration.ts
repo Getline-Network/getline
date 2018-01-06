@@ -42,8 +42,8 @@ class EndToEndTests {
         const description = "test loan";
         const amount = new BigNumber(1000);
         const interestPermil = 50;
-        const fundraising = moment().add(7, 'days');
-        const payback = fundraising.add(7, 'days');
+        const fundraising = 7 * 86400;
+        const payback = 7 * 86400;
         return client.newLoan(description, amount, interestPermil, fundraising, payback);
     }
 
@@ -67,8 +67,8 @@ class EndToEndTests {
         const description = "test loan";
         const amount = new BigNumber(1000);
         const interestPermil = 50;
-        const fundraising = moment().add(7, 'days');
-        const payback = fundraising.add(7, 'days');
+        const fundraising = 7 * 86400;
+        const payback = 7 * 86400;
         const loan = await c.newLoan(description, amount, interestPermil, fundraising, payback);
 
         // Parameters from user in metabackend.
@@ -78,18 +78,15 @@ class EndToEndTests {
         assert(loan.owner.eq(await c.currentUser()), "owner set correctly")
 
         // Parameters from user on the blockchain.
-        assert(loan.parameters.fundraisingDeadline.diff(fundraising) < 15000, "fundraising set correctly");
-        assert(loan.parameters.paybackDeadline.diff(payback) < 15000, "payback set correctly");
+        assert(loan.parameters.fundraisingDelta == fundraising, "fundraising set correctly");
+        assert(loan.parameters.paybackDelta == payback, "payback set correctly");
         assert(loan.parameters.amountWanted.eq(amount), "amount wanted set correctly");
         assert(loan.parameters.interestPermil == interestPermil, "interest set correctly");
 
         // State on the blockchain.
         await loan.updateStateFromBlockchain();
         assert(loan.blockchainState.loanState == LoanState.CollateralCollection, "loan state set correctly");
-        assert(loan.blockchainState.amountGathered.eq(0), "amount gathered zero");
-        assert(loan.blockchainState.fundraising == false, "loan is not fundraising");
-        assert(loan.blockchainState.paidback == false, "loan is not paidback");
-        assert(loan.blockchainState.defaulted == false, "loan is not defaulted");
+        assert(loan.blockchainState.totalAmountInvested.eq(0), "amount gathered zero");
     }
 
     /**
@@ -123,7 +120,6 @@ class EndToEndTests {
         await c.testToken.print(user);
         await loan.sendCollateral(new BigNumber(5000));
         assert(loan.blockchainState.loanState == LoanState.Fundraising, "loan state is fundraising");
-        assert(loan.blockchainState.fundraising, "loan is fundraising");
     }
 
     /**
@@ -143,35 +139,32 @@ class EndToEndTests {
         // Send collateral and check if we are fundraising.
         await loan.sendCollateral(new BigNumber(5000));
         assert(loan.blockchainState.loanState == LoanState.Fundraising, "loan state is fundraising");
-        assert(loan.blockchainState.fundraising, "loan is fundraising");
 
         let balance = await c.testToken.balanceOf(user);
         let want = amountStart.sub(5000);
-        assert(balance.eq(want), `user has ${balance}, should have ${want}`);
+        assert(balance.eq(want), `after sending collateral user has ${balance}, should have ${want}`);
 
         // Send investment.
         await loan.invest(new BigNumber(500));
         assert(loan.blockchainState.loanState == LoanState.Fundraising, "loan state is fundraising");
-        assert(loan.blockchainState.fundraising, "loan is fundraising");
-        assert(loan.blockchainState.amountGathered.eq(500), "loan has gathered right amount of funds");
+        assert(loan.blockchainState.totalAmountInvested.eq(500), "loan has gathered right amount of funds");
 
         balance = await c.testToken.balanceOf(user);
         want = amountStart.sub(5500);
-        assert(balance.eq(want), `user has ${balance}, should have ${want}`);
+        assert(balance.eq(want), `after sending investment user has ${balance}, should have ${want}`);
 
         // Finish investment.
         await loan.invest(new BigNumber(500));
         assert(loan.blockchainState.loanState == LoanState.Payback, "loan state is in payback");
-        assert(!loan.blockchainState.paidback, "loan has not been paid back yet");
 
         balance = await c.testToken.balanceOf(user);
-        want = amountStart.sub(6000);
-        assert(balance.eq(want), `user has ${balance}, should have ${want}`);
+        want = amountStart.sub(5000); // Start amount without collateral - after finishing the investment
+                                      // the user immediately receives the loan.
+        assert(balance.eq(want), `after finishing investment user has ${balance}, should have ${want}`);
 
         // Now pay the loan back.
         await loan.payback();
         assert(loan.blockchainState.loanState == LoanState.Finished, "loan state is finished");
-        assert(loan.blockchainState.paidback, "loan has been paid back");
     }
 
     /**
@@ -283,8 +276,8 @@ class EndToEndTests {
         const description = "test loan";
         const amount = new BigNumber(0);
         const interestPermil = 50;
-        const fundraising = moment().add(7, 'days');
-        const payback = fundraising.add(7, 'days');
+        const fundraising = 7 * 86400;
+        const payback = 7 * 86400;
 
         assert.isRejected(c.newLoan(description, amount, interestPermil, fundraising, payback), /non-positive amount/, "zero amount loan is rejected");
     }

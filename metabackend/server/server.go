@@ -94,6 +94,7 @@ func (s *Server) GetLoans(ctx context.Context, req *pb.GetLoansRequest) (*pb.Get
 			Parameters:        loan.ProtoParameters(),
 			Description:       loan.Metadata.Description,
 			DeploymentState:   pb.LoanCache_DEPLOYED,
+			BlockchainState:   loan.ProtoBlockchainState(),
 		}
 		cache[i] = &c
 	}

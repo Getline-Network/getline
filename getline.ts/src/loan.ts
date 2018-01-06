@@ -1,10 +1,13 @@
 import {BigNumber} from "bignumber.js";
+import * as debug from "debug";
 import * as moment from "moment";
 import * as Web3 from "web3";
 
 import {Blockchain, Contract} from "./blockchain";
 import {Address, Token, waitUntil} from "./common";
 import * as pb from "./generated/metabackend_pb";
+
+const logger = debug("getline.ts:loan");
 
 /**
  * State of a Getline Loan.
@@ -22,10 +25,10 @@ export enum LoanState {
      * Loan is being paid back by liege.
      */
     Payback,
-    /**
-     * Loan has been paid back or has defaulted.
-     */
-    Finished,
+    Paidback,
+    Defaulted,
+    Canceled,
+    Finished
 }
 
 /**
@@ -46,14 +49,8 @@ export class Loan {
          * Address of ERC20-compatible token used as loan.
          */
         loanToken: Token,
-        /**
-         * Date by which the loan needs to have all investment gathered.
-         */
-        fundraisingDeadline: moment.Moment,
-        /**
-         * Date by which loan needs to be fully repaid.
-         */
-        paybackDeadline: moment.Moment,
+        fundraisingDelta: number,
+        paybackDelta: number,
         /**
          * Amount of loan token wanted.
          */
@@ -94,21 +91,19 @@ export class Loan {
         /**
          * Value of loan token gathered in fundraising.
          */
-        amountGathered: BigNumber,
+        totalAmountInvested: BigNumber,
+        receivedCollateral: BigNumber,
         /**
-         * Whether the loan is currently raising funds from investors.
+         * Date by which the loan needs to have all investment gathered.
          */
-        fundraising: boolean,
+        fundraisingDeadline: moment.Moment,
         /**
-         * Whether the loan has been paid back succesfully.
+         * Date by which loan needs to be fully repaid.
          */
-        paidback: boolean,
-        /**
-         * Whether the loan has defaulted, ie. the liege has not paid back in
-         * time.
-         */
-        defaulted: boolean,
+        paybackDeadline: moment.Moment,
     };
+
+    public pending: LoanState | undefined;
 
     private blockchain: Blockchain;
 
@@ -140,20 +135,16 @@ export class Loan {
         this.address = new Address(this.blockchain, proto.getDeploymentAddress()!.getAscii());
         this.owner = new Address(this.blockchain, proto.getOwner()!.getAscii());
 
-        const currentBlock = await this.blockchain.currentBlock();
-        const blockToTime = (count: string) => {
-            return this.blockchain.blockToTime(currentBlock, new BigNumber(count));
-        };
-
         const params = proto.getParameters()!;
         this.parameters = {
             amountWanted: new BigNumber(params.getAmountWanted()),
             collateralToken: new Token(this.blockchain, params.getCollateralToken()!.getAscii()),
-            fundraisingDeadline: blockToTime(params.getFundraisingBlocksCount()),
+            fundraisingDelta: params.getFundraisingDelta(),
             interestPermil: params.getInterestPermil(),
             loanToken: new Token(this.blockchain, params.getLoanToken()!.getAscii()),
-            paybackDeadline: blockToTime(params.getPaybackBlocksCount()),
+            paybackDelta: params.getPaybackDelta(),
         };
+        this.pending = undefined;
 
         this.contract = await this.blockchain.existing("Loan", this.address);
     }
@@ -162,13 +153,27 @@ export class Loan {
      * Loads the newest state of the loan from the blockchain.
      */
     public async updateStateFromBlockchain(): Promise<void> {
+        logger(`Loan.updateStateFromBlockchain() starting...`);
         this.blockchainState = {
-            amountGathered: await this.contract.call<BigNumber>("amountGathered"),
-            defaulted: await this.contract.call<boolean>("isDefaulted"),
-            fundraising: await this.contract.call<boolean>("isFundraising"),
-            loanState: (await this.contract.call<BigNumber>("currentState")).toNumber(),
-            paidback: await this.contract.call<boolean>("isPaidback"),
+            totalAmountInvested: await this.contract.call<BigNumber>("totalAmountInvested"),
+            loanState: (await this.contract.call<BigNumber>("state")).toNumber(),
+            receivedCollateral: await this.contract.call<BigNumber>("receivedCollateral"),
+            fundraisingDeadline: moment.unix(await this.contract.call<number>("fundraisingDeadline")),
+            paybackDeadline: moment.unix(await this.contract.call<number>("paybackDeadline")),
         };
+
+        // Try to poke the loan - if we get a new state, it means that there is
+        // a timeout condition pending on the loan (ie. a default or cencelation).
+        const nextState: number = (await this.contract.call<BigNumber>("poke")).toNumber();
+        if (this.blockchainState.loanState != nextState) {
+            logger(`Loan blockchain state is ${this.blockchainState.loanState}. poke() state is ${nextState}`);
+            if (nextState != LoanState.Defaulted && nextState != LoanState.Canceled &&
+                nextState != LoanState.Finished) {
+                throw new Error("Unexpected loan state: " + nextState);
+            }
+            this.pending = nextState;
+        }
+        logger(`Loan.updateStateFromBlockchain() done.`);
     }
 
     /**
@@ -179,6 +184,7 @@ export class Loan {
      *
      */
     public async sendCollateral(amount: BigNumber): Promise<void> {
+        logger(`Loan.sendCollateral(${amount.toNumber()}) starting...`);
         if (this.blockchainState === undefined) {
             await this.updateStateFromBlockchain();
         }
@@ -198,6 +204,7 @@ export class Loan {
         // Now, call gatherCollateral and wait for state change.
         await this.contract.mutate("gatherCollateral");
         await this.updateStateFromBlockchain();
+        logger(`Loan.sendCollateral(${amount.toNumber()}) done.`);
     }
 
     /**
@@ -207,11 +214,13 @@ export class Loan {
      *
      */
     public async invest(amount: BigNumber): Promise<void> {
+        logger(`Loan.invest(${amount.toNumber()}) starting...`);
         if (this.blockchainState === undefined) {
             await this.updateStateFromBlockchain();
         }
 
-        if (this.blockchainState.loanState !== LoanState.Fundraising) {
+        if (this.blockchainState.loanState !== LoanState.Fundraising ||
+            this.pending !== undefined) {
             throw new Error("Loan is not currently fundraising");
         }
 
@@ -223,16 +232,17 @@ export class Loan {
         // Now, call invest and wait for state change.
         await this.contract.mutate("invest");
         await this.updateStateFromBlockchain();
+        logger(`Loan.invest(${amount.toNumber()}) done.`);
     }
 
     /**
      * Returns the payback amount required for the loan, in loan token units.
      */
-    public async paybackAmount(): Promise<BigNumber> {
+    public async paybackRequired(): Promise<BigNumber> {
         if (this.blockchainState === undefined) {
             await this.updateStateFromBlockchain();
         }
-        return this.contract.call<BigNumber>("paybackNeeded");
+        return this.contract.call<BigNumber>("paybackRequired");
     }
 
     /**
@@ -242,15 +252,17 @@ export class Loan {
      *
      */
     public async payback(): Promise<void> {
+        logger(`Loan.payback() starting...`);
         if (this.blockchainState === undefined) {
             await this.updateStateFromBlockchain();
         }
 
-        if (this.blockchainState.loanState !== LoanState.Payback) {
+        if (this.blockchainState.loanState !== LoanState.Payback ||
+            this.pending !== undefined) {
             throw new Error("Loan is not currently fundraising");
         }
 
-        const amount = await this.paybackAmount();
+        const amount = await this.paybackRequired();
 
         // First, ensure that payback allowance is set correctly.
         const loan = this.parameters.loanToken;
@@ -260,6 +272,7 @@ export class Loan {
         // Now, call invest and wait for state change.
         await this.contract.mutate("payback");
         await this.updateStateFromBlockchain();
+        logger(`Loan.payback() done.`);
     }
 
     /**

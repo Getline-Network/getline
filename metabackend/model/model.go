@@ -36,8 +36,8 @@ CREATE TABLE deployed_loan_parameters (
 	amount_wanted numeric not null,
 	borrower bytea not null,
 	interest_permil int not null,
-	fundraising_blocks_count numeric not null,
-	payback_blocks_count numeric not null,
+	fundraising_delta int not null,
+	payback_delta int not null,
 
 	primary key(network, address)
 );

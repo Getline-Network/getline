@@ -16,8 +16,8 @@ contract Loan {
         address _borrower,
         uint256 _amountWanted,
         uint16  _interestPermil,
-        uint256 _fundraisingDeadline,
-        uint256 _paybackDeadline
+        uint64 _fundraisingDeadline,
+        uint64 _paybackDeadline
     ) public {
         require(_amountWanted > 0);
         
@@ -42,8 +42,8 @@ contract Loan {
         return ledger.loanToken;
     }
 
-    function totalLoanNeeded() view public returns (uint256 _amountWanted) {
-        return ledger.totalLoanNeeded;
+    function amountWanted() view public returns (uint256 _amountWanted) {
+        return ledger.amountWanted;
     }
 
     function borrower() view public returns (address _borrower) {
@@ -62,28 +62,32 @@ contract Loan {
         return ledger.paybackRequired();
     }
 
-    function amountInvested() view public returns (uint256 _totalAmount) {
-        return ledger.amountInvested();
+    function totalAmountInvested() view public returns (uint256 _totalAmount) {
+        return ledger.totalAmountInvested();
     }
 
     function amountInvested(address investor) view public returns (uint256 _amount) {
         return ledger.amountInvested(investor);
     }
 
-    function fundraisingDeadline() view public returns (uint256 _fundraisingDeadline) {
+    function fundraisingDeadline() view public returns (uint64 _fundraisingDeadline) {
         return ledger.fundraisingDeadline;
     }
 
-    function paybackDeadline() view public returns (uint256 _paybackDeadline) {
+    function paybackDeadline() view public returns (uint64 _paybackDeadline) {
         return ledger.paybackDeadline;
     }
 
-    function fundraisingDelta() view public returns (uint256 _fundraisingDelta) {
+    function fundraisingDelta() view public returns (uint64 _fundraisingDelta) {
         return ledger.fundraisingDelta;
     }
 
-    function paybackDelta() view public returns (uint256 _paybackDelta) {
+    function paybackDelta() view public returns (uint64 _paybackDelta) {
         return ledger.paybackDelta;
+    }
+
+    function receivedCollateral() view public returns (uint256 _amount) {
+        return ledger.receivedCollateral;
     }
 
 
@@ -124,11 +128,15 @@ contract Loan {
 
     // poke advances the state if possible. This can be called by clients to
     // see if a timeout occured but hasen't been processed yet.
-    function poke() public {
+    function poke() public returns (uint256 _newState) {
+        // We do not want to simulate if we act as an user, so let's tell the
+        // contract that we are address 0x0 - which should not have any loans
+        // approved for the contract and thus cannot influence state changes
+        // other than by timeouts.
         if (ledger.state == InvestorLedger.State.Fundraising) {
-            ledger.fundraisingProcess(msg.sender);
+            ledger.fundraisingProcess(0x0);
         } else if (ledger.state == InvestorLedger.State.Payback) {
-            ledger.paybackProcess(msg.sender);
+            ledger.paybackProcess(0x0);
         }
         // These two shouldn't happen (we advance them as soon as we see them
         // in invest()/payback(), but let's allow for them anyway.
@@ -137,5 +145,6 @@ contract Loan {
         } else if (ledger.state == InvestorLedger.State.Canceled) {
             ledger.canceledProcess();
         }
+        return uint256(ledger.state);
     }
 }

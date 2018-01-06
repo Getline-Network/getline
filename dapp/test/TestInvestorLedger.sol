@@ -6,7 +6,7 @@ import "../contracts/loans/InvestorLedger.sol";
 import "../contracts/tokens/PrintableToken.sol";
 
 contract Harness {
-    uint256 totalLoanNeeded = 10000;
+    uint256 amountWanted = 10000;
     uint16 interestPermil = 10;
     uint256 printValue = 10000;
     PrintableToken collateralToken = new PrintableToken("collateralToken", 0, "token_symbol", printValue);
@@ -22,19 +22,19 @@ contract TestLedgerCreation is Harness {
     // parameters set correctly.
     function testLedgerCreation() public {
         l = InvestorLedger.openAccount(collateralToken, loanToken,
-            address(borrower), totalLoanNeeded, interestPermil,
+            address(borrower), amountWanted, interestPermil,
             3600, 7200);
 
         Assert.equal(l.collateralToken, collateralToken, "collateralToken should be set");
         Assert.equal(l.loanToken, loanToken, "loanToken should be set");
         Assert.equal(l.borrower, borrower, "borrower should be set");
-        Assert.equal(l.totalLoanNeeded, totalLoanNeeded, "totalLoanNeeded should be set");
+        Assert.equal(l.amountWanted, amountWanted, "amountWanted should be set");
         Assert.equal(uint(l.interestPermil), uint(interestPermil), "interestPermil should be set");
-        Assert.equal(l.totalCollateral, 0, "totalCollateral should be zero");
-        Assert.equal(InvestorLedger.amountInvested(l), 0, "amountInvested should be zero");
+        Assert.equal(l.receivedCollateral, 0, "receivedCollateral should be zero");
+        Assert.equal(l.totalAmountInvested(), 0, "amountInvested should be zero");
         Assert.equal(uint(l.state), uint(InvestorLedger.State.CollateralCollection), "Ledger should be in CollateralCollection");
-        Assert.equal(l.fundraisingDelta, 3600, "fundraisingDelta should be set");
-        Assert.equal(l.paybackDelta, 7200, "paybackDelta should be set");
+        Assert.equal(uint(l.fundraisingDelta), 3600, "fundraisingDelta should be set");
+        Assert.equal(uint(l.paybackDelta), 7200, "paybackDelta should be set");
     }
 }
 
@@ -44,7 +44,7 @@ contract TestLedgerPayback is Harness {
     function testLedgerPayback() public {
         delete l;
         l = InvestorLedger.openAccount(collateralToken, loanToken,
-            address(borrower), totalLoanNeeded, interestPermil,
+            address(borrower), amountWanted, interestPermil,
             3600, 7200);
 
         borrower.ensureCollateralBalance(10000);
@@ -60,7 +60,7 @@ contract TestLedgerPayback is Harness {
 
         borrower.approveCollateral(this, 2137);
         l.collateralCollectionProcess(borrower);
-        Assert.equal(l.totalCollateral, 2137, "totalCollateral should be set");
+        Assert.equal(l.receivedCollateral, 2137, "receivedCollateral should be set");
         Assert.equal(uint(l.state), uint(InvestorLedger.State.Fundraising), "Ledger should be in Fundraising");
         Assert.equal(collateralToken.balanceOf(borrower), borrowerCollateralStartBalance - 2137, "borrower should have sent collateral");
         Assert.equal(l.fundraisingDeadline, block.timestamp + 3600, "fundraisingDeadline should be set");
@@ -72,13 +72,13 @@ contract TestLedgerPayback is Harness {
         Assert.equal(uint(l.state), uint(InvestorLedger.State.Fundraising), "Ledger should be in Fundraising");
         Assert.equal(loanToken.balanceOf(investor), investorLoanStartBalance - 5000, "investor should have sent loan");
         Assert.equal(loanToken.balanceOf(this), 5000, "Ledger should have gathered loan");
-        Assert.equal(l.amountInvested(), 5000, "Ledger should have noted loan");
+        Assert.equal(l.totalAmountInvested(), 5000, "Ledger should have noted loan");
         Assert.equal(l.amountInvested(investor), 5000, "Ledger should have noted loan");
 
         investor.approveLoan(this, 6000);
         l.fundraisingProcess(investor);
         Assert.equal(uint(l.state), uint(InvestorLedger.State.Payback), "Ledger should be in Payback");
-        Assert.equal(l.amountInvested(), 10000, "Ledger should have noted loan");
+        Assert.equal(l.totalAmountInvested(), 10000, "Ledger should have noted loan");
         Assert.equal(l.amountInvested(investor), 10000, "Ledger should have noted loan");
         Assert.equal(loanToken.balanceOf(investor), investorLoanStartBalance - 10000, "investor should have sent loan");
         Assert.equal(loanToken.balanceOf(this), 0, "Ledger should have sent out loan");
@@ -109,7 +109,7 @@ contract TestLedgerZeroCollateral is Harness {
     function testLedgerZeroCollateral() public {
         delete l;
         l = InvestorLedger.openAccount(collateralToken, loanToken,
-            address(borrower), totalLoanNeeded, interestPermil,
+            address(borrower), amountWanted, interestPermil,
             3600, 7200);
 
         borrower.ensureCollateralBalance(10000);
@@ -123,7 +123,7 @@ contract TestLedgerUnderPayback is Harness {
     function testLedgerUnderPayback() public {
         delete l;
         l = InvestorLedger.openAccount(collateralToken, loanToken,
-            address(borrower), totalLoanNeeded, interestPermil,
+            address(borrower), amountWanted, interestPermil,
             3600, 7200);
 
         borrower.ensureCollateralBalance(10000);
@@ -135,7 +135,7 @@ contract TestLedgerUnderPayback is Harness {
         investor.approveLoan(this, 10000);
         l.fundraisingProcess(investor);
 
-        Assert.equal(l.totalLoanNeeded, 10000, "dicks");
+        Assert.equal(l.amountWanted, 10000, "dicks");
         Assert.equal(l.investors.length, 1, "dicks2");
 
 

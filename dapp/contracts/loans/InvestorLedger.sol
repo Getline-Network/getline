@@ -4,10 +4,11 @@ import "../tokens/IToken.sol";
 import "../common/Math.sol";
 
 library InvestorLedger {
-    event CollateralCollectionDone(
-        address indexed loan
+    event StateTransistion(
+        address indexed loan,
+        State from,
+        State to
     );
-    
     event NewInvestor(
         address indexed loan,
         address indexed investor
@@ -17,10 +18,6 @@ library InvestorLedger {
         address indexed loan,
         address indexed investor,
         uint256 amount
-    );
-
-    event FundraisingDone(
-        address indexed loan
     );
 
     uint constant PERMIL = 1000;
@@ -138,18 +135,18 @@ library InvestorLedger {
         // Receiver of the loan.
         address borrower;
         // How much loanToken does borrower want to borrow.
-        uint256 totalLoanNeeded;
+        uint256 amountWanted;
         // Interst of loan in permils.
         uint16  interestPermil;
         // Delta (in seconds) between collateral collected and fundraising ending.
-        uint256 fundraisingDelta;
+        uint64 fundraisingDelta;
         // Delta (in seconds)  between fundraising ending and payback needed.
-        uint256 paybackDelta;
+        uint64 paybackDelta;
 
         /// Mutable ledger state.
         // Total collateralToken gathered for loan. It increases from 0 to
         // the loan collateral when its' gathered.
-        uint256 totalCollateral;
+        uint256 receivedCollateral;
         // List of investor addresses to key investorData.
         address[] investors;
         // Data about each investor. It gets upserted any time a new investment
@@ -157,10 +154,10 @@ library InvestorLedger {
         mapping(address => InvestorData) investorData;
         // Absolute timestamp of fundraising deadline, in block time (seconds).
         // Calculated when we switch to the fundraising state.
-        uint256 fundraisingDeadline;
+        uint64 fundraisingDeadline;
         // Absolute timestamp of payback deadline, in block time (seconds).
         // Calculated when we switch to the payback state.
-        uint256 paybackDeadline;
+        uint64 paybackDeadline;
 
         /// Main ledger FSM state.
         State state;
@@ -173,9 +170,9 @@ library InvestorLedger {
     /// View functions for the Ledger structure that calculate denormalized
     /// data based on investment status.
     
-    // amountInvested() returns how much was invested into this loan in total
-    // (not counting interest rate).
-    function amountInvested(Ledger storage ledger) view public returns (uint256 amount) {
+    // totalAmountInvested() returns how much was invested into this loan in
+    // total by all investors (not counting interest rate).
+    function totalAmountInvested(Ledger storage ledger) view public returns (uint256 amount) {
         amount = 0;
         for (uint i = 0; i < ledger.investors.length; i++ ) {
             var investor = ledger.investorData[ledger.investors[i]];
@@ -193,7 +190,7 @@ library InvestorLedger {
     // paybackRequired returns how much payback is/will be required for this
     // loan (loan amount + interest).
     function paybackRequired(Ledger storage ledger) view public returns (uint256 amount) {
-        return ledger.totalLoanNeeded + calculateInterest(ledger, ledger.totalLoanNeeded);
+        return ledger.amountWanted + calculateInterest(ledger, ledger.amountWanted);
     }
 
     // calculateInterest is a convenience function to calculate the interest
@@ -212,20 +209,22 @@ library InvestorLedger {
         IToken collateralToken,
         IToken loanToken,
         address borrower,
-        uint256 totalLoanNeeded,
+        uint256 amountWanted,
         uint16 interestPermil,
-        uint fundraisingDelta,
-        uint paybackDelta) internal view returns (Ledger account)
+        uint64 fundraisingDelta,
+        uint64 paybackDelta) internal view returns (Ledger account)
     {
         // Argument validation.
         require(fundraisingDelta > 0);
         require(paybackDelta > 0);
-        require(totalLoanNeeded > 0);
+        require(amountWanted > 0);
+        require(block.timestamp + fundraisingDelta + paybackDelta > block.timestamp);
+        require(block.timestamp + fundraisingDelta + paybackDelta > block.timestamp + fundraisingDelta);
 
         // Fill new state object.
         account.collateralToken = collateralToken;
         account.loanToken = loanToken;
-        account.totalLoanNeeded = totalLoanNeeded;
+        account.amountWanted = amountWanted;
         account.interestPermil = interestPermil;
         account.borrower = borrower;
         account.state = State.CollateralCollection;
@@ -254,11 +253,13 @@ library InvestorLedger {
         if (caller == ledger.borrower) {
             var allowance = ledger.collateralToken.allowance(ledger.borrower, this);
             if (allowance > 0) {
-                ledger.totalCollateral += allowance;
+                uint64 timestamp = uint64(block.timestamp);
+                ledger.receivedCollateral += allowance;
                 newState(ledger, State.Fundraising);
-                ledger.fundraisingDeadline = block.timestamp + ledger.fundraisingDelta;
+                ledger.fundraisingDeadline = timestamp + ledger.fundraisingDelta;
+                require(ledger.fundraisingDeadline > timestamp);
+                require(ledger.fundraisingDeadline + ledger.paybackDelta > ledger.fundraisingDeadline);
 
-                CollateralCollectionDone(this);
                 require(
                     ledger.collateralToken.transferFrom(
                         ledger.borrower,
@@ -277,25 +278,27 @@ library InvestorLedger {
         if (block.timestamp > ledger.fundraisingDeadline) {
             newState(ledger, State.Canceled);
         } else {
-            uint256 amountNeeded = ledger.totalLoanNeeded - amountInvested(ledger);
+            uint256 amountNeeded = ledger.amountWanted - totalAmountInvested(ledger);
             address investor = caller;
-            // Do not invest more than required to fullfill totalLoanNeeded.
+            // Do not invest more than required to fullfill amountWanted.
             var investmentAmount = Math.min(
                 ledger.loanToken.allowance(investor, this),
                 amountNeeded
             );
             if (investmentAmount > 0) {
+                uint64 timestamp = uint64(block.timestamp);
                 var investorData = ledger.investorData[investor];
                 if (investorData.amountInvested == 0) {
                     NewInvestor(this, investor);
                     ledger.investors.push(investor);
                 }
                 // Note down the investment.
+                require(investorData.amountInvested + investmentAmount > investorData.amountInvested);
                 investorData.amountInvested += investmentAmount;
                 // Did we just gather all investments required?
                 if (investmentAmount == amountNeeded) {
                     newState(ledger, State.Payback);
-                    ledger.paybackDeadline = block.timestamp + ledger.paybackDelta;
+                    ledger.paybackDeadline = timestamp + ledger.paybackDelta;
                 }
                 // Transfer the investment to the receiving contract.
                 InvestmentSent(this, investor, investmentAmount);
@@ -309,11 +312,10 @@ library InvestorLedger {
                 // If this was the last required invesment, transfer all the
                 // invested money to the borrower.
                 if (investmentAmount == amountNeeded) {
-                    FundraisingDone(this);
                     require(
                         ledger.loanToken.transfer(
                             ledger.borrower,
-                            ledger.totalLoanNeeded
+                            ledger.amountWanted
                         )
                     );
                 }
@@ -351,7 +353,7 @@ library InvestorLedger {
         require(
             ledger.collateralToken.transfer(
                 ledger.borrower,
-                ledger.totalCollateral
+                ledger.receivedCollateral
             )
         );
         // Send the investments (with interest) back to the investors.
@@ -373,11 +375,11 @@ library InvestorLedger {
 
         // Send the collateral, prorated over the investment amount by each
         // investor.
-        uint256 totalInvested = amountInvested(ledger);
+        uint256 totalInvested = totalAmountInvested(ledger);
         for (uint i = 0; i < ledger.investors.length; i++) {
             address investor = ledger.investors[i];
             uint256 invested = ledger.investorData[investor].amountInvested;
-            uint256 collateralBack = (ledger.totalCollateral * invested) / totalInvested;
+            uint256 collateralBack = (ledger.receivedCollateral * invested) / totalInvested;
             require(
                 ledger.collateralToken.transfer(
                     investor,
@@ -395,7 +397,7 @@ library InvestorLedger {
         require(
             ledger.collateralToken.transfer(
                 ledger.borrower,
-                ledger.totalCollateral
+                ledger.receivedCollateral
             )
         );
         // Send the investments back to the investors.
