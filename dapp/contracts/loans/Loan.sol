@@ -18,7 +18,8 @@ contract Loan {
         uint16  _interestPermil,
         uint64 _fundraisingDeadline,
         uint64 _paybackDeadline
-    ) public {
+    ) public
+    {
         require(_amountWanted > 0);
         
         ledger = InvestorLedger.openAccount(
@@ -90,7 +91,6 @@ contract Loan {
     function receivedCollateral() view public returns (uint256 _amount) {
         return ledger.receivedCollateral;
     }
-
 
     // Three explicit state changing functions. All of them call their
     // respective ledger process functions, and then process any further new

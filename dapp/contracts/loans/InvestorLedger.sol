@@ -3,6 +3,7 @@ pragma solidity ^0.4.17;
 import "../tokens/IToken.sol";
 import "../common/Math.sol";
 
+
 library InvestorLedger {
     /// Events
 
@@ -98,7 +99,6 @@ library InvestorLedger {
         }
         return false;
     }
-
 
     // newState applies a state transition to the ledger FSM and ensures it is
     // legal.
@@ -335,7 +335,7 @@ library InvestorLedger {
         if (!processTimeouts(ledger)) {
             return;
         }
-        if (caller != ledger.borrower)  {
+        if (caller != ledger.borrower) {
             return;
         }
 
@@ -416,7 +416,12 @@ library InvestorLedger {
         uint256 loan = canWithdrawLoanToken(ledger, caller);
         if (loan > 0) {
             ledger.withdrawalData[caller].loanWithdrawn += loan;
-            Withdrawal(this, caller, WithdrawalType.LoanTokens, loan);
+            Withdrawal(
+                this,
+                caller,
+                WithdrawalType.LoanTokens,
+                loan
+            );
             require(
                 ledger.loanToken.transfer(
                     caller,
@@ -428,7 +433,12 @@ library InvestorLedger {
         uint256 collateral = canWithdrawCollateralToken(ledger, caller);
         if (collateral > 0) {
             ledger.withdrawalData[caller].collateralWithdrawn += collateral;
-            Withdrawal(this, caller, WithdrawalType.CollateralTokens, collateral);
+            Withdrawal(
+                this,
+                caller,
+                WithdrawalType.CollateralTokens,
+                collateral
+            );
             require(
                 ledger.collateralToken.transfer(
                     caller,
