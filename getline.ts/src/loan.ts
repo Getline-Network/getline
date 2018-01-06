@@ -31,7 +31,7 @@ export enum LoanState {
      */
     Paidback,
     /**
-     * Loan has defaulted and there might be funds to be transfered back to 
+     * Loan has defaulted and there might be funds to be transfered back to
      * their respective owners.
      */
     Defaulted,
@@ -39,7 +39,7 @@ export enum LoanState {
      * Loan has been canceled and there might be funds to be transfered back to
      * their respective owners.
      */
-    Canceled
+    Canceled,
 }
 
 /**
@@ -84,15 +84,15 @@ export interface Withdrawal {
     /**
      * Token that can be withdrawn.
      */
-    token: Token,
+    token: Token;
     /**
      * Amount that can be withdrawn.
      */
-    amount: BigNumber,
+    amount: BigNumber;
     /**
      * Reason for this withdrawal.
      */
-    reason: WithdrawalReason,
+    reason: WithdrawalReason;
 }
 
 /**
@@ -227,9 +227,9 @@ export class Loan {
         logger(`Loan.updateStateFromBlockchain() starting...`);
         this.blockchainState = {
             amountInvested: await this.contract.call<BigNumber>("totalAmountInvested"),
-            loanState: (await this.contract.call<BigNumber>("state")).toNumber(),
             collateralReceived: await this.contract.call<BigNumber>("receivedCollateral"),
             fundraisingDeadline: moment.unix(await this.contract.call<number>("fundraisingDeadline")),
+            loanState: (await this.contract.call<BigNumber>("state")).toNumber(),
             paybackDeadline: moment.unix(await this.contract.call<number>("paybackDeadline")),
         };
 
@@ -336,39 +336,39 @@ export class Loan {
     /**
      * Returns possible withdrawals for a given loan depending on the caller.
      */
-    public async possibleWithdrawals(): Promise<Array<Withdrawal>> {
-        const [loanAmount, collateralAmount] = await this.contract.call<Array<BigNumber>>("withdrawable");
+    public async possibleWithdrawals(): Promise<Withdrawal[]> {
+        const [loanAmount, collateralAmount] = await this.contract.call<BigNumber[]>("withdrawable");
 
         const state = this.blockchainState.loanState;
 
-        let result: Withdrawal[] = [];
+        const result: Withdrawal[] = [];
 
         if (collateralAmount.gt(0)) {
             let collateralReason = WithdrawalReason.Unknown;
-            if (state == LoanState.Paidback) {
+            if (state === LoanState.Paidback) {
                 collateralReason = WithdrawalReason.CollateralBackAfterPayback;
-            } else if (state == LoanState.Defaulted) {
+            } else if (state === LoanState.Defaulted) {
                 collateralReason = WithdrawalReason.CollateralBackAfterDefaulted;
-            } else if (state == LoanState.Canceled) {
+            } else if (state === LoanState.Canceled) {
                 collateralReason = WithdrawalReason.CollateralBackAfterCanceled;
             }
             result.push({
-                token: this.parameters.collateralToken,
                 amount: collateralAmount,
-                reason: collateralReason
+                reason: collateralReason,
+                token: this.parameters.collateralToken,
             });
         }
         if (loanAmount.gt(0)) {
             let loanReason = WithdrawalReason.Unknown;
-            if (state == LoanState.Paidback) {
+            if (state === LoanState.Paidback) {
                 loanReason = WithdrawalReason.LoanBackAfterPayback;
-            } else if (state == LoanState.Canceled) {
+            } else if (state === LoanState.Canceled) {
                 loanReason = WithdrawalReason.LoanBackAfterCanceled;
             }
             result.push({
-                token: this.parameters.loanToken,
                 amount: loanAmount,
-                reason: loanReason
+                reason: loanReason,
+                token: this.parameters.loanToken,
             });
         }
 
@@ -383,7 +383,7 @@ export class Loan {
 
         // Continue withdrawing until no change happens in what we can withdraw.
         while (true) {
-            const amounts = await this.contract.call<Array<BigNumber>>("withdrawable");
+            const amounts = await this.contract.call<BigNumber[]>("withdrawable");
             const [loan, collateral] = amounts;
             if (loan.eq(prevLoan) && collateral.eq(prevCollateral)) {
                 break;
