@@ -199,7 +199,18 @@ library InvestorLedger {
         require(fundraisingDelta > 0);
         require(paybackDelta > 0);
         require(amountWanted > 0);
+
+        /// Overflow checks for time deltas. These are overkill as we only
+        /// accept 64-bit arguments for deltas yet store timestamps in 256-bit
+        /// variables.
+        // Ensure that a calculated fundraising time does not overflow to be
+        // before now.
+        require(block.timestamp + fundraisingDelta > block.timestamp);
+        // Ensure that a calculated payback time does not overflow to be
+        // before now.
         require(block.timestamp + fundraisingDelta + paybackDelta > block.timestamp);
+        // Ensure that a calculated payback time does not overflow to be before
+        // fundraising.
         require(block.timestamp + fundraisingDelta + paybackDelta > block.timestamp + fundraisingDelta);
 
         // Fill new state object.
@@ -218,22 +229,18 @@ library InvestorLedger {
         return account;
     }
 
-    function processTimeouts(Ledger storage ledger) public returns (bool) {
+    function processTimeouts(Ledger storage ledger) public {
         if (ledger.state == State.Fundraising) {
             if (block.timestamp > ledger.fundraisingDeadline) {
                 newState(ledger, State.Canceled);
-                return false;
             }
         }
 
         if (ledger.state == State.Payback) {
             if (block.timestamp > ledger.paybackDeadline) {
                 newState(ledger, State.Defaulted);
-                return false;
             }
         }
-
-        return true;
     }
 
     // collateralCollectionProcess performs processing within the
@@ -246,24 +253,24 @@ library InvestorLedger {
         // Only allow borrower to perform the state transition, otherwise we
         // could permit races where a malicious actor performs the state
         // transition when the borrower is not ready to do so.
-        if (caller == ledger.borrower) {
-            var allowance = ledger.collateralToken.allowance(ledger.borrower, this);
-            if (allowance > 0) {
-                uint64 timestamp = uint64(block.timestamp);
-                ledger.receivedCollateral += allowance;
-                newState(ledger, State.Fundraising);
-                ledger.fundraisingDeadline = timestamp + ledger.fundraisingDelta;
-                require(ledger.fundraisingDeadline > timestamp);
-                require(ledger.fundraisingDeadline + ledger.paybackDelta > ledger.fundraisingDeadline);
+        require(caller == ledger.borrower);
 
-                require(
-                    ledger.collateralToken.transferFrom(
-                        ledger.borrower,
-                        this,
-                        allowance
-                    )
-                );
-            }
+        var allowance = ledger.collateralToken.allowance(ledger.borrower, this);
+        if (allowance > 0) {
+            newState(ledger, State.Fundraising);
+            uint64 timestamp = uint64(block.timestamp);
+            ledger.receivedCollateral += allowance;
+            ledger.fundraisingDeadline = timestamp + ledger.fundraisingDelta;
+            require(ledger.fundraisingDeadline > timestamp);
+            require(ledger.fundraisingDeadline + ledger.paybackDelta > ledger.fundraisingDeadline);
+
+            require(
+                ledger.collateralToken.transferFrom(
+                    ledger.borrower,
+                    this,
+                    allowance
+                )
+            );
         }
     }
 
@@ -274,11 +281,8 @@ library InvestorLedger {
     //   advance to the Payback state
     // - if timeout is reached, advance to the Canceled state
     function fundraisingProcess(Ledger storage ledger, address caller) public {
+        processTimeouts(ledger);
         require(ledger.state == State.Fundraising);
-
-        if (!processTimeouts(ledger)) {
-            return;
-        }
 
         uint256 amountNeeded = ledger.amountWanted - ledger.totalAmountInvested;
         address investor = caller;
@@ -293,16 +297,20 @@ library InvestorLedger {
             if (investorData.amountInvested == 0) {
                 NewInvestor(this, investor);
             }
-            // Note down the investment.
+
+            // Check overflows on investment amounts.
             require(investorData.amountInvested + investmentAmount > investorData.amountInvested);
             require(ledger.totalAmountInvested + investmentAmount > ledger.totalAmountInvested);
-            investorData.amountInvested += investmentAmount;
-            ledger.totalAmountInvested += investmentAmount;
-            // Did we just gather all investments required?
-            if (ledger.totalAmountInvested == ledger.amountWanted) {
+            // Did we just gather all investments required? Change state and
+            // block re-entry to this state.
+            if (ledger.totalAmountInvested + investmentAmount == ledger.amountWanted) {
                 newState(ledger, State.Payback);
                 ledger.paybackDeadline = timestamp + ledger.paybackDelta;
             }
+            // Note down the investment.
+            investorData.amountInvested += investmentAmount;
+            ledger.totalAmountInvested += investmentAmount;
+
             // Transfer the investment to the receiving contract.
             InvestmentSent(this, investor, investmentAmount);
             require(
@@ -331,11 +339,9 @@ library InvestorLedger {
     //   state
     // - if timeout is reached, advance to the Paidback state
     function paybackProcess(Ledger storage ledger, address caller) public {
+        processTimeouts(ledger);
         require(ledger.state == State.Payback);
 
-        if (!processTimeouts(ledger)) {
-            return;
-        }
         if (caller != ledger.borrower) {
             return;
         }

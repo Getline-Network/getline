@@ -224,7 +224,7 @@ export class Loan {
      * Loads the newest state of the loan from the blockchain.
      */
     public async updateStateFromBlockchain(): Promise<void> {
-        logger(`Loan.updateStateFromBlockchain() starting...`);
+        logger("Loan.updateStateFromBlockchain() starting...");
         this.blockchainState = {
             amountInvested: await this.contract.call<BigNumber>("totalAmountInvested"),
             collateralReceived: await this.contract.call<BigNumber>("receivedCollateral"),
@@ -233,7 +233,7 @@ export class Loan {
             paybackDeadline: moment.unix(await this.contract.call<number>("paybackDeadline")),
         };
 
-        logger(`Loan.updateStateFromBlockchain() done.`);
+        logger("Loan.updateStateFromBlockchain() done.");
     }
 
     /**
@@ -311,7 +311,7 @@ export class Loan {
      *
      */
     public async payback(): Promise<void> {
-        logger(`Loan.payback() starting...`);
+        logger("Loan.payback() starting...");
         if (this.blockchainState === undefined) {
             await this.updateStateFromBlockchain();
         }
@@ -330,7 +330,7 @@ export class Loan {
         // Now, call invest and wait for state change.
         await this.contract.mutate("payback");
         await this.updateStateFromBlockchain();
-        logger(`Loan.payback() done.`);
+        logger("Loan.payback() done.");
     }
 
     /**
