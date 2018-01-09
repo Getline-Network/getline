@@ -14,7 +14,7 @@
       </div>
       <div>
         <div class="mlt-fin-line-a"> AMOUNT GATHERED </div>
-        <div class="mlt-fin-line-b mlt-fin-line-right"> {{ formatBigNumber(loan.amountGathered) }} {{ loan.tokenSymbol }}</div>
+        <div class="mlt-fin-line-b mlt-fin-line-right"> {{ formatBigNumber(loan.amountInvested) }} {{ loan.tokenSymbol }}</div>
       </div>
     </div>
     <fundraising-section v-if="loan.isFundraising" :loan="loan" />

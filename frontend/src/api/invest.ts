@@ -1,30 +1,34 @@
 import API, { BigNumber, LoanState, Loan } from './index';
 import { LoanToInvestT } from 'store/invest/types';
-import { getTokenSymbolsFromBlockchain, getAmountsWantedFromBlockchain, getAmountsGatheredFromBlockchain } from './utils';
-import { getSingleAmountWantedFromBlockchain, getSingleAmountGatheredFromBlockchain, getSingleTokenSymbolFromBlockchain } from './utils';
+import { getLoanTokenSymbols, getCollateralTokenSymbols, getAmountsWanted, 
+         getAmountsInvested, getCollateralsReceived } from './utils';
 
 export async function getLoansToInvest(): Promise<LoanToInvestT[]> {
   const api = await API.instance();
   const currentUser = await api.currentUser();
   const libraryLoans = await api.loansByState(LoanState.Fundraising);
-  await Promise.all(libraryLoans.map(loan => loan.updateStateFromBlockchain()));
 
-  const amountsWanted: BigNumber[] = await getAmountsWantedFromBlockchain(libraryLoans);
-  const amountsGathered: BigNumber[] = await getAmountsGatheredFromBlockchain(libraryLoans);
-  const loanTokenSymbols: string[] = await getTokenSymbolsFromBlockchain(libraryLoans);
+  const amountsWanted: BigNumber[] = await getAmountsWanted(libraryLoans);
+  const amountsInvested: BigNumber[] = await getAmountsInvested(libraryLoans);
+  const collateralsReceived: BigNumber[] = await getCollateralsReceived(libraryLoans);
+  const loanTokenSymbols: string[] = await getLoanTokenSymbols(libraryLoans);
+  const collateralTokenSymbols: string[] = await getCollateralTokenSymbols(libraryLoans);
 
   return libraryLoans.map(({
     shortId,
     owner,
     parameters,
+    blockchainState,
   }, index): LoanToInvestT => ({
       id: shortId,
       userName: owner.ascii,
       interestPermil: parameters.interestPermil,
-      fundraisingDeadline: parameters.fundraisingDeadline,
-      amountGathered: amountsGathered[index],
+      fundraisingDeadline: blockchainState.fundraisingDeadline,
+      amountInvested: amountsInvested[index],
+      collateralReceived: collateralsReceived[index],
       amountWanted: amountsWanted[index],
-      tokenSymbol: loanTokenSymbols[index]
+      loanTokenSymbol: loanTokenSymbols[index],
+      collateralTokenSymbol: collateralTokenSymbols[index],
     }));
 }
 
@@ -53,18 +57,23 @@ export async function getMyInvestments(): Promise<LoanToInvestT[]> {
 }
 
 async function libraryLoanToViewLoan(libraryLoan: Loan): Promise<LoanToInvestT> {
-  const amountWanted: BigNumber = await getSingleAmountWantedFromBlockchain(libraryLoan);
-  const amountGathered: BigNumber = await getSingleAmountGatheredFromBlockchain(libraryLoan);
-  const tokenSymbol: string = await getSingleTokenSymbolFromBlockchain(libraryLoan);
+  const loanT = libraryLoan.parameters.loanToken;
+  const collateralT = libraryLoan.parameters.collateralToken;
+
+  const amountWanted = await loanT.humanize(libraryLoan.parameters.amountWanted);
+  const amountInvested = await loanT.humanize(libraryLoan.blockchainState.amountInvested);
+  const collateralReceived = await collateralT.humanize(libraryLoan.blockchainState.collateralReceived);
   return {
     id: libraryLoan.shortId,
     userName: libraryLoan.owner.ascii,
     interestPermil: libraryLoan.parameters.interestPermil,
-    fundraisingDeadline: libraryLoan.parameters.fundraisingDeadline,
-    amountGathered: amountGathered,
+    fundraisingDeadline: libraryLoan.blockchainState.fundraisingDeadline,
+    amountInvested: amountInvested,
+    collateralReceived: collateralReceived,
     amountWanted: amountWanted,
-    tokenSymbol,
     description: libraryLoan.description,
-    loanState: libraryLoan.blockchainState.loanState
+    loanState: libraryLoan.blockchainState.loanState,
+    loanTokenSymbol: await loanT.symbol(),
+    collateralTokenSymbol: await collateralT.symbol(),
   }
 }

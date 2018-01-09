@@ -18,7 +18,7 @@
       </div>
       <div>
         <div class="mit-fin-line-a"> <div> AMOUNT </div> <div> GATHERED </div> </div>
-        <div class="mit-fin-line-b">{{ investment.amountGathered.toString() }} {{ investment.tokenSymbol }} </div>
+        <div class="mit-fin-line-b">{{ investment.amountInvested.toString() }} {{ investment.tokenSymbol }} </div>
       </div>
     </div>
   </div>

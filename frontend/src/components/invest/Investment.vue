@@ -21,10 +21,16 @@
             </div>
           </div>
         </div>
-        <div class="li-amount-rate-time">
-          <div class="li-amount">
-            <div class="li-title"> AMOUNT </div>
-            <div class="li-value">{{ loan.amountWanted.toString() }} {{loan.tokenSymbol}} </div>
+        <div class="li-amounts-rate-time">
+          <div class="li-amounts">
+            <div class="li-wanted">
+              <div class="li-title"> AMOUNT </div>
+              <div class="li-value">{{ loan.amountWanted.toString() }} <small>{{loan.loanTokenSymbol}}</small> </div>
+            </div>
+            <div class="li-collateral">
+              <div class="li-title"> COLLATERAL </div>
+              <div class="li-value">{{ loan.collateralReceived.toString() }} <small>{{loan.collateralTokenSymbol}}</small> </div>
+            </div>
           </div>
           <div class="li-rate-time">
             <div class="li-rate">
@@ -137,13 +143,16 @@ export default {
         .li-bar-labels { display: flex; justify-content: space-between; margin: 5px 0 0 0; font-size: 11px; font-weight: 300; letter-spacing: 0.4px; text-align: left; color: #858585; }
       }
     }
-    .li-amount-rate-time { width: 42%; background-color: #ffffff;
+    .li-amounts-rate-time { width: 42%; background-color: #ffffff;
       .li-title { font-size: 11px; font-weight: 300; letter-spacing: 0.4px; color: #858585; }
       .li-value { font-size: 34px; font-weight: 300; line-height: 1.06; letter-spacing: -0.4px; color: var(--color-black-cod); }
-      .li-amount { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; border-bottom: 1px solid var(--color-white-smoke); }
+      .li-amounts { display: flex;
+        .li-wanted { width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; border-right: 1px solid var(--color-white-smoke); border-bottom: 1px solid var(--color-white-smoke); }
+        .li-collateral { width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; border-bottom: 1px solid var(--color-white-smoke); }
+      }
       .li-rate-time { display: flex;
-        .li-rate { width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; border-right: 1px solid var(--color-white-smoke);  }
-        .li-time { width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px;  }
+        .li-rate { width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; border-right: 1px solid var(--color-white-smoke);  }
+        .li-time { width: 65%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px;  }
       }
     }
   }

@@ -13,7 +13,7 @@ export interface MyLoanT {
   loanState: LoanState;
 
   // Data from promises.
-  amountGathered?: BigNumber;
+  amountInvested?: BigNumber;
   amountWanted?: BigNumber;
   paybackAmount?: BigNumber;
 

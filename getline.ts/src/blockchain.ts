@@ -120,7 +120,7 @@ export class Contract {
             const opts = {
                 gas: 1000000,
             };
-            method(...params, opts, (err: Error, object: T) => {
+            method.call(...params, opts, (err: Error, object: T) => {
                 if (err !== null) {
                     logger(`Failed: ${err}`);
                     reject(err);
@@ -143,8 +143,21 @@ export class Contract {
      */
     public async mutate(methodName: string, ...params: any[]): Promise<void> {
         logger(`Mutating ${methodName}...`);
-        // Build a transaction and get its' hash.
-        const hash = await this.call<string>(methodName, ...params);
+        const method: any = this.instance[methodName];
+        const hash: string = await (new Promise<string>((resolve, reject) => {
+            const opts = {
+                gas: 1000000,
+            };
+            method.sendTransaction(...params, opts, (err: Error, object: string) => {
+                if (err !== null) {
+                    logger(`Failed: ${err}`);
+                    reject(err);
+                    return;
+                }
+                logger("Sucess.");
+                resolve(object);
+            });
+        }));
         // Wait until transaction hash gets mined into a block.
         await this.blockchain.waitTxMined(hash);
     }

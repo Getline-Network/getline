@@ -14,7 +14,7 @@
 
 syntax = "proto3";
 
-// Version: 0.1.0
+// Version: 0.2.0
 // Follows semver semantics - versions under < 1.0.0 are not considered stable.
 
 package pb;
@@ -46,24 +46,27 @@ enum LoanLifetimeState {
     COLLATERAL_COLLECTION = 1;
     FUNDRAISING = 2;
     PAYBACK = 3;
-    FINISHED = 4;
+    PAIDBACK = 4;
+    DEFAULTED = 5;
+    CANCELED = 6;
 }
 
 // Collection of all data in the Loan contract that can change.
 message LoanState {
-    reserved 1, 2, 3, 4;
-    LoanLifetimeState lifetime_state = 5;
+    LoanLifetimeState lifetime_state = 1;
+    uint64 fundraising_deadline = 2;
+    uint64 payback_deadline = 3;
 }
 
 // Parameters with which a GetLine Loan was created.
 message LoanParameters {
     Address collateral_token = 1;
     Address loan_token = 2;
-    Address liege = 3;
+    Address borrower = 3;
     string amount_wanted = 4;
     uint32 interest_permil = 5;
-    string fundraising_blocks_count = 6;
-    string payback_blocks_count = 7;
+    uint64 fundraising_delta = 6;
+    uint64 payback_delta = 7;
 }
 
 // The cache entry of the metabackend service - contains the parameters of the
