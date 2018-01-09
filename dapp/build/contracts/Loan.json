@@ -294,8 +294,8 @@
   ],
   "bytecode": "0x606060405234156200001057600080fd5b60405160e0806200159b833981016040528080519060200190919080519060200190919080519060200190919080519060200190919080519060200190919080519060200190919080519060200190919050506000841115156200007357600080fd5b6200009887878787878787620002a96401000000000262000c87176401000000009004565b6000808201518160000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060208201518160010160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060408201518160020160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506060820151816003015560808201518160040160006101000a81548161ffff021916908361ffff16021790555060a08201518160040160026101000a81548167ffffffffffffffff021916908367ffffffffffffffff16021790555060c082015181600401600a6101000a81548167ffffffffffffffff021916908367ffffffffffffffff16021790555060e0820151816005015561010082015181600701556101208201518160080160006101000a81548167ffffffffffffffff021916908367ffffffffffffffff1602179055506101408201518160080160086101000a81548167ffffffffffffffff021916908367ffffffffffffffff16021790555061016082015181600a0160006101000a81548160ff021916908360058111156200029457fe5b021790555090505050505050505050620005c6565b620002b3620004ea565b60008367ffffffffffffffff16111515620002cd57600080fd5b60008267ffffffffffffffff16111515620002e757600080fd5b600085111515620002f757600080fd5b428367ffffffffffffffff1642011115156200031257600080fd5b428267ffffffffffffffff168467ffffffffffffffff164201011115156200033957600080fd5b8267ffffffffffffffff1642018267ffffffffffffffff168467ffffffffffffffff164201011115156200036c57600080fd5b87816000019073ffffffffffffffffffffffffffffffffffffffff16908173ffffffffffffffffffffffffffffffffffffffff168152505086816020019073ffffffffffffffffffffffffffffffffffffffff16908173ffffffffffffffffffffffffffffffffffffffff16815250508481606001818152505083816080019061ffff16908161ffff168152505085816040019073ffffffffffffffffffffffffffffffffffffffff16908173ffffffffffffffffffffffffffffffffffffffff1681525050600081610160019060058111156200044657fe5b908160058111156200045457fe5b81525050828160a0019067ffffffffffffffff16908167ffffffffffffffff1681525050818160c0019067ffffffffffffffff16908167ffffffffffffffff1681525050600081610120019067ffffffffffffffff16908167ffffffffffffffff1681525050600081610140019067ffffffffffffffff16908167ffffffffffffffff1681525050809050979650505050505050565b61018060405190810160405280600073ffffffffffffffffffffffffffffffffffffffff168152602001600073ffffffffffffffffffffffffffffffffffffffff168152602001600073ffffffffffffffffffffffffffffffffffffffff16815260200160008152602001600061ffff168152602001600067ffffffffffffffff168152602001600067ffffffffffffffff1681526020016000815260200160008152602001600067ffffffffffffffff168152602001600067ffffffffffffffff16815260200160006005811115620005c057fe5b81525090565b610fc580620005d66000396000f300606060405260043610610107576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806306a9d1a91461010c57806306d37817146101495780631cd301491461019e57806325e629f2146101c75780633c3d3af6146102045780633ccfd60b14610251578063501883011461026657806377f27251146102965780637df1f1b9146102d3578063854bec871461032857806386f5bf881461033d578063a36be9a11461036e578063b2016bd4146103ab578063b9ba292614610400578063c19d93fb14610429578063ca5f428214610452578063e8b5e51f1461047b578063f5caccad14610490578063f6724a55146104a5575b600080fd5b341561011757600080fd5b61011f6104ce565b604051808267ffffffffffffffff1667ffffffffffffffff16815260200191505060405180910390f35b341561015457600080fd5b61015c6104ee565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156101a957600080fd5b6101b161051a565b6040518082815260200191505060405180910390f35b34156101d257600080fd5b6101da6105b1565b604051808267ffffffffffffffff1667ffffffffffffffff16815260200191505060405180910390f35b341561020f57600080fd5b61023b600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506105d1565b6040518082815260200191505060405180910390f35b341561025c57600080fd5b61026461069e565b005b341561027157600080fd5b610279610755565b604051808381526020018281526020019250505060405180910390f35b34156102a157600080fd5b6102a96108ea565b604051808267ffffffffffffffff1667ffffffffffffffff16815260200191505060405180910390f35b34156102de57600080fd5b6102e661090a565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561033357600080fd5b61033b610936565b005b341561034857600080fd5b6103506109ed565b604051808261ffff1661ffff16815260200191505060405180910390f35b341561037957600080fd5b610381610a07565b604051808267ffffffffffffffff1667ffffffffffffffff16815260200191505060405180910390f35b34156103b657600080fd5b6103be610a27565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561040b57600080fd5b610413610a53565b6040518082815260200191505060405180910390f35b341561043457600080fd5b61043c610a5f565b6040518082815260200191505060405180910390f35b341561045d57600080fd5b610465610b01565b6040518082815260200191505060405180910390f35b341561048657600080fd5b61048e610b0d565b005b341561049b57600080fd5b6104a3610bc4565b005b34156104b057600080fd5b6104b8610c7b565b6040518082815260200191505060405180910390f35b60008060080160009054906101000a900467ffffffffffffffff16905090565b60008060010160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b60008073__InvestorLedger________________________638cf388d890916000604051602001526040518263ffffffff167c01000000000000000000000000000000000000000000000000000000000281526004018082815260200191505060206040518083038186803b151561059157600080fd5b6102c65a03f415156105a257600080fd5b50505060405180519050905090565b60008060040160029054906101000a900467ffffffffffffffff16905090565b60008073__InvestorLedger________________________6343a2e1b09091846000604051602001526040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808381526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060206040518083038186803b151561067c57600080fd5b6102c65a03f4151561068d57600080fd5b505050604051805190509050919050565b600073__InvestorLedger________________________63e93f82f29091336040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808381526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060006040518083038186803b151561073f57600080fd5b6102c65a03f4151561075057600080fd5b505050565b600080600073__InvestorLedger________________________63cd5e88a49091336000604051602001526040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808381526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060206040518083038186803b151561080257600080fd5b6102c65a03f4151561081357600080fd5b505050604051805190509150600073__InvestorLedger________________________63cc857d359091336000604051602001526040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808381526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060206040518083038186803b15156108c957600080fd5b6102c65a03f415156108da57600080fd5b5050506040518051905090509091565b600080600401600a9054906101000a900467ffffffffffffffff16905090565b60008060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b600073__InvestorLedger________________________63e491b0589091336040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808381526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060006040518083038186803b15156109d757600080fd5b6102c65a03f415156109e857600080fd5b505050565b60008060040160009054906101000a900461ffff16905090565b60008060080160089054906101000a900467ffffffffffffffff16905090565b60008060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b60008060050154905090565b60008073__InvestorLedger________________________63bbe7873890916000604051602001526040518263ffffffff167c01000000000000000000000000000000000000000000000000000000000281526004018082815260200191505060206040518083038186803b1515610ad657600080fd5b6102c65a03f41515610ae757600080fd5b505050604051805190506005811115610afc57fe5b905090565b60008060030154905090565b600073__InvestorLedger________________________63dc93f39a9091336040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808381526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060006040518083038186803b1515610bae57600080fd5b6102c65a03f41515610bbf57600080fd5b505050565b600073__InvestorLedger________________________636a64cb029091336040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808381526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060006040518083038186803b1515610c6557600080fd5b6102c65a03f41515610c7657600080fd5b505050565b60008060070154905090565b610c8f610ebe565b60008367ffffffffffffffff16111515610ca857600080fd5b60008267ffffffffffffffff16111515610cc157600080fd5b600085111515610cd057600080fd5b428367ffffffffffffffff164201111515610cea57600080fd5b428267ffffffffffffffff168467ffffffffffffffff16420101111515610d1057600080fd5b8267ffffffffffffffff1642018267ffffffffffffffff168467ffffffffffffffff16420101111515610d4257600080fd5b87816000019073ffffffffffffffffffffffffffffffffffffffff16908173ffffffffffffffffffffffffffffffffffffffff168152505086816020019073ffffffffffffffffffffffffffffffffffffffff16908173ffffffffffffffffffffffffffffffffffffffff16815250508481606001818152505083816080019061ffff16908161ffff168152505085816040019073ffffffffffffffffffffffffffffffffffffffff16908173ffffffffffffffffffffffffffffffffffffffff168152505060008161016001906005811115610e1b57fe5b90816005811115610e2857fe5b81525050828160a0019067ffffffffffffffff16908167ffffffffffffffff1681525050818160c0019067ffffffffffffffff16908167ffffffffffffffff1681525050600081610120019067ffffffffffffffff16908167ffffffffffffffff1681525050600081610140019067ffffffffffffffff16908167ffffffffffffffff1681525050809050979650505050505050565b61018060405190810160405280600073ffffffffffffffffffffffffffffffffffffffff168152602001600073ffffffffffffffffffffffffffffffffffffffff168152602001600073ffffffffffffffffffffffffffffffffffffffff16815260200160008152602001600061ffff168152602001600067ffffffffffffffff168152602001600067ffffffffffffffff1681526020016000815260200160008152602001600067ffffffffffffffff168152602001600067ffffffffffffffff16815260200160006005811115610f9357fe5b815250905600a165627a7a723058204572437ce9b1aa1768c13fe7bfc998b95e113ddd8d7f3381b26b2ebbd82461040029",
   "deployedBytecode": "0x606060405260043610610107576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806306a9d1a91461010c57806306d37817146101495780631cd301491461019e57806325e629f2146101c75780633c3d3af6146102045780633ccfd60b14610251578063501883011461026657806377f27251146102965780637df1f1b9146102d3578063854bec871461032857806386f5bf881461033d578063a36be9a11461036e578063b2016bd4146103ab578063b9ba292614610400578063c19d93fb14610429578063ca5f428214610452578063e8b5e51f1461047b578063f5caccad14610490578063f6724a55146104a5575b600080fd5b341561011757600080fd5b61011f6104ce565b604051808267ffffffffffffffff1667ffffffffffffffff16815260200191505060405180910390f35b341561015457600080fd5b61015c6104ee565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156101a957600080fd5b6101b161051a565b6040518082815260200191505060405180910390f35b34156101d257600080fd5b6101da6105b1565b604051808267ffffffffffffffff1667ffffffffffffffff16815260200191505060405180910390f35b341561020f57600080fd5b61023b600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506105d1565b6040518082815260200191505060405180910390f35b341561025c57600080fd5b61026461069e565b005b341561027157600080fd5b610279610755565b604051808381526020018281526020019250505060405180910390f35b34156102a157600080fd5b6102a96108ea565b604051808267ffffffffffffffff1667ffffffffffffffff16815260200191505060405180910390f35b34156102de57600080fd5b6102e661090a565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561033357600080fd5b61033b610936565b005b341561034857600080fd5b6103506109ed565b604051808261ffff1661ffff16815260200191505060405180910390f35b341561037957600080fd5b610381610a07565b604051808267ffffffffffffffff1667ffffffffffffffff16815260200191505060405180910390f35b34156103b657600080fd5b6103be610a27565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561040b57600080fd5b610413610a53565b6040518082815260200191505060405180910390f35b341561043457600080fd5b61043c610a5f565b6040518082815260200191505060405180910390f35b341561045d57600080fd5b610465610b01565b6040518082815260200191505060405180910390f35b341561048657600080fd5b61048e610b0d565b005b341561049b57600080fd5b6104a3610bc4565b005b34156104b057600080fd5b6104b8610c7b565b6040518082815260200191505060405180910390f35b60008060080160009054906101000a900467ffffffffffffffff16905090565b60008060010160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b60008073__InvestorLedger________________________638cf388d890916000604051602001526040518263ffffffff167c01000000000000000000000000000000000000000000000000000000000281526004018082815260200191505060206040518083038186803b151561059157600080fd5b6102c65a03f415156105a257600080fd5b50505060405180519050905090565b60008060040160029054906101000a900467ffffffffffffffff16905090565b60008073__InvestorLedger________________________6343a2e1b09091846000604051602001526040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808381526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060206040518083038186803b151561067c57600080fd5b6102c65a03f4151561068d57600080fd5b505050604051805190509050919050565b600073__InvestorLedger________________________63e93f82f29091336040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808381526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060006040518083038186803b151561073f57600080fd5b6102c65a03f4151561075057600080fd5b505050565b600080600073__InvestorLedger________________________63cd5e88a49091336000604051602001526040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808381526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060206040518083038186803b151561080257600080fd5b6102c65a03f4151561081357600080fd5b505050604051805190509150600073__InvestorLedger________________________63cc857d359091336000604051602001526040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808381526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060206040518083038186803b15156108c957600080fd5b6102c65a03f415156108da57600080fd5b5050506040518051905090509091565b600080600401600a9054906101000a900467ffffffffffffffff16905090565b60008060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b600073__InvestorLedger________________________63e491b0589091336040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808381526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060006040518083038186803b15156109d757600080fd5b6102c65a03f415156109e857600080fd5b505050565b60008060040160009054906101000a900461ffff16905090565b60008060080160089054906101000a900467ffffffffffffffff16905090565b60008060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b60008060050154905090565b60008073__InvestorLedger________________________63bbe7873890916000604051602001526040518263ffffffff167c01000000000000000000000000000000000000000000000000000000000281526004018082815260200191505060206040518083038186803b1515610ad657600080fd5b6102c65a03f41515610ae757600080fd5b505050604051805190506005811115610afc57fe5b905090565b60008060030154905090565b600073__InvestorLedger________________________63dc93f39a9091336040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808381526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060006040518083038186803b1515610bae57600080fd5b6102c65a03f41515610bbf57600080fd5b505050565b600073__InvestorLedger________________________636a64cb029091336040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808381526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060006040518083038186803b1515610c6557600080fd5b6102c65a03f41515610c7657600080fd5b505050565b60008060070154905090565b610c8f610ebe565b60008367ffffffffffffffff16111515610ca857600080fd5b60008267ffffffffffffffff16111515610cc157600080fd5b600085111515610cd057600080fd5b428367ffffffffffffffff164201111515610cea57600080fd5b428267ffffffffffffffff168467ffffffffffffffff16420101111515610d1057600080fd5b8267ffffffffffffffff1642018267ffffffffffffffff168467ffffffffffffffff16420101111515610d4257600080fd5b87816000019073ffffffffffffffffffffffffffffffffffffffff16908173ffffffffffffffffffffffffffffffffffffffff168152505086816020019073ffffffffffffffffffffffffffffffffffffffff16908173ffffffffffffffffffffffffffffffffffffffff16815250508481606001818152505083816080019061ffff16908161ffff168152505085816040019073ffffffffffffffffffffffffffffffffffffffff16908173ffffffffffffffffffffffffffffffffffffffff168152505060008161016001906005811115610e1b57fe5b90816005811115610e2857fe5b81525050828160a0019067ffffffffffffffff16908167ffffffffffffffff1681525050818160c0019067ffffffffffffffff16908167ffffffffffffffff1681525050600081610120019067ffffffffffffffff16908167ffffffffffffffff1681525050600081610140019067ffffffffffffffff16908167ffffffffffffffff1681525050809050979650505050505050565b61018060405190810160405280600073ffffffffffffffffffffffffffffffffffffffff168152602001600073ffffffffffffffffffffffffffffffffffffffff168152602001600073ffffffffffffffffffffffffffffffffffffffff16815260200160008152602001600061ffff168152602001600067ffffffffffffffff168152602001600067ffffffffffffffff1681526020016000815260200160008152602001600067ffffffffffffffff168152602001600067ffffffffffffffff16815260200160006005811115610f9357fe5b815250905600a165627a7a723058204572437ce9b1aa1768c13fe7bfc998b95e113ddd8d7f3381b26b2ebbd82461040029",
-  "sourceMap": "90:4244:2:-;;;201:587;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;518:1;502:13;:17;494:26;;;;;;;;548:233;588:16;618:10;642:9;665:13;692:15;721:20;755:16;548:26;;;;;:233;;;:::i;:::-;539:6;:242;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;201:587;;;;;;;90:4244;;6802:1695:1;7054:14;;:::i;:::-;7143:1;7124:16;:20;;;7116:29;;;;;;;;7178:1;7163:12;:16;;;7155:25;;;;;;;;7213:1;7198:12;:16;7190:25;;;;;;;;7548:15;7529:16;7511:34;;:15;:34;:52;7503:61;;;;;;;;7730:15;7715:12;7678:49;;7696:16;7678:34;;:15;:34;:49;:67;7670:76;;;;;;;;7938:16;7920:34;;:15;:34;7905:12;7868:49;;7886:16;7868:34;;:15;:34;:49;:86;7860:95;;;;;;;;8026:15;8000:7;:23;;:41;;;;;;;;;;;8071:9;8051:7;:17;;:29;;;;;;;;;;;8113:12;8090:7;:20;;:35;;;;;8160:14;8135:7;:22;;:39;;;;;;;;;;;8203:8;8184:7;:16;;:27;;;;;;;;;;;8237:26;8221:7;:13;;:42;;;;;;;;;;;;;;;;;;;;;;;8300:16;8273:7;:24;;:43;;;;;;;;;;;8349:12;8326:7;:20;;:35;;;;;;;;;;;8401:1;8371:7;:27;;:31;;;;;;;;;;;8438:1;8412:7;:23;;:27;;;;;;;;;;;8483:7;8476:14;;6802:1695;;;;;;;;;:::o;90:4244:2:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;",
-  "deployedSourceMap": "90:4244:2:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1940:131;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;981:104;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1544:119;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2202:122;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1799:135;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;4261:71;;;;;;;;;;;;;;3913:233;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2330:110;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1208:99;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3673:76;;;;;;;;;;;;;;1313:116;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2077:119;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;859:116;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2446:117;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1435:103;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1091:111;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3314:79;;;;;;;;;;;;;;2968:98;;;;;;;;;;;;;;1669:124;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1940:131;1992:27;2038:6;:26;;;;;;;;;;;;2031:33;;1940:131;:::o;981:104::-;1023:20;1062:6;:16;;;;;;;;;;;;1055:23;;981:104;:::o;1544:119::-;1592:21;1632:6;:22;;;;:24;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1625:31;;1544:119;:::o;2202:122::-;2251:24;2294:6;:23;;;;;;;;;;;;2287:30;;2202:122;:::o;1799:135::-;1862:15;1896:6;:21;;;;1918:8;1896:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1889:38;;1799:135;;;:::o;4261:71::-;4298:6;:15;;;;4314:10;4298:27;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;4261:71::o;3913:233::-;3953:19;3974:25;4025:6;:27;;;;4053:10;4025:39;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;4011:53;;4094:6;:33;;;;4128:10;4094:45;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;4074:65;;3913:233;;:::o;2330:110::-;2375:20;2414:6;:19;;;;;;;;;;;;2407:26;;2330:110;:::o;1208:99::-;1249:17;1285:6;:15;;;;;;;;;;;;1278:22;;1208:99;:::o;3673:76::-;3709:6;:21;;;;3731:10;3709:33;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3673:76::o;1313:116::-;1360:22;1401:6;:21;;;;;;;;;;;;1394:28;;1313:116;:::o;2077:119::-;2125:23;2167:6;:22;;;;;;;;;;;;2160:29;;2077:119;:::o;859:116::-;907:20;946:6;:22;;;;;;;;;;;;939:29;;859:116;:::o;2446:117::-;2497:15;2531:6;:25;;;2524:32;;2446:117;:::o;1435:103::-;1468:14;1509:6;:19;;;;:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1501:30;;;;;;;;1494:37;;1435:103;:::o;1091:111::-;1136:21;1176:6;:19;;;1169:26;;1091:111;:::o;3314:79::-;3349:6;:25;;;;3375:10;3349:37;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3314:79::o;2968:98::-;3013:6;:34;;;;3048:10;3013:46;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2968:98::o;1669:124::-;1721:20;1760:6;:26;;;1753:33;;1669:124;:::o;6802:1695:1:-;7054:14;;:::i;:::-;7143:1;7124:16;:20;;;7116:29;;;;;;;;7178:1;7163:12;:16;;;7155:25;;;;;;;;7213:1;7198:12;:16;7190:25;;;;;;;;7548:15;7529:16;7511:34;;:15;:34;:52;7503:61;;;;;;;;7730:15;7715:12;7678:49;;7696:16;7678:34;;:15;:34;:49;:67;7670:76;;;;;;;;7938:16;7920:34;;:15;:34;7905:12;7868:49;;7886:16;7868:34;;:15;:34;:49;:86;7860:95;;;;;;;;8026:15;8000:7;:23;;:41;;;;;;;;;;;8071:9;8051:7;:17;;:29;;;;;;;;;;;8113:12;8090:7;:20;;:35;;;;;8160:14;8135:7;:22;;:39;;;;;;;;;;;8203:8;8184:7;:16;;:27;;;;;;;;;;;8237:26;8221:7;:13;;:42;;;;;;;;;;;;;;;;;;;;;;;8300:16;8273:7;:24;;:43;;;;;;;;;;;8349:12;8326:7;:20;;:35;;;;;;;;;;;8401:1;8371:7;:27;;:31;;;;;;;;;;;8438:1;8412:7;:23;;:27;;;;;;;;;;;8483:7;8476:14;;6802:1695;;;;;;;;;:::o;-1:-1:-1:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o",
+  "sourceMap": "90:4244:4:-;;;201:587;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;518:1;502:13;:17;494:26;;;;;;;;548:233;588:16;618:10;642:9;665:13;692:15;721:20;755:16;548:26;;;;;:233;;;:::i;:::-;539:6;:242;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;201:587;;;;;;;90:4244;;6802:1695:3;7054:14;;:::i;:::-;7143:1;7124:16;:20;;;7116:29;;;;;;;;7178:1;7163:12;:16;;;7155:25;;;;;;;;7213:1;7198:12;:16;7190:25;;;;;;;;7548:15;7529:16;7511:34;;:15;:34;:52;7503:61;;;;;;;;7730:15;7715:12;7678:49;;7696:16;7678:34;;:15;:34;:49;:67;7670:76;;;;;;;;7938:16;7920:34;;:15;:34;7905:12;7868:49;;7886:16;7868:34;;:15;:34;:49;:86;7860:95;;;;;;;;8026:15;8000:7;:23;;:41;;;;;;;;;;;8071:9;8051:7;:17;;:29;;;;;;;;;;;8113:12;8090:7;:20;;:35;;;;;8160:14;8135:7;:22;;:39;;;;;;;;;;;8203:8;8184:7;:16;;:27;;;;;;;;;;;8237:26;8221:7;:13;;:42;;;;;;;;;;;;;;;;;;;;;;;8300:16;8273:7;:24;;:43;;;;;;;;;;;8349:12;8326:7;:20;;:35;;;;;;;;;;;8401:1;8371:7;:27;;:31;;;;;;;;;;;8438:1;8412:7;:23;;:27;;;;;;;;;;;8483:7;8476:14;;6802:1695;;;;;;;;;:::o;90:4244:4:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;",
+  "deployedSourceMap": "90:4244:4:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1940:131;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;981:104;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1544:119;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2202:122;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1799:135;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;4261:71;;;;;;;;;;;;;;3913:233;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2330:110;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1208:99;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3673:76;;;;;;;;;;;;;;1313:116;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2077:119;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;859:116;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2446:117;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1435:103;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1091:111;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3314:79;;;;;;;;;;;;;;2968:98;;;;;;;;;;;;;;1669:124;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1940:131;1992:27;2038:6;:26;;;;;;;;;;;;2031:33;;1940:131;:::o;981:104::-;1023:20;1062:6;:16;;;;;;;;;;;;1055:23;;981:104;:::o;1544:119::-;1592:21;1632:6;:22;;;;:24;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1625:31;;1544:119;:::o;2202:122::-;2251:24;2294:6;:23;;;;;;;;;;;;2287:30;;2202:122;:::o;1799:135::-;1862:15;1896:6;:21;;;;1918:8;1896:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1889:38;;1799:135;;;:::o;4261:71::-;4298:6;:15;;;;4314:10;4298:27;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;4261:71::o;3913:233::-;3953:19;3974:25;4025:6;:27;;;;4053:10;4025:39;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;4011:53;;4094:6;:33;;;;4128:10;4094:45;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;4074:65;;3913:233;;:::o;2330:110::-;2375:20;2414:6;:19;;;;;;;;;;;;2407:26;;2330:110;:::o;1208:99::-;1249:17;1285:6;:15;;;;;;;;;;;;1278:22;;1208:99;:::o;3673:76::-;3709:6;:21;;;;3731:10;3709:33;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3673:76::o;1313:116::-;1360:22;1401:6;:21;;;;;;;;;;;;1394:28;;1313:116;:::o;2077:119::-;2125:23;2167:6;:22;;;;;;;;;;;;2160:29;;2077:119;:::o;859:116::-;907:20;946:6;:22;;;;;;;;;;;;939:29;;859:116;:::o;2446:117::-;2497:15;2531:6;:25;;;2524:32;;2446:117;:::o;1435:103::-;1468:14;1509:6;:19;;;;:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1501:30;;;;;;;;1494:37;;1435:103;:::o;1091:111::-;1136:21;1176:6;:19;;;1169:26;;1091:111;:::o;3314:79::-;3349:6;:25;;;;3375:10;3349:37;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3314:79::o;2968:98::-;3013:6;:34;;;;3048:10;3013:46;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2968:98::o;1669:124::-;1721:20;1760:6;:26;;;1753:33;;1669:124;:::o;6802:1695:3:-;7054:14;;:::i;:::-;7143:1;7124:16;:20;;;7116:29;;;;;;;;7178:1;7163:12;:16;;;7155:25;;;;;;;;7213:1;7198:12;:16;7190:25;;;;;;;;7548:15;7529:16;7511:34;;:15;:34;:52;7503:61;;;;;;;;7730:15;7715:12;7678:49;;7696:16;7678:34;;:15;:34;:49;:67;7670:76;;;;;;;;7938:16;7920:34;;:15;:34;7905:12;7868:49;;7886:16;7868:34;;:15;:34;:49;:86;7860:95;;;;;;;;8026:15;8000:7;:23;;:41;;;;;;;;;;;8071:9;8051:7;:17;;:29;;;;;;;;;;;8113:12;8090:7;:20;;:35;;;;;8160:14;8135:7;:22;;:39;;;;;;;;;;;8203:8;8184:7;:16;;:27;;;;;;;;;;;8237:26;8221:7;:13;;:42;;;;;;;;;;;;;;;;;;;;;;;8300:16;8273:7;:24;;:43;;;;;;;;;;;8349:12;8326:7;:20;;:35;;;;;;;;;;;8401:1;8371:7;:27;;:31;;;;;;;;;;;8438:1;8412:7;:23;;:27;;;;;;;;;;;8483:7;8476:14;;6802:1695;;;;;;;;;:::o;-1:-1:-1:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o",
   "source": "pragma solidity ^0.4.17;\n\nimport \"./InvestorLedger.sol\";\nimport \"../tokens/IToken.sol\";\n\n\ncontract Loan {\n    using InvestorLedger for InvestorLedger.Ledger;\n    InvestorLedger.Ledger ledger;   \n\n\n    function Loan(\n        //IAtestor _atestator,\n        IToken _collateralToken,\n        IToken _loanToken,\n        address _borrower,\n        uint256 _amountWanted,\n        uint16  _interestPermil,\n        uint64 _fundraisingDeadline,\n        uint64 _paybackDeadline\n    ) public\n    {\n        require(_amountWanted > 0);\n        \n        ledger = InvestorLedger.openAccount(\n            _collateralToken,\n            _loanToken,\n            _borrower,\n            _amountWanted,\n            _interestPermil,\n            _fundraisingDeadline,\n            _paybackDeadline\n        );\n    }\n\n    // View functions that directly return InvestorLedger data.\n\n    function collateralToken() view public returns (IToken _tokenAddress) {\n        return ledger.collateralToken;\n    }\n\n    function loanToken() view public returns (IToken _tokenAddress) {\n        return ledger.loanToken;\n    }\n\n    function amountWanted() view public returns (uint256 _amountWanted) {\n        return ledger.amountWanted;\n    }\n\n    function borrower() view public returns (address _borrower) {\n        return ledger.borrower;\n    }\n\n    function interestPermil() view public returns (uint16 _interestPermil) {\n        return ledger.interestPermil;\n    }\n\n    function state() public returns (uint256 _state) {\n        return uint256(ledger.currentState());\n    }\n\n    function paybackRequired() view public returns (uint256 _totalPayback) {\n        return ledger.paybackRequired();\n    }\n\n    function totalAmountInvested() view public returns (uint256 _totalAmount) {\n        return ledger.totalAmountInvested;\n    }\n\n    function amountInvested(address investor) view public returns (uint256 _amount) {\n        return ledger.amountInvested(investor);\n    }\n\n    function fundraisingDeadline() view public returns (uint64 _fundraisingDeadline) {\n        return ledger.fundraisingDeadline;\n    }\n\n    function paybackDeadline() view public returns (uint64 _paybackDeadline) {\n        return ledger.paybackDeadline;\n    }\n\n    function fundraisingDelta() view public returns (uint64 _fundraisingDelta) {\n        return ledger.fundraisingDelta;\n    }\n\n    function paybackDelta() view public returns (uint64 _paybackDelta) {\n        return ledger.paybackDelta;\n    }\n\n    function receivedCollateral() view public returns (uint256 _amount) {\n        return ledger.receivedCollateral;\n    }\n\n    // Three explicit state changing functions. All of them call their\n    // respective ledger process functions, and then process any further new\n    // state that can arise and that might not require funds to be sent (ie.\n    // process a cancelement, default or post-payback condition).\n\n    // gatherCollateral should be called by the the borrower to submit the\n    // collateral for the loan.\n    function gatherCollateral() public {\n        ledger.collateralCollectionProcess(msg.sender);\n    }\n\n    // invest should be called by an investor to submit an investment. It can\n    // also advance the state to either payback (no further processing\n    // necessary) or canceled (state needs to be processed to send investments\n    // back).\n    function invest() public {\n        ledger.fundraisingProcess(msg.sender);\n    }\n\n    // payback should be called by the borrower to submit the loan payback. It\n    // can also advance the state to either paidback (needs processing to send\n    // investment and collateral back) or defaulted (needs processing to send\n    // collateral back to investors).\n    function payback() public {\n        ledger.paybackProcess(msg.sender);\n    }\n\n    // withdrawable can be called by investors and the borrower at any point ti\n    // see if they can either withdraw some loan tokens or collateral tokens.\n    function withdrawable() public returns (uint256 _loanAmount, uint256 _collateralAmount) {\n        _loanAmount = ledger.canWithdrawLoanToken(msg.sender);\n        _collateralAmount = ledger.canWithdrawCollateralToken(msg.sender);\n    }\n\n    // withdraw can be called by investors and borrowers at any point to\n    // execute pending withdrawals.\n    function withdraw() public {\n        ledger.withdraw(msg.sender);\n    }\n}\n",
   "sourcePath": "/home/q3k/Work/getline/getline/dapp/contracts/loans/Loan.sol",
   "ast": {
@@ -303,7 +303,7 @@
       "absolutePath": "/home/q3k/Work/getline/getline/dapp/contracts/loans/Loan.sol",
       "exportedSymbols": {
         "Loan": [
-          1309
+          1497
         ]
       }
     },
@@ -317,39 +317,39 @@
             ".17"
           ]
         },
-        "id": 1062,
+        "id": 1250,
         "name": "PragmaDirective",
-        "src": "0:24:2"
+        "src": "0:24:4"
       },
       {
         "attributes": {
-          "SourceUnit": 1061,
+          "SourceUnit": 1249,
           "absolutePath": "/home/q3k/Work/getline/getline/dapp/contracts/loans/InvestorLedger.sol",
           "file": "./InvestorLedger.sol",
-          "scope": 1310,
+          "scope": 1498,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 1063,
+        "id": 1251,
         "name": "ImportDirective",
-        "src": "26:30:2"
+        "src": "26:30:4"
       },
       {
         "attributes": {
-          "SourceUnit": 1385,
+          "SourceUnit": 1826,
           "absolutePath": "/home/q3k/Work/getline/getline/dapp/contracts/tokens/IToken.sol",
           "file": "../tokens/IToken.sol",
-          "scope": 1310,
+          "scope": 1498,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 1064,
+        "id": 1252,
         "name": "ImportDirective",
-        "src": "57:30:2"
+        "src": "57:30:4"
       },
       {
         "attributes": {
@@ -363,10 +363,10 @@
           "documentation": null,
           "fullyImplemented": true,
           "linearizedBaseContracts": [
-            1309
+            1497
           ],
           "name": "Loan",
-          "scope": 1310
+          "scope": 1498
         },
         "children": [
           {
@@ -375,34 +375,34 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "InvestorLedger",
-                  "referencedDeclaration": 1060,
+                  "referencedDeclaration": 1248,
                   "type": "library InvestorLedger"
                 },
-                "id": 1065,
+                "id": 1253,
                 "name": "UserDefinedTypeName",
-                "src": "116:14:2"
+                "src": "116:14:4"
               },
               {
                 "attributes": {
                   "contractScope": null,
                   "name": "InvestorLedger.Ledger",
-                  "referencedDeclaration": 208,
+                  "referencedDeclaration": 396,
                   "type": "struct InvestorLedger.Ledger storage pointer"
                 },
-                "id": 1066,
+                "id": 1254,
                 "name": "UserDefinedTypeName",
-                "src": "135:21:2"
+                "src": "135:21:4"
               }
             ],
-            "id": 1067,
+            "id": 1255,
             "name": "UsingForDirective",
-            "src": "110:47:2"
+            "src": "110:47:4"
           },
           {
             "attributes": {
               "constant": false,
               "name": "ledger",
-              "scope": 1309,
+              "scope": 1497,
               "stateVariable": true,
               "storageLocation": "default",
               "type": "struct InvestorLedger.Ledger storage ref",
@@ -414,17 +414,17 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "InvestorLedger.Ledger",
-                  "referencedDeclaration": 208,
+                  "referencedDeclaration": 396,
                   "type": "struct InvestorLedger.Ledger storage pointer"
                 },
-                "id": 1068,
+                "id": 1256,
                 "name": "UserDefinedTypeName",
-                "src": "162:21:2"
+                "src": "162:21:4"
               }
             ],
-            "id": 1069,
+            "id": 1257,
             "name": "VariableDeclaration",
-            "src": "162:28:2"
+            "src": "162:28:4"
           },
           {
             "attributes": {
@@ -436,7 +436,7 @@
               ],
               "name": "Loan",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "nonpayable",
               "superFunction": null,
               "visibility": "public"
@@ -448,7 +448,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_collateralToken",
-                      "scope": 1106,
+                      "scope": 1294,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "contract IToken",
@@ -460,23 +460,23 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "IToken",
-                          "referencedDeclaration": 1384,
+                          "referencedDeclaration": 1825,
                           "type": "contract IToken"
                         },
-                        "id": 1070,
+                        "id": 1258,
                         "name": "UserDefinedTypeName",
-                        "src": "255:6:2"
+                        "src": "255:6:4"
                       }
                     ],
-                    "id": 1071,
+                    "id": 1259,
                     "name": "VariableDeclaration",
-                    "src": "255:23:2"
+                    "src": "255:23:4"
                   },
                   {
                     "attributes": {
                       "constant": false,
                       "name": "_loanToken",
-                      "scope": 1106,
+                      "scope": 1294,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "contract IToken",
@@ -488,23 +488,23 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "IToken",
-                          "referencedDeclaration": 1384,
+                          "referencedDeclaration": 1825,
                           "type": "contract IToken"
                         },
-                        "id": 1072,
+                        "id": 1260,
                         "name": "UserDefinedTypeName",
-                        "src": "288:6:2"
+                        "src": "288:6:4"
                       }
                     ],
-                    "id": 1073,
+                    "id": 1261,
                     "name": "VariableDeclaration",
-                    "src": "288:17:2"
+                    "src": "288:17:4"
                   },
                   {
                     "attributes": {
                       "constant": false,
                       "name": "_borrower",
-                      "scope": 1106,
+                      "scope": 1294,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "address",
@@ -517,20 +517,20 @@
                           "name": "address",
                           "type": "address"
                         },
-                        "id": 1074,
+                        "id": 1262,
                         "name": "ElementaryTypeName",
-                        "src": "315:7:2"
+                        "src": "315:7:4"
                       }
                     ],
-                    "id": 1075,
+                    "id": 1263,
                     "name": "VariableDeclaration",
-                    "src": "315:17:2"
+                    "src": "315:17:4"
                   },
                   {
                     "attributes": {
                       "constant": false,
                       "name": "_amountWanted",
-                      "scope": 1106,
+                      "scope": 1294,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -543,20 +543,20 @@
                           "name": "uint256",
                           "type": "uint256"
                         },
-                        "id": 1076,
+                        "id": 1264,
                         "name": "ElementaryTypeName",
-                        "src": "342:7:2"
+                        "src": "342:7:4"
                       }
                     ],
-                    "id": 1077,
+                    "id": 1265,
                     "name": "VariableDeclaration",
-                    "src": "342:21:2"
+                    "src": "342:21:4"
                   },
                   {
                     "attributes": {
                       "constant": false,
                       "name": "_interestPermil",
-                      "scope": 1106,
+                      "scope": 1294,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint16",
@@ -569,20 +569,20 @@
                           "name": "uint16",
                           "type": "uint16"
                         },
-                        "id": 1078,
+                        "id": 1266,
                         "name": "ElementaryTypeName",
-                        "src": "373:6:2"
+                        "src": "373:6:4"
                       }
                     ],
-                    "id": 1079,
+                    "id": 1267,
                     "name": "VariableDeclaration",
-                    "src": "373:23:2"
+                    "src": "373:23:4"
                   },
                   {
                     "attributes": {
                       "constant": false,
                       "name": "_fundraisingDeadline",
-                      "scope": 1106,
+                      "scope": 1294,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint64",
@@ -595,20 +595,20 @@
                           "name": "uint64",
                           "type": "uint64"
                         },
-                        "id": 1080,
+                        "id": 1268,
                         "name": "ElementaryTypeName",
-                        "src": "406:6:2"
+                        "src": "406:6:4"
                       }
                     ],
-                    "id": 1081,
+                    "id": 1269,
                     "name": "VariableDeclaration",
-                    "src": "406:27:2"
+                    "src": "406:27:4"
                   },
                   {
                     "attributes": {
                       "constant": false,
                       "name": "_paybackDeadline",
-                      "scope": 1106,
+                      "scope": 1294,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint64",
@@ -621,19 +621,19 @@
                           "name": "uint64",
                           "type": "uint64"
                         },
-                        "id": 1082,
+                        "id": 1270,
                         "name": "ElementaryTypeName",
-                        "src": "443:6:2"
+                        "src": "443:6:4"
                       }
                     ],
-                    "id": 1083,
+                    "id": 1271,
                     "name": "VariableDeclaration",
-                    "src": "443:23:2"
+                    "src": "443:23:4"
                   }
                 ],
-                "id": 1084,
+                "id": 1272,
                 "name": "ParameterList",
-                "src": "214:258:2"
+                "src": "214:258:4"
               },
               {
                 "attributes": {
@@ -642,9 +642,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1085,
+                "id": 1273,
                 "name": "ParameterList",
-                "src": "484:0:2"
+                "src": "484:0:4"
               },
               {
                 "children": [
@@ -676,13 +676,13 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1399,
+                              "referencedDeclaration": 1920,
                               "type": "function (bool) pure",
                               "value": "require"
                             },
-                            "id": 1086,
+                            "id": 1274,
                             "name": "Identifier",
-                            "src": "494:7:2"
+                            "src": "494:7:4"
                           },
                           {
                             "attributes": {
@@ -705,13 +705,13 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1077,
+                                  "referencedDeclaration": 1265,
                                   "type": "uint256",
                                   "value": "_amountWanted"
                                 },
-                                "id": 1087,
+                                "id": 1275,
                                 "name": "Identifier",
-                                "src": "502:13:2"
+                                "src": "502:13:4"
                               },
                               {
                                 "attributes": {
@@ -726,24 +726,24 @@
                                   "type": "int_const 0",
                                   "value": "0"
                                 },
-                                "id": 1088,
+                                "id": 1276,
                                 "name": "Literal",
-                                "src": "518:1:2"
+                                "src": "518:1:4"
                               }
                             ],
-                            "id": 1089,
+                            "id": 1277,
                             "name": "BinaryOperation",
-                            "src": "502:17:2"
+                            "src": "502:17:4"
                           }
                         ],
-                        "id": 1090,
+                        "id": 1278,
                         "name": "FunctionCall",
-                        "src": "494:26:2"
+                        "src": "494:26:4"
                       }
                     ],
-                    "id": 1091,
+                    "id": 1279,
                     "name": "ExpressionStatement",
-                    "src": "494:26:2"
+                    "src": "494:26:4"
                   },
                   {
                     "children": [
@@ -764,13 +764,13 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1069,
+                              "referencedDeclaration": 1257,
                               "type": "struct InvestorLedger.Ledger storage ref",
                               "value": "ledger"
                             },
-                            "id": 1092,
+                            "id": 1280,
                             "name": "Identifier",
-                            "src": "539:6:2"
+                            "src": "539:6:4"
                           },
                           {
                             "attributes": {
@@ -791,11 +791,11 @@
                                 "attributes": {
                                   "argumentTypes": [
                                     {
-                                      "typeIdentifier": "t_contract$_IToken_$1384",
+                                      "typeIdentifier": "t_contract$_IToken_$1825",
                                       "typeString": "contract IToken"
                                     },
                                     {
-                                      "typeIdentifier": "t_contract$_IToken_$1384",
+                                      "typeIdentifier": "t_contract$_IToken_$1825",
                                       "typeString": "contract IToken"
                                     },
                                     {
@@ -824,7 +824,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "openAccount",
-                                  "referencedDeclaration": 417,
+                                  "referencedDeclaration": 605,
                                   "type": "function (contract IToken,contract IToken,address,uint256,uint16,uint64,uint64) view returns (struct InvestorLedger.Ledger memory)"
                                 },
                                 "children": [
@@ -834,18 +834,18 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 1060,
+                                      "referencedDeclaration": 1248,
                                       "type": "type(library InvestorLedger)",
                                       "value": "InvestorLedger"
                                     },
-                                    "id": 1093,
+                                    "id": 1281,
                                     "name": "Identifier",
-                                    "src": "548:14:2"
+                                    "src": "548:14:4"
                                   }
                                 ],
-                                "id": 1094,
+                                "id": 1282,
                                 "name": "MemberAccess",
-                                "src": "548:26:2"
+                                "src": "548:26:4"
                               },
                               {
                                 "attributes": {
@@ -853,13 +853,13 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1071,
+                                  "referencedDeclaration": 1259,
                                   "type": "contract IToken",
                                   "value": "_collateralToken"
                                 },
-                                "id": 1095,
+                                "id": 1283,
                                 "name": "Identifier",
-                                "src": "588:16:2"
+                                "src": "588:16:4"
                               },
                               {
                                 "attributes": {
@@ -867,13 +867,13 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1073,
+                                  "referencedDeclaration": 1261,
                                   "type": "contract IToken",
                                   "value": "_loanToken"
                                 },
-                                "id": 1096,
+                                "id": 1284,
                                 "name": "Identifier",
-                                "src": "618:10:2"
+                                "src": "618:10:4"
                               },
                               {
                                 "attributes": {
@@ -881,13 +881,13 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1075,
+                                  "referencedDeclaration": 1263,
                                   "type": "address",
                                   "value": "_borrower"
                                 },
-                                "id": 1097,
+                                "id": 1285,
                                 "name": "Identifier",
-                                "src": "642:9:2"
+                                "src": "642:9:4"
                               },
                               {
                                 "attributes": {
@@ -895,13 +895,13 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1077,
+                                  "referencedDeclaration": 1265,
                                   "type": "uint256",
                                   "value": "_amountWanted"
                                 },
-                                "id": 1098,
+                                "id": 1286,
                                 "name": "Identifier",
-                                "src": "665:13:2"
+                                "src": "665:13:4"
                               },
                               {
                                 "attributes": {
@@ -909,13 +909,13 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1079,
+                                  "referencedDeclaration": 1267,
                                   "type": "uint16",
                                   "value": "_interestPermil"
                                 },
-                                "id": 1099,
+                                "id": 1287,
                                 "name": "Identifier",
-                                "src": "692:15:2"
+                                "src": "692:15:4"
                               },
                               {
                                 "attributes": {
@@ -923,13 +923,13 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1081,
+                                  "referencedDeclaration": 1269,
                                   "type": "uint64",
                                   "value": "_fundraisingDeadline"
                                 },
-                                "id": 1100,
+                                "id": 1288,
                                 "name": "Identifier",
-                                "src": "721:20:2"
+                                "src": "721:20:4"
                               },
                               {
                                 "attributes": {
@@ -937,38 +937,38 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1083,
+                                  "referencedDeclaration": 1271,
                                   "type": "uint64",
                                   "value": "_paybackDeadline"
                                 },
-                                "id": 1101,
+                                "id": 1289,
                                 "name": "Identifier",
-                                "src": "755:16:2"
+                                "src": "755:16:4"
                               }
                             ],
-                            "id": 1102,
+                            "id": 1290,
                             "name": "FunctionCall",
-                            "src": "548:233:2"
+                            "src": "548:233:4"
                           }
                         ],
-                        "id": 1103,
+                        "id": 1291,
                         "name": "Assignment",
-                        "src": "539:242:2"
+                        "src": "539:242:4"
                       }
                     ],
-                    "id": 1104,
+                    "id": 1292,
                     "name": "ExpressionStatement",
-                    "src": "539:242:2"
+                    "src": "539:242:4"
                   }
                 ],
-                "id": 1105,
+                "id": 1293,
                 "name": "Block",
-                "src": "484:304:2"
+                "src": "484:304:4"
               }
             ],
-            "id": 1106,
+            "id": 1294,
             "name": "FunctionDefinition",
-            "src": "201:587:2"
+            "src": "201:587:4"
           },
           {
             "attributes": {
@@ -980,7 +980,7 @@
               ],
               "name": "collateralToken",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "view",
               "superFunction": null,
               "visibility": "public"
@@ -993,9 +993,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1107,
+                "id": 1295,
                 "name": "ParameterList",
-                "src": "883:2:2"
+                "src": "883:2:4"
               },
               {
                 "children": [
@@ -1003,7 +1003,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_tokenAddress",
-                      "scope": 1115,
+                      "scope": 1303,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "contract IToken",
@@ -1015,28 +1015,28 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "IToken",
-                          "referencedDeclaration": 1384,
+                          "referencedDeclaration": 1825,
                           "type": "contract IToken"
                         },
-                        "id": 1108,
+                        "id": 1296,
                         "name": "UserDefinedTypeName",
-                        "src": "907:6:2"
+                        "src": "907:6:4"
                       }
                     ],
-                    "id": 1109,
+                    "id": 1297,
                     "name": "VariableDeclaration",
-                    "src": "907:20:2"
+                    "src": "907:20:4"
                   }
                 ],
-                "id": 1110,
+                "id": 1298,
                 "name": "ParameterList",
-                "src": "906:22:2"
+                "src": "906:22:4"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 1110
+                      "functionReturnParameters": 1298
                     },
                     "children": [
                       {
@@ -1047,7 +1047,7 @@
                           "isPure": false,
                           "lValueRequested": false,
                           "member_name": "collateralToken",
-                          "referencedDeclaration": 177,
+                          "referencedDeclaration": 365,
                           "type": "contract IToken"
                         },
                         "children": [
@@ -1057,33 +1057,33 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1069,
+                              "referencedDeclaration": 1257,
                               "type": "struct InvestorLedger.Ledger storage ref",
                               "value": "ledger"
                             },
-                            "id": 1111,
+                            "id": 1299,
                             "name": "Identifier",
-                            "src": "946:6:2"
+                            "src": "946:6:4"
                           }
                         ],
-                        "id": 1112,
+                        "id": 1300,
                         "name": "MemberAccess",
-                        "src": "946:22:2"
+                        "src": "946:22:4"
                       }
                     ],
-                    "id": 1113,
+                    "id": 1301,
                     "name": "Return",
-                    "src": "939:29:2"
+                    "src": "939:29:4"
                   }
                 ],
-                "id": 1114,
+                "id": 1302,
                 "name": "Block",
-                "src": "929:46:2"
+                "src": "929:46:4"
               }
             ],
-            "id": 1115,
+            "id": 1303,
             "name": "FunctionDefinition",
-            "src": "859:116:2"
+            "src": "859:116:4"
           },
           {
             "attributes": {
@@ -1095,7 +1095,7 @@
               ],
               "name": "loanToken",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "view",
               "superFunction": null,
               "visibility": "public"
@@ -1108,9 +1108,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1116,
+                "id": 1304,
                 "name": "ParameterList",
-                "src": "999:2:2"
+                "src": "999:2:4"
               },
               {
                 "children": [
@@ -1118,7 +1118,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_tokenAddress",
-                      "scope": 1124,
+                      "scope": 1312,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "contract IToken",
@@ -1130,28 +1130,28 @@
                         "attributes": {
                           "contractScope": null,
                           "name": "IToken",
-                          "referencedDeclaration": 1384,
+                          "referencedDeclaration": 1825,
                           "type": "contract IToken"
                         },
-                        "id": 1117,
+                        "id": 1305,
                         "name": "UserDefinedTypeName",
-                        "src": "1023:6:2"
+                        "src": "1023:6:4"
                       }
                     ],
-                    "id": 1118,
+                    "id": 1306,
                     "name": "VariableDeclaration",
-                    "src": "1023:20:2"
+                    "src": "1023:20:4"
                   }
                 ],
-                "id": 1119,
+                "id": 1307,
                 "name": "ParameterList",
-                "src": "1022:22:2"
+                "src": "1022:22:4"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 1119
+                      "functionReturnParameters": 1307
                     },
                     "children": [
                       {
@@ -1162,7 +1162,7 @@
                           "isPure": false,
                           "lValueRequested": false,
                           "member_name": "loanToken",
-                          "referencedDeclaration": 179,
+                          "referencedDeclaration": 367,
                           "type": "contract IToken"
                         },
                         "children": [
@@ -1172,33 +1172,33 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1069,
+                              "referencedDeclaration": 1257,
                               "type": "struct InvestorLedger.Ledger storage ref",
                               "value": "ledger"
                             },
-                            "id": 1120,
+                            "id": 1308,
                             "name": "Identifier",
-                            "src": "1062:6:2"
+                            "src": "1062:6:4"
                           }
                         ],
-                        "id": 1121,
+                        "id": 1309,
                         "name": "MemberAccess",
-                        "src": "1062:16:2"
+                        "src": "1062:16:4"
                       }
                     ],
-                    "id": 1122,
+                    "id": 1310,
                     "name": "Return",
-                    "src": "1055:23:2"
+                    "src": "1055:23:4"
                   }
                 ],
-                "id": 1123,
+                "id": 1311,
                 "name": "Block",
-                "src": "1045:40:2"
+                "src": "1045:40:4"
               }
             ],
-            "id": 1124,
+            "id": 1312,
             "name": "FunctionDefinition",
-            "src": "981:104:2"
+            "src": "981:104:4"
           },
           {
             "attributes": {
@@ -1210,7 +1210,7 @@
               ],
               "name": "amountWanted",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "view",
               "superFunction": null,
               "visibility": "public"
@@ -1223,9 +1223,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1125,
+                "id": 1313,
                 "name": "ParameterList",
-                "src": "1112:2:2"
+                "src": "1112:2:4"
               },
               {
                 "children": [
@@ -1233,7 +1233,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_amountWanted",
-                      "scope": 1133,
+                      "scope": 1321,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -1246,25 +1246,25 @@
                           "name": "uint256",
                           "type": "uint256"
                         },
-                        "id": 1126,
+                        "id": 1314,
                         "name": "ElementaryTypeName",
-                        "src": "1136:7:2"
+                        "src": "1136:7:4"
                       }
                     ],
-                    "id": 1127,
+                    "id": 1315,
                     "name": "VariableDeclaration",
-                    "src": "1136:21:2"
+                    "src": "1136:21:4"
                   }
                 ],
-                "id": 1128,
+                "id": 1316,
                 "name": "ParameterList",
-                "src": "1135:23:2"
+                "src": "1135:23:4"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 1128
+                      "functionReturnParameters": 1316
                     },
                     "children": [
                       {
@@ -1275,7 +1275,7 @@
                           "isPure": false,
                           "lValueRequested": false,
                           "member_name": "amountWanted",
-                          "referencedDeclaration": 183,
+                          "referencedDeclaration": 371,
                           "type": "uint256"
                         },
                         "children": [
@@ -1285,33 +1285,33 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1069,
+                              "referencedDeclaration": 1257,
                               "type": "struct InvestorLedger.Ledger storage ref",
                               "value": "ledger"
                             },
-                            "id": 1129,
+                            "id": 1317,
                             "name": "Identifier",
-                            "src": "1176:6:2"
+                            "src": "1176:6:4"
                           }
                         ],
-                        "id": 1130,
+                        "id": 1318,
                         "name": "MemberAccess",
-                        "src": "1176:19:2"
+                        "src": "1176:19:4"
                       }
                     ],
-                    "id": 1131,
+                    "id": 1319,
                     "name": "Return",
-                    "src": "1169:26:2"
+                    "src": "1169:26:4"
                   }
                 ],
-                "id": 1132,
+                "id": 1320,
                 "name": "Block",
-                "src": "1159:43:2"
+                "src": "1159:43:4"
               }
             ],
-            "id": 1133,
+            "id": 1321,
             "name": "FunctionDefinition",
-            "src": "1091:111:2"
+            "src": "1091:111:4"
           },
           {
             "attributes": {
@@ -1323,7 +1323,7 @@
               ],
               "name": "borrower",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "view",
               "superFunction": null,
               "visibility": "public"
@@ -1336,9 +1336,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1134,
+                "id": 1322,
                 "name": "ParameterList",
-                "src": "1225:2:2"
+                "src": "1225:2:4"
               },
               {
                 "children": [
@@ -1346,7 +1346,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_borrower",
-                      "scope": 1142,
+                      "scope": 1330,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "address",
@@ -1359,25 +1359,25 @@
                           "name": "address",
                           "type": "address"
                         },
-                        "id": 1135,
+                        "id": 1323,
                         "name": "ElementaryTypeName",
-                        "src": "1249:7:2"
+                        "src": "1249:7:4"
                       }
                     ],
-                    "id": 1136,
+                    "id": 1324,
                     "name": "VariableDeclaration",
-                    "src": "1249:17:2"
+                    "src": "1249:17:4"
                   }
                 ],
-                "id": 1137,
+                "id": 1325,
                 "name": "ParameterList",
-                "src": "1248:19:2"
+                "src": "1248:19:4"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 1137
+                      "functionReturnParameters": 1325
                     },
                     "children": [
                       {
@@ -1388,7 +1388,7 @@
                           "isPure": false,
                           "lValueRequested": false,
                           "member_name": "borrower",
-                          "referencedDeclaration": 181,
+                          "referencedDeclaration": 369,
                           "type": "address"
                         },
                         "children": [
@@ -1398,33 +1398,33 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1069,
+                              "referencedDeclaration": 1257,
                               "type": "struct InvestorLedger.Ledger storage ref",
                               "value": "ledger"
                             },
-                            "id": 1138,
+                            "id": 1326,
                             "name": "Identifier",
-                            "src": "1285:6:2"
+                            "src": "1285:6:4"
                           }
                         ],
-                        "id": 1139,
+                        "id": 1327,
                         "name": "MemberAccess",
-                        "src": "1285:15:2"
+                        "src": "1285:15:4"
                       }
                     ],
-                    "id": 1140,
+                    "id": 1328,
                     "name": "Return",
-                    "src": "1278:22:2"
+                    "src": "1278:22:4"
                   }
                 ],
-                "id": 1141,
+                "id": 1329,
                 "name": "Block",
-                "src": "1268:39:2"
+                "src": "1268:39:4"
               }
             ],
-            "id": 1142,
+            "id": 1330,
             "name": "FunctionDefinition",
-            "src": "1208:99:2"
+            "src": "1208:99:4"
           },
           {
             "attributes": {
@@ -1436,7 +1436,7 @@
               ],
               "name": "interestPermil",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "view",
               "superFunction": null,
               "visibility": "public"
@@ -1449,9 +1449,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1143,
+                "id": 1331,
                 "name": "ParameterList",
-                "src": "1336:2:2"
+                "src": "1336:2:4"
               },
               {
                 "children": [
@@ -1459,7 +1459,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_interestPermil",
-                      "scope": 1151,
+                      "scope": 1339,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint16",
@@ -1472,25 +1472,25 @@
                           "name": "uint16",
                           "type": "uint16"
                         },
-                        "id": 1144,
+                        "id": 1332,
                         "name": "ElementaryTypeName",
-                        "src": "1360:6:2"
+                        "src": "1360:6:4"
                       }
                     ],
-                    "id": 1145,
+                    "id": 1333,
                     "name": "VariableDeclaration",
-                    "src": "1360:22:2"
+                    "src": "1360:22:4"
                   }
                 ],
-                "id": 1146,
+                "id": 1334,
                 "name": "ParameterList",
-                "src": "1359:24:2"
+                "src": "1359:24:4"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 1146
+                      "functionReturnParameters": 1334
                     },
                     "children": [
                       {
@@ -1501,7 +1501,7 @@
                           "isPure": false,
                           "lValueRequested": false,
                           "member_name": "interestPermil",
-                          "referencedDeclaration": 185,
+                          "referencedDeclaration": 373,
                           "type": "uint16"
                         },
                         "children": [
@@ -1511,33 +1511,33 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1069,
+                              "referencedDeclaration": 1257,
                               "type": "struct InvestorLedger.Ledger storage ref",
                               "value": "ledger"
                             },
-                            "id": 1147,
+                            "id": 1335,
                             "name": "Identifier",
-                            "src": "1401:6:2"
+                            "src": "1401:6:4"
                           }
                         ],
-                        "id": 1148,
+                        "id": 1336,
                         "name": "MemberAccess",
-                        "src": "1401:21:2"
+                        "src": "1401:21:4"
                       }
                     ],
-                    "id": 1149,
+                    "id": 1337,
                     "name": "Return",
-                    "src": "1394:28:2"
+                    "src": "1394:28:4"
                   }
                 ],
-                "id": 1150,
+                "id": 1338,
                 "name": "Block",
-                "src": "1384:45:2"
+                "src": "1384:45:4"
               }
             ],
-            "id": 1151,
+            "id": 1339,
             "name": "FunctionDefinition",
-            "src": "1313:116:2"
+            "src": "1313:116:4"
           },
           {
             "attributes": {
@@ -1549,7 +1549,7 @@
               ],
               "name": "state",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "nonpayable",
               "superFunction": null,
               "visibility": "public"
@@ -1562,9 +1562,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1152,
+                "id": 1340,
                 "name": "ParameterList",
-                "src": "1449:2:2"
+                "src": "1449:2:4"
               },
               {
                 "children": [
@@ -1572,7 +1572,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_state",
-                      "scope": 1163,
+                      "scope": 1351,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -1585,25 +1585,25 @@
                           "name": "uint256",
                           "type": "uint256"
                         },
-                        "id": 1153,
+                        "id": 1341,
                         "name": "ElementaryTypeName",
-                        "src": "1468:7:2"
+                        "src": "1468:7:4"
                       }
                     ],
-                    "id": 1154,
+                    "id": 1342,
                     "name": "VariableDeclaration",
-                    "src": "1468:14:2"
+                    "src": "1468:14:4"
                   }
                 ],
-                "id": 1155,
+                "id": 1343,
                 "name": "ParameterList",
-                "src": "1467:16:2"
+                "src": "1467:16:4"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 1155
+                      "functionReturnParameters": 1343
                     },
                     "children": [
                       {
@@ -1625,7 +1625,7 @@
                             "attributes": {
                               "argumentTypes": [
                                 {
-                                  "typeIdentifier": "t_enum$_State_$70",
+                                  "typeIdentifier": "t_enum$_State_$258",
                                   "typeString": "enum InvestorLedger.State"
                                 }
                               ],
@@ -1636,9 +1636,9 @@
                               "type": "type(uint256)",
                               "value": "uint256"
                             },
-                            "id": 1156,
+                            "id": 1344,
                             "name": "ElementaryTypeNameExpression",
-                            "src": "1501:7:2"
+                            "src": "1501:7:4"
                           },
                           {
                             "attributes": {
@@ -1668,7 +1668,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "currentState",
-                                  "referencedDeclaration": 280,
+                                  "referencedDeclaration": 468,
                                   "type": "function (struct InvestorLedger.Ledger storage pointer) returns (enum InvestorLedger.State)"
                                 },
                                 "children": [
@@ -1678,43 +1678,43 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 1069,
+                                      "referencedDeclaration": 1257,
                                       "type": "struct InvestorLedger.Ledger storage ref",
                                       "value": "ledger"
                                     },
-                                    "id": 1157,
+                                    "id": 1345,
                                     "name": "Identifier",
-                                    "src": "1509:6:2"
+                                    "src": "1509:6:4"
                                   }
                                 ],
-                                "id": 1158,
+                                "id": 1346,
                                 "name": "MemberAccess",
-                                "src": "1509:19:2"
+                                "src": "1509:19:4"
                               }
                             ],
-                            "id": 1159,
+                            "id": 1347,
                             "name": "FunctionCall",
-                            "src": "1509:21:2"
+                            "src": "1509:21:4"
                           }
                         ],
-                        "id": 1160,
+                        "id": 1348,
                         "name": "FunctionCall",
-                        "src": "1501:30:2"
+                        "src": "1501:30:4"
                       }
                     ],
-                    "id": 1161,
+                    "id": 1349,
                     "name": "Return",
-                    "src": "1494:37:2"
+                    "src": "1494:37:4"
                   }
                 ],
-                "id": 1162,
+                "id": 1350,
                 "name": "Block",
-                "src": "1484:54:2"
+                "src": "1484:54:4"
               }
             ],
-            "id": 1163,
+            "id": 1351,
             "name": "FunctionDefinition",
-            "src": "1435:103:2"
+            "src": "1435:103:4"
           },
           {
             "attributes": {
@@ -1726,7 +1726,7 @@
               ],
               "name": "paybackRequired",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "view",
               "superFunction": null,
               "visibility": "public"
@@ -1739,9 +1739,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1164,
+                "id": 1352,
                 "name": "ParameterList",
-                "src": "1568:2:2"
+                "src": "1568:2:4"
               },
               {
                 "children": [
@@ -1749,7 +1749,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_totalPayback",
-                      "scope": 1173,
+                      "scope": 1361,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -1762,25 +1762,25 @@
                           "name": "uint256",
                           "type": "uint256"
                         },
-                        "id": 1165,
+                        "id": 1353,
                         "name": "ElementaryTypeName",
-                        "src": "1592:7:2"
+                        "src": "1592:7:4"
                       }
                     ],
-                    "id": 1166,
+                    "id": 1354,
                     "name": "VariableDeclaration",
-                    "src": "1592:21:2"
+                    "src": "1592:21:4"
                   }
                 ],
-                "id": 1167,
+                "id": 1355,
                 "name": "ParameterList",
-                "src": "1591:23:2"
+                "src": "1591:23:4"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 1167
+                      "functionReturnParameters": 1355
                     },
                     "children": [
                       {
@@ -1811,7 +1811,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "paybackRequired",
-                              "referencedDeclaration": 249,
+                              "referencedDeclaration": 437,
                               "type": "function (struct InvestorLedger.Ledger storage pointer) view returns (uint256)"
                             },
                             "children": [
@@ -1821,38 +1821,38 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1069,
+                                  "referencedDeclaration": 1257,
                                   "type": "struct InvestorLedger.Ledger storage ref",
                                   "value": "ledger"
                                 },
-                                "id": 1168,
+                                "id": 1356,
                                 "name": "Identifier",
-                                "src": "1632:6:2"
+                                "src": "1632:6:4"
                               }
                             ],
-                            "id": 1169,
+                            "id": 1357,
                             "name": "MemberAccess",
-                            "src": "1632:22:2"
+                            "src": "1632:22:4"
                           }
                         ],
-                        "id": 1170,
+                        "id": 1358,
                         "name": "FunctionCall",
-                        "src": "1632:24:2"
+                        "src": "1632:24:4"
                       }
                     ],
-                    "id": 1171,
+                    "id": 1359,
                     "name": "Return",
-                    "src": "1625:31:2"
+                    "src": "1625:31:4"
                   }
                 ],
-                "id": 1172,
+                "id": 1360,
                 "name": "Block",
-                "src": "1615:48:2"
+                "src": "1615:48:4"
               }
             ],
-            "id": 1173,
+            "id": 1361,
             "name": "FunctionDefinition",
-            "src": "1544:119:2"
+            "src": "1544:119:4"
           },
           {
             "attributes": {
@@ -1864,7 +1864,7 @@
               ],
               "name": "totalAmountInvested",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "view",
               "superFunction": null,
               "visibility": "public"
@@ -1877,9 +1877,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1174,
+                "id": 1362,
                 "name": "ParameterList",
-                "src": "1697:2:2"
+                "src": "1697:2:4"
               },
               {
                 "children": [
@@ -1887,7 +1887,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_totalAmount",
-                      "scope": 1182,
+                      "scope": 1370,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -1900,25 +1900,25 @@
                           "name": "uint256",
                           "type": "uint256"
                         },
-                        "id": 1175,
+                        "id": 1363,
                         "name": "ElementaryTypeName",
-                        "src": "1721:7:2"
+                        "src": "1721:7:4"
                       }
                     ],
-                    "id": 1176,
+                    "id": 1364,
                     "name": "VariableDeclaration",
-                    "src": "1721:20:2"
+                    "src": "1721:20:4"
                   }
                 ],
-                "id": 1177,
+                "id": 1365,
                 "name": "ParameterList",
-                "src": "1720:22:2"
+                "src": "1720:22:4"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 1177
+                      "functionReturnParameters": 1365
                     },
                     "children": [
                       {
@@ -1929,7 +1929,7 @@
                           "isPure": false,
                           "lValueRequested": false,
                           "member_name": "totalAmountInvested",
-                          "referencedDeclaration": 197,
+                          "referencedDeclaration": 385,
                           "type": "uint256"
                         },
                         "children": [
@@ -1939,33 +1939,33 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1069,
+                              "referencedDeclaration": 1257,
                               "type": "struct InvestorLedger.Ledger storage ref",
                               "value": "ledger"
                             },
-                            "id": 1178,
+                            "id": 1366,
                             "name": "Identifier",
-                            "src": "1760:6:2"
+                            "src": "1760:6:4"
                           }
                         ],
-                        "id": 1179,
+                        "id": 1367,
                         "name": "MemberAccess",
-                        "src": "1760:26:2"
+                        "src": "1760:26:4"
                       }
                     ],
-                    "id": 1180,
+                    "id": 1368,
                     "name": "Return",
-                    "src": "1753:33:2"
+                    "src": "1753:33:4"
                   }
                 ],
-                "id": 1181,
+                "id": 1369,
                 "name": "Block",
-                "src": "1743:50:2"
+                "src": "1743:50:4"
               }
             ],
-            "id": 1182,
+            "id": 1370,
             "name": "FunctionDefinition",
-            "src": "1669:124:2"
+            "src": "1669:124:4"
           },
           {
             "attributes": {
@@ -1977,7 +1977,7 @@
               ],
               "name": "amountInvested",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "view",
               "superFunction": null,
               "visibility": "public"
@@ -1989,7 +1989,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "investor",
-                      "scope": 1195,
+                      "scope": 1383,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "address",
@@ -2002,19 +2002,19 @@
                           "name": "address",
                           "type": "address"
                         },
-                        "id": 1183,
+                        "id": 1371,
                         "name": "ElementaryTypeName",
-                        "src": "1823:7:2"
+                        "src": "1823:7:4"
                       }
                     ],
-                    "id": 1184,
+                    "id": 1372,
                     "name": "VariableDeclaration",
-                    "src": "1823:16:2"
+                    "src": "1823:16:4"
                   }
                 ],
-                "id": 1185,
+                "id": 1373,
                 "name": "ParameterList",
-                "src": "1822:18:2"
+                "src": "1822:18:4"
               },
               {
                 "children": [
@@ -2022,7 +2022,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_amount",
-                      "scope": 1195,
+                      "scope": 1383,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -2035,25 +2035,25 @@
                           "name": "uint256",
                           "type": "uint256"
                         },
-                        "id": 1186,
+                        "id": 1374,
                         "name": "ElementaryTypeName",
-                        "src": "1862:7:2"
+                        "src": "1862:7:4"
                       }
                     ],
-                    "id": 1187,
+                    "id": 1375,
                     "name": "VariableDeclaration",
-                    "src": "1862:15:2"
+                    "src": "1862:15:4"
                   }
                 ],
-                "id": 1188,
+                "id": 1376,
                 "name": "ParameterList",
-                "src": "1861:17:2"
+                "src": "1861:17:4"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 1188
+                      "functionReturnParameters": 1376
                     },
                     "children": [
                       {
@@ -2084,7 +2084,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "amountInvested",
-                              "referencedDeclaration": 232,
+                              "referencedDeclaration": 420,
                               "type": "function (struct InvestorLedger.Ledger storage pointer,address) view returns (uint256)"
                             },
                             "children": [
@@ -2094,18 +2094,18 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1069,
+                                  "referencedDeclaration": 1257,
                                   "type": "struct InvestorLedger.Ledger storage ref",
                                   "value": "ledger"
                                 },
-                                "id": 1189,
+                                "id": 1377,
                                 "name": "Identifier",
-                                "src": "1896:6:2"
+                                "src": "1896:6:4"
                               }
                             ],
-                            "id": 1190,
+                            "id": 1378,
                             "name": "MemberAccess",
-                            "src": "1896:21:2"
+                            "src": "1896:21:4"
                           },
                           {
                             "attributes": {
@@ -2113,33 +2113,33 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1184,
+                              "referencedDeclaration": 1372,
                               "type": "address",
                               "value": "investor"
                             },
-                            "id": 1191,
+                            "id": 1379,
                             "name": "Identifier",
-                            "src": "1918:8:2"
+                            "src": "1918:8:4"
                           }
                         ],
-                        "id": 1192,
+                        "id": 1380,
                         "name": "FunctionCall",
-                        "src": "1896:31:2"
+                        "src": "1896:31:4"
                       }
                     ],
-                    "id": 1193,
+                    "id": 1381,
                     "name": "Return",
-                    "src": "1889:38:2"
+                    "src": "1889:38:4"
                   }
                 ],
-                "id": 1194,
+                "id": 1382,
                 "name": "Block",
-                "src": "1879:55:2"
+                "src": "1879:55:4"
               }
             ],
-            "id": 1195,
+            "id": 1383,
             "name": "FunctionDefinition",
-            "src": "1799:135:2"
+            "src": "1799:135:4"
           },
           {
             "attributes": {
@@ -2151,7 +2151,7 @@
               ],
               "name": "fundraisingDeadline",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "view",
               "superFunction": null,
               "visibility": "public"
@@ -2164,9 +2164,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1196,
+                "id": 1384,
                 "name": "ParameterList",
-                "src": "1968:2:2"
+                "src": "1968:2:4"
               },
               {
                 "children": [
@@ -2174,7 +2174,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_fundraisingDeadline",
-                      "scope": 1204,
+                      "scope": 1392,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint64",
@@ -2187,25 +2187,25 @@
                           "name": "uint64",
                           "type": "uint64"
                         },
-                        "id": 1197,
+                        "id": 1385,
                         "name": "ElementaryTypeName",
-                        "src": "1992:6:2"
+                        "src": "1992:6:4"
                       }
                     ],
-                    "id": 1198,
+                    "id": 1386,
                     "name": "VariableDeclaration",
-                    "src": "1992:27:2"
+                    "src": "1992:27:4"
                   }
                 ],
-                "id": 1199,
+                "id": 1387,
                 "name": "ParameterList",
-                "src": "1991:29:2"
+                "src": "1991:29:4"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 1199
+                      "functionReturnParameters": 1387
                     },
                     "children": [
                       {
@@ -2216,7 +2216,7 @@
                           "isPure": false,
                           "lValueRequested": false,
                           "member_name": "fundraisingDeadline",
-                          "referencedDeclaration": 199,
+                          "referencedDeclaration": 387,
                           "type": "uint64"
                         },
                         "children": [
@@ -2226,33 +2226,33 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1069,
+                              "referencedDeclaration": 1257,
                               "type": "struct InvestorLedger.Ledger storage ref",
                               "value": "ledger"
                             },
-                            "id": 1200,
+                            "id": 1388,
                             "name": "Identifier",
-                            "src": "2038:6:2"
+                            "src": "2038:6:4"
                           }
                         ],
-                        "id": 1201,
+                        "id": 1389,
                         "name": "MemberAccess",
-                        "src": "2038:26:2"
+                        "src": "2038:26:4"
                       }
                     ],
-                    "id": 1202,
+                    "id": 1390,
                     "name": "Return",
-                    "src": "2031:33:2"
+                    "src": "2031:33:4"
                   }
                 ],
-                "id": 1203,
+                "id": 1391,
                 "name": "Block",
-                "src": "2021:50:2"
+                "src": "2021:50:4"
               }
             ],
-            "id": 1204,
+            "id": 1392,
             "name": "FunctionDefinition",
-            "src": "1940:131:2"
+            "src": "1940:131:4"
           },
           {
             "attributes": {
@@ -2264,7 +2264,7 @@
               ],
               "name": "paybackDeadline",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "view",
               "superFunction": null,
               "visibility": "public"
@@ -2277,9 +2277,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1205,
+                "id": 1393,
                 "name": "ParameterList",
-                "src": "2101:2:2"
+                "src": "2101:2:4"
               },
               {
                 "children": [
@@ -2287,7 +2287,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_paybackDeadline",
-                      "scope": 1213,
+                      "scope": 1401,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint64",
@@ -2300,25 +2300,25 @@
                           "name": "uint64",
                           "type": "uint64"
                         },
-                        "id": 1206,
+                        "id": 1394,
                         "name": "ElementaryTypeName",
-                        "src": "2125:6:2"
+                        "src": "2125:6:4"
                       }
                     ],
-                    "id": 1207,
+                    "id": 1395,
                     "name": "VariableDeclaration",
-                    "src": "2125:23:2"
+                    "src": "2125:23:4"
                   }
                 ],
-                "id": 1208,
+                "id": 1396,
                 "name": "ParameterList",
-                "src": "2124:25:2"
+                "src": "2124:25:4"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 1208
+                      "functionReturnParameters": 1396
                     },
                     "children": [
                       {
@@ -2329,7 +2329,7 @@
                           "isPure": false,
                           "lValueRequested": false,
                           "member_name": "paybackDeadline",
-                          "referencedDeclaration": 201,
+                          "referencedDeclaration": 389,
                           "type": "uint64"
                         },
                         "children": [
@@ -2339,33 +2339,33 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1069,
+                              "referencedDeclaration": 1257,
                               "type": "struct InvestorLedger.Ledger storage ref",
                               "value": "ledger"
                             },
-                            "id": 1209,
+                            "id": 1397,
                             "name": "Identifier",
-                            "src": "2167:6:2"
+                            "src": "2167:6:4"
                           }
                         ],
-                        "id": 1210,
+                        "id": 1398,
                         "name": "MemberAccess",
-                        "src": "2167:22:2"
+                        "src": "2167:22:4"
                       }
                     ],
-                    "id": 1211,
+                    "id": 1399,
                     "name": "Return",
-                    "src": "2160:29:2"
+                    "src": "2160:29:4"
                   }
                 ],
-                "id": 1212,
+                "id": 1400,
                 "name": "Block",
-                "src": "2150:46:2"
+                "src": "2150:46:4"
               }
             ],
-            "id": 1213,
+            "id": 1401,
             "name": "FunctionDefinition",
-            "src": "2077:119:2"
+            "src": "2077:119:4"
           },
           {
             "attributes": {
@@ -2377,7 +2377,7 @@
               ],
               "name": "fundraisingDelta",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "view",
               "superFunction": null,
               "visibility": "public"
@@ -2390,9 +2390,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1214,
+                "id": 1402,
                 "name": "ParameterList",
-                "src": "2227:2:2"
+                "src": "2227:2:4"
               },
               {
                 "children": [
@@ -2400,7 +2400,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_fundraisingDelta",
-                      "scope": 1222,
+                      "scope": 1410,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint64",
@@ -2413,25 +2413,25 @@
                           "name": "uint64",
                           "type": "uint64"
                         },
-                        "id": 1215,
+                        "id": 1403,
                         "name": "ElementaryTypeName",
-                        "src": "2251:6:2"
+                        "src": "2251:6:4"
                       }
                     ],
-                    "id": 1216,
+                    "id": 1404,
                     "name": "VariableDeclaration",
-                    "src": "2251:24:2"
+                    "src": "2251:24:4"
                   }
                 ],
-                "id": 1217,
+                "id": 1405,
                 "name": "ParameterList",
-                "src": "2250:26:2"
+                "src": "2250:26:4"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 1217
+                      "functionReturnParameters": 1405
                     },
                     "children": [
                       {
@@ -2442,7 +2442,7 @@
                           "isPure": false,
                           "lValueRequested": false,
                           "member_name": "fundraisingDelta",
-                          "referencedDeclaration": 187,
+                          "referencedDeclaration": 375,
                           "type": "uint64"
                         },
                         "children": [
@@ -2452,33 +2452,33 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1069,
+                              "referencedDeclaration": 1257,
                               "type": "struct InvestorLedger.Ledger storage ref",
                               "value": "ledger"
                             },
-                            "id": 1218,
+                            "id": 1406,
                             "name": "Identifier",
-                            "src": "2294:6:2"
+                            "src": "2294:6:4"
                           }
                         ],
-                        "id": 1219,
+                        "id": 1407,
                         "name": "MemberAccess",
-                        "src": "2294:23:2"
+                        "src": "2294:23:4"
                       }
                     ],
-                    "id": 1220,
+                    "id": 1408,
                     "name": "Return",
-                    "src": "2287:30:2"
+                    "src": "2287:30:4"
                   }
                 ],
-                "id": 1221,
+                "id": 1409,
                 "name": "Block",
-                "src": "2277:47:2"
+                "src": "2277:47:4"
               }
             ],
-            "id": 1222,
+            "id": 1410,
             "name": "FunctionDefinition",
-            "src": "2202:122:2"
+            "src": "2202:122:4"
           },
           {
             "attributes": {
@@ -2490,7 +2490,7 @@
               ],
               "name": "paybackDelta",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "view",
               "superFunction": null,
               "visibility": "public"
@@ -2503,9 +2503,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1223,
+                "id": 1411,
                 "name": "ParameterList",
-                "src": "2351:2:2"
+                "src": "2351:2:4"
               },
               {
                 "children": [
@@ -2513,7 +2513,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_paybackDelta",
-                      "scope": 1231,
+                      "scope": 1419,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint64",
@@ -2526,25 +2526,25 @@
                           "name": "uint64",
                           "type": "uint64"
                         },
-                        "id": 1224,
+                        "id": 1412,
                         "name": "ElementaryTypeName",
-                        "src": "2375:6:2"
+                        "src": "2375:6:4"
                       }
                     ],
-                    "id": 1225,
+                    "id": 1413,
                     "name": "VariableDeclaration",
-                    "src": "2375:20:2"
+                    "src": "2375:20:4"
                   }
                 ],
-                "id": 1226,
+                "id": 1414,
                 "name": "ParameterList",
-                "src": "2374:22:2"
+                "src": "2374:22:4"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 1226
+                      "functionReturnParameters": 1414
                     },
                     "children": [
                       {
@@ -2555,7 +2555,7 @@
                           "isPure": false,
                           "lValueRequested": false,
                           "member_name": "paybackDelta",
-                          "referencedDeclaration": 189,
+                          "referencedDeclaration": 377,
                           "type": "uint64"
                         },
                         "children": [
@@ -2565,33 +2565,33 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1069,
+                              "referencedDeclaration": 1257,
                               "type": "struct InvestorLedger.Ledger storage ref",
                               "value": "ledger"
                             },
-                            "id": 1227,
+                            "id": 1415,
                             "name": "Identifier",
-                            "src": "2414:6:2"
+                            "src": "2414:6:4"
                           }
                         ],
-                        "id": 1228,
+                        "id": 1416,
                         "name": "MemberAccess",
-                        "src": "2414:19:2"
+                        "src": "2414:19:4"
                       }
                     ],
-                    "id": 1229,
+                    "id": 1417,
                     "name": "Return",
-                    "src": "2407:26:2"
+                    "src": "2407:26:4"
                   }
                 ],
-                "id": 1230,
+                "id": 1418,
                 "name": "Block",
-                "src": "2397:43:2"
+                "src": "2397:43:4"
               }
             ],
-            "id": 1231,
+            "id": 1419,
             "name": "FunctionDefinition",
-            "src": "2330:110:2"
+            "src": "2330:110:4"
           },
           {
             "attributes": {
@@ -2603,7 +2603,7 @@
               ],
               "name": "receivedCollateral",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "view",
               "superFunction": null,
               "visibility": "public"
@@ -2616,9 +2616,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1232,
+                "id": 1420,
                 "name": "ParameterList",
-                "src": "2473:2:2"
+                "src": "2473:2:4"
               },
               {
                 "children": [
@@ -2626,7 +2626,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_amount",
-                      "scope": 1240,
+                      "scope": 1428,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -2639,25 +2639,25 @@
                           "name": "uint256",
                           "type": "uint256"
                         },
-                        "id": 1233,
+                        "id": 1421,
                         "name": "ElementaryTypeName",
-                        "src": "2497:7:2"
+                        "src": "2497:7:4"
                       }
                     ],
-                    "id": 1234,
+                    "id": 1422,
                     "name": "VariableDeclaration",
-                    "src": "2497:15:2"
+                    "src": "2497:15:4"
                   }
                 ],
-                "id": 1235,
+                "id": 1423,
                 "name": "ParameterList",
-                "src": "2496:17:2"
+                "src": "2496:17:4"
               },
               {
                 "children": [
                   {
                     "attributes": {
-                      "functionReturnParameters": 1235
+                      "functionReturnParameters": 1423
                     },
                     "children": [
                       {
@@ -2668,7 +2668,7 @@
                           "isPure": false,
                           "lValueRequested": false,
                           "member_name": "receivedCollateral",
-                          "referencedDeclaration": 191,
+                          "referencedDeclaration": 379,
                           "type": "uint256"
                         },
                         "children": [
@@ -2678,33 +2678,33 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1069,
+                              "referencedDeclaration": 1257,
                               "type": "struct InvestorLedger.Ledger storage ref",
                               "value": "ledger"
                             },
-                            "id": 1236,
+                            "id": 1424,
                             "name": "Identifier",
-                            "src": "2531:6:2"
+                            "src": "2531:6:4"
                           }
                         ],
-                        "id": 1237,
+                        "id": 1425,
                         "name": "MemberAccess",
-                        "src": "2531:25:2"
+                        "src": "2531:25:4"
                       }
                     ],
-                    "id": 1238,
+                    "id": 1426,
                     "name": "Return",
-                    "src": "2524:32:2"
+                    "src": "2524:32:4"
                   }
                 ],
-                "id": 1239,
+                "id": 1427,
                 "name": "Block",
-                "src": "2514:49:2"
+                "src": "2514:49:4"
               }
             ],
-            "id": 1240,
+            "id": 1428,
             "name": "FunctionDefinition",
-            "src": "2446:117:2"
+            "src": "2446:117:4"
           },
           {
             "attributes": {
@@ -2716,7 +2716,7 @@
               ],
               "name": "gatherCollateral",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "nonpayable",
               "superFunction": null,
               "visibility": "public"
@@ -2729,9 +2729,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1241,
+                "id": 1429,
                 "name": "ParameterList",
-                "src": "2993:2:2"
+                "src": "2993:2:4"
               },
               {
                 "attributes": {
@@ -2740,9 +2740,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1242,
+                "id": 1430,
                 "name": "ParameterList",
-                "src": "3003:0:2"
+                "src": "3003:0:4"
               },
               {
                 "children": [
@@ -2776,7 +2776,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "collateralCollectionProcess",
-                              "referencedDeclaration": 557,
+                              "referencedDeclaration": 745,
                               "type": "function (struct InvestorLedger.Ledger storage pointer,address)"
                             },
                             "children": [
@@ -2786,18 +2786,18 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1069,
+                                  "referencedDeclaration": 1257,
                                   "type": "struct InvestorLedger.Ledger storage ref",
                                   "value": "ledger"
                                 },
-                                "id": 1243,
+                                "id": 1431,
                                 "name": "Identifier",
-                                "src": "3013:6:2"
+                                "src": "3013:6:4"
                               }
                             ],
-                            "id": 1245,
+                            "id": 1433,
                             "name": "MemberAccess",
-                            "src": "3013:34:2"
+                            "src": "3013:34:4"
                           },
                           {
                             "attributes": {
@@ -2817,38 +2817,38 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1396,
+                                  "referencedDeclaration": 1917,
                                   "type": "msg",
                                   "value": "msg"
                                 },
-                                "id": 1246,
+                                "id": 1434,
                                 "name": "Identifier",
-                                "src": "3048:3:2"
+                                "src": "3048:3:4"
                               }
                             ],
-                            "id": 1247,
+                            "id": 1435,
                             "name": "MemberAccess",
-                            "src": "3048:10:2"
+                            "src": "3048:10:4"
                           }
                         ],
-                        "id": 1248,
+                        "id": 1436,
                         "name": "FunctionCall",
-                        "src": "3013:46:2"
+                        "src": "3013:46:4"
                       }
                     ],
-                    "id": 1249,
+                    "id": 1437,
                     "name": "ExpressionStatement",
-                    "src": "3013:46:2"
+                    "src": "3013:46:4"
                   }
                 ],
-                "id": 1250,
+                "id": 1438,
                 "name": "Block",
-                "src": "3003:63:2"
+                "src": "3003:63:4"
               }
             ],
-            "id": 1251,
+            "id": 1439,
             "name": "FunctionDefinition",
-            "src": "2968:98:2"
+            "src": "2968:98:4"
           },
           {
             "attributes": {
@@ -2860,7 +2860,7 @@
               ],
               "name": "invest",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "nonpayable",
               "superFunction": null,
               "visibility": "public"
@@ -2873,9 +2873,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1252,
+                "id": 1440,
                 "name": "ParameterList",
-                "src": "3329:2:2"
+                "src": "3329:2:4"
               },
               {
                 "attributes": {
@@ -2884,9 +2884,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1253,
+                "id": 1441,
                 "name": "ParameterList",
-                "src": "3339:0:2"
+                "src": "3339:0:4"
               },
               {
                 "children": [
@@ -2920,7 +2920,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "fundraisingProcess",
-                              "referencedDeclaration": 719,
+                              "referencedDeclaration": 907,
                               "type": "function (struct InvestorLedger.Ledger storage pointer,address)"
                             },
                             "children": [
@@ -2930,18 +2930,18 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1069,
+                                  "referencedDeclaration": 1257,
                                   "type": "struct InvestorLedger.Ledger storage ref",
                                   "value": "ledger"
                                 },
-                                "id": 1254,
+                                "id": 1442,
                                 "name": "Identifier",
-                                "src": "3349:6:2"
+                                "src": "3349:6:4"
                               }
                             ],
-                            "id": 1256,
+                            "id": 1444,
                             "name": "MemberAccess",
-                            "src": "3349:25:2"
+                            "src": "3349:25:4"
                           },
                           {
                             "attributes": {
@@ -2961,38 +2961,38 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1396,
+                                  "referencedDeclaration": 1917,
                                   "type": "msg",
                                   "value": "msg"
                                 },
-                                "id": 1257,
+                                "id": 1445,
                                 "name": "Identifier",
-                                "src": "3375:3:2"
+                                "src": "3375:3:4"
                               }
                             ],
-                            "id": 1258,
+                            "id": 1446,
                             "name": "MemberAccess",
-                            "src": "3375:10:2"
+                            "src": "3375:10:4"
                           }
                         ],
-                        "id": 1259,
+                        "id": 1447,
                         "name": "FunctionCall",
-                        "src": "3349:37:2"
+                        "src": "3349:37:4"
                       }
                     ],
-                    "id": 1260,
+                    "id": 1448,
                     "name": "ExpressionStatement",
-                    "src": "3349:37:2"
+                    "src": "3349:37:4"
                   }
                 ],
-                "id": 1261,
+                "id": 1449,
                 "name": "Block",
-                "src": "3339:54:2"
+                "src": "3339:54:4"
               }
             ],
-            "id": 1262,
+            "id": 1450,
             "name": "FunctionDefinition",
-            "src": "3314:79:2"
+            "src": "3314:79:4"
           },
           {
             "attributes": {
@@ -3004,7 +3004,7 @@
               ],
               "name": "payback",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "nonpayable",
               "superFunction": null,
               "visibility": "public"
@@ -3017,9 +3017,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1263,
+                "id": 1451,
                 "name": "ParameterList",
-                "src": "3689:2:2"
+                "src": "3689:2:4"
               },
               {
                 "attributes": {
@@ -3028,9 +3028,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1264,
+                "id": 1452,
                 "name": "ParameterList",
-                "src": "3699:0:2"
+                "src": "3699:0:4"
               },
               {
                 "children": [
@@ -3064,7 +3064,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "paybackProcess",
-                              "referencedDeclaration": 779,
+                              "referencedDeclaration": 967,
                               "type": "function (struct InvestorLedger.Ledger storage pointer,address)"
                             },
                             "children": [
@@ -3074,18 +3074,18 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1069,
+                                  "referencedDeclaration": 1257,
                                   "type": "struct InvestorLedger.Ledger storage ref",
                                   "value": "ledger"
                                 },
-                                "id": 1265,
+                                "id": 1453,
                                 "name": "Identifier",
-                                "src": "3709:6:2"
+                                "src": "3709:6:4"
                               }
                             ],
-                            "id": 1267,
+                            "id": 1455,
                             "name": "MemberAccess",
-                            "src": "3709:21:2"
+                            "src": "3709:21:4"
                           },
                           {
                             "attributes": {
@@ -3105,38 +3105,38 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1396,
+                                  "referencedDeclaration": 1917,
                                   "type": "msg",
                                   "value": "msg"
                                 },
-                                "id": 1268,
+                                "id": 1456,
                                 "name": "Identifier",
-                                "src": "3731:3:2"
+                                "src": "3731:3:4"
                               }
                             ],
-                            "id": 1269,
+                            "id": 1457,
                             "name": "MemberAccess",
-                            "src": "3731:10:2"
+                            "src": "3731:10:4"
                           }
                         ],
-                        "id": 1270,
+                        "id": 1458,
                         "name": "FunctionCall",
-                        "src": "3709:33:2"
+                        "src": "3709:33:4"
                       }
                     ],
-                    "id": 1271,
+                    "id": 1459,
                     "name": "ExpressionStatement",
-                    "src": "3709:33:2"
+                    "src": "3709:33:4"
                   }
                 ],
-                "id": 1272,
+                "id": 1460,
                 "name": "Block",
-                "src": "3699:50:2"
+                "src": "3699:50:4"
               }
             ],
-            "id": 1273,
+            "id": 1461,
             "name": "FunctionDefinition",
-            "src": "3673:76:2"
+            "src": "3673:76:4"
           },
           {
             "attributes": {
@@ -3148,7 +3148,7 @@
               ],
               "name": "withdrawable",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "nonpayable",
               "superFunction": null,
               "visibility": "public"
@@ -3161,9 +3161,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1274,
+                "id": 1462,
                 "name": "ParameterList",
-                "src": "3934:2:2"
+                "src": "3934:2:4"
               },
               {
                 "children": [
@@ -3171,7 +3171,7 @@
                     "attributes": {
                       "constant": false,
                       "name": "_loanAmount",
-                      "scope": 1297,
+                      "scope": 1485,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -3184,20 +3184,20 @@
                           "name": "uint256",
                           "type": "uint256"
                         },
-                        "id": 1275,
+                        "id": 1463,
                         "name": "ElementaryTypeName",
-                        "src": "3953:7:2"
+                        "src": "3953:7:4"
                       }
                     ],
-                    "id": 1276,
+                    "id": 1464,
                     "name": "VariableDeclaration",
-                    "src": "3953:19:2"
+                    "src": "3953:19:4"
                   },
                   {
                     "attributes": {
                       "constant": false,
                       "name": "_collateralAmount",
-                      "scope": 1297,
+                      "scope": 1485,
                       "stateVariable": false,
                       "storageLocation": "default",
                       "type": "uint256",
@@ -3210,19 +3210,19 @@
                           "name": "uint256",
                           "type": "uint256"
                         },
-                        "id": 1277,
+                        "id": 1465,
                         "name": "ElementaryTypeName",
-                        "src": "3974:7:2"
+                        "src": "3974:7:4"
                       }
                     ],
-                    "id": 1278,
+                    "id": 1466,
                     "name": "VariableDeclaration",
-                    "src": "3974:25:2"
+                    "src": "3974:25:4"
                   }
                 ],
-                "id": 1279,
+                "id": 1467,
                 "name": "ParameterList",
-                "src": "3952:48:2"
+                "src": "3952:48:4"
               },
               {
                 "children": [
@@ -3245,13 +3245,13 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1276,
+                              "referencedDeclaration": 1464,
                               "type": "uint256",
                               "value": "_loanAmount"
                             },
-                            "id": 1280,
+                            "id": 1468,
                             "name": "Identifier",
-                            "src": "4011:11:2"
+                            "src": "4011:11:4"
                           },
                           {
                             "attributes": {
@@ -3281,7 +3281,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "canWithdrawLoanToken",
-                                  "referencedDeclaration": 855,
+                                  "referencedDeclaration": 1043,
                                   "type": "function (struct InvestorLedger.Ledger storage pointer,address) returns (uint256)"
                                 },
                                 "children": [
@@ -3291,18 +3291,18 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 1069,
+                                      "referencedDeclaration": 1257,
                                       "type": "struct InvestorLedger.Ledger storage ref",
                                       "value": "ledger"
                                     },
-                                    "id": 1281,
+                                    "id": 1469,
                                     "name": "Identifier",
-                                    "src": "4025:6:2"
+                                    "src": "4025:6:4"
                                   }
                                 ],
-                                "id": 1282,
+                                "id": 1470,
                                 "name": "MemberAccess",
-                                "src": "4025:27:2"
+                                "src": "4025:27:4"
                               },
                               {
                                 "attributes": {
@@ -3322,33 +3322,33 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 1396,
+                                      "referencedDeclaration": 1917,
                                       "type": "msg",
                                       "value": "msg"
                                     },
-                                    "id": 1283,
+                                    "id": 1471,
                                     "name": "Identifier",
-                                    "src": "4053:3:2"
+                                    "src": "4053:3:4"
                                   }
                                 ],
-                                "id": 1284,
+                                "id": 1472,
                                 "name": "MemberAccess",
-                                "src": "4053:10:2"
+                                "src": "4053:10:4"
                               }
                             ],
-                            "id": 1285,
+                            "id": 1473,
                             "name": "FunctionCall",
-                            "src": "4025:39:2"
+                            "src": "4025:39:4"
                           }
                         ],
-                        "id": 1286,
+                        "id": 1474,
                         "name": "Assignment",
-                        "src": "4011:53:2"
+                        "src": "4011:53:4"
                       }
                     ],
-                    "id": 1287,
+                    "id": 1475,
                     "name": "ExpressionStatement",
-                    "src": "4011:53:2"
+                    "src": "4011:53:4"
                   },
                   {
                     "children": [
@@ -3369,13 +3369,13 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 1278,
+                              "referencedDeclaration": 1466,
                               "type": "uint256",
                               "value": "_collateralAmount"
                             },
-                            "id": 1288,
+                            "id": 1476,
                             "name": "Identifier",
-                            "src": "4074:17:2"
+                            "src": "4074:17:4"
                           },
                           {
                             "attributes": {
@@ -3405,7 +3405,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "canWithdrawCollateralToken",
-                                  "referencedDeclaration": 973,
+                                  "referencedDeclaration": 1161,
                                   "type": "function (struct InvestorLedger.Ledger storage pointer,address) returns (uint256)"
                                 },
                                 "children": [
@@ -3415,18 +3415,18 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 1069,
+                                      "referencedDeclaration": 1257,
                                       "type": "struct InvestorLedger.Ledger storage ref",
                                       "value": "ledger"
                                     },
-                                    "id": 1289,
+                                    "id": 1477,
                                     "name": "Identifier",
-                                    "src": "4094:6:2"
+                                    "src": "4094:6:4"
                                   }
                                 ],
-                                "id": 1290,
+                                "id": 1478,
                                 "name": "MemberAccess",
-                                "src": "4094:33:2"
+                                "src": "4094:33:4"
                               },
                               {
                                 "attributes": {
@@ -3446,43 +3446,43 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 1396,
+                                      "referencedDeclaration": 1917,
                                       "type": "msg",
                                       "value": "msg"
                                     },
-                                    "id": 1291,
+                                    "id": 1479,
                                     "name": "Identifier",
-                                    "src": "4128:3:2"
+                                    "src": "4128:3:4"
                                   }
                                 ],
-                                "id": 1292,
+                                "id": 1480,
                                 "name": "MemberAccess",
-                                "src": "4128:10:2"
+                                "src": "4128:10:4"
                               }
                             ],
-                            "id": 1293,
+                            "id": 1481,
                             "name": "FunctionCall",
-                            "src": "4094:45:2"
+                            "src": "4094:45:4"
                           }
                         ],
-                        "id": 1294,
+                        "id": 1482,
                         "name": "Assignment",
-                        "src": "4074:65:2"
+                        "src": "4074:65:4"
                       }
                     ],
-                    "id": 1295,
+                    "id": 1483,
                     "name": "ExpressionStatement",
-                    "src": "4074:65:2"
+                    "src": "4074:65:4"
                   }
                 ],
-                "id": 1296,
+                "id": 1484,
                 "name": "Block",
-                "src": "4001:145:2"
+                "src": "4001:145:4"
               }
             ],
-            "id": 1297,
+            "id": 1485,
             "name": "FunctionDefinition",
-            "src": "3913:233:2"
+            "src": "3913:233:4"
           },
           {
             "attributes": {
@@ -3494,7 +3494,7 @@
               ],
               "name": "withdraw",
               "payable": false,
-              "scope": 1309,
+              "scope": 1497,
               "stateMutability": "nonpayable",
               "superFunction": null,
               "visibility": "public"
@@ -3507,9 +3507,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1298,
+                "id": 1486,
                 "name": "ParameterList",
-                "src": "4278:2:2"
+                "src": "4278:2:4"
               },
               {
                 "attributes": {
@@ -3518,9 +3518,9 @@
                   ]
                 },
                 "children": [],
-                "id": 1299,
+                "id": 1487,
                 "name": "ParameterList",
-                "src": "4288:0:2"
+                "src": "4288:0:4"
               },
               {
                 "children": [
@@ -3554,7 +3554,7 @@
                               "isPure": false,
                               "lValueRequested": false,
                               "member_name": "withdraw",
-                              "referencedDeclaration": 1059,
+                              "referencedDeclaration": 1247,
                               "type": "function (struct InvestorLedger.Ledger storage pointer,address)"
                             },
                             "children": [
@@ -3564,18 +3564,18 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1069,
+                                  "referencedDeclaration": 1257,
                                   "type": "struct InvestorLedger.Ledger storage ref",
                                   "value": "ledger"
                                 },
-                                "id": 1300,
+                                "id": 1488,
                                 "name": "Identifier",
-                                "src": "4298:6:2"
+                                "src": "4298:6:4"
                               }
                             ],
-                            "id": 1302,
+                            "id": 1490,
                             "name": "MemberAccess",
-                            "src": "4298:15:2"
+                            "src": "4298:15:4"
                           },
                           {
                             "attributes": {
@@ -3595,48 +3595,48 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 1396,
+                                  "referencedDeclaration": 1917,
                                   "type": "msg",
                                   "value": "msg"
                                 },
-                                "id": 1303,
+                                "id": 1491,
                                 "name": "Identifier",
-                                "src": "4314:3:2"
+                                "src": "4314:3:4"
                               }
                             ],
-                            "id": 1304,
+                            "id": 1492,
                             "name": "MemberAccess",
-                            "src": "4314:10:2"
+                            "src": "4314:10:4"
                           }
                         ],
-                        "id": 1305,
+                        "id": 1493,
                         "name": "FunctionCall",
-                        "src": "4298:27:2"
+                        "src": "4298:27:4"
                       }
                     ],
-                    "id": 1306,
+                    "id": 1494,
                     "name": "ExpressionStatement",
-                    "src": "4298:27:2"
+                    "src": "4298:27:4"
                   }
                 ],
-                "id": 1307,
+                "id": 1495,
                 "name": "Block",
-                "src": "4288:44:2"
+                "src": "4288:44:4"
               }
             ],
-            "id": 1308,
+            "id": 1496,
             "name": "FunctionDefinition",
-            "src": "4261:71:2"
+            "src": "4261:71:4"
           }
         ],
-        "id": 1309,
+        "id": 1497,
         "name": "ContractDefinition",
-        "src": "90:4244:2"
+        "src": "90:4244:4"
       }
     ],
-    "id": 1310,
+    "id": 1498,
     "name": "SourceUnit",
-    "src": "0:4335:2"
+    "src": "0:4335:4"
   },
   "compiler": {
     "name": "solc",
@@ -3645,7 +3645,7 @@
   "networks": {
     "4": {
       "events": {
-        "0xc5e46c9ca1e5193a8fdcd77493636a686e69c96a9612bf9d0dafce88bca0443d": {
+        "0x325bfb6de5ebac3819596c18a9bc1c5162aaad9fcedfb776ec01b8af2ded865b": {
           "anonymous": false,
           "inputs": [
             {
@@ -3664,7 +3664,7 @@
               "type": "uint8"
             }
           ],
-          "name": "StateTransistion",
+          "name": "StateTransition",
           "type": "event"
         },
         "0x089503121e3a176aa77097b457324d86df56c14f7c42b15e9455f4a2dd13ea00": {
@@ -3735,10 +3735,10 @@
         }
       },
       "links": {
-        "InvestorLedger": "0x396a9d2047dd6df68704ecc0bb69651518d9eb92"
+        "InvestorLedger": "0xdc8afd3f995b1779a73cad87f7ca8f775a59eb8a"
       }
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-01-09T12:49:18.264Z"
+  "updatedAt": "2018-01-09T17:36:37.255Z"
 }
