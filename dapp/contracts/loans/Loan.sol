@@ -56,8 +56,7 @@ contract Loan {
     }
 
     function state() public returns (uint256 _state) {
-        ledger.processTimeouts();
-        return uint256(ledger.state);
+        return uint256(ledger.currentState());
     }
 
     function paybackRequired() view public returns (uint256 _totalPayback) {

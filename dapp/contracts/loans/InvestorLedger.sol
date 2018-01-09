@@ -180,6 +180,12 @@ library InvestorLedger {
         return investment * ledger.interestPermil / PERMIL;
     }
 
+    // currentState returns the ledger's current state, possible altered by
+    // timeouts.
+    function currentState(Ledger storage ledger) processTimeouts(ledger) public returns (State state) {
+        return ledger.state;
+    }
+
     // openAccount is a static constructor of the Ledger state object.
     // @param collateralToken: Token to be used as collateral during the loan.
     // @param loanToken: Token to be loaned.
@@ -229,7 +235,9 @@ library InvestorLedger {
         return account;
     }
 
-    function processTimeouts(Ledger storage ledger) public {
+    // Checks if the current ledger state is one that can time out. If so,
+    // performs the timeout check and advances state if required.
+    modifier processTimeouts(Ledger storage ledger) {
         if (ledger.state == State.Fundraising) {
             if (block.timestamp > ledger.fundraisingDeadline) {
                 newState(ledger, State.Canceled);
@@ -241,6 +249,8 @@ library InvestorLedger {
                 newState(ledger, State.Defaulted);
             }
         }
+
+        _;
     }
 
     // collateralCollectionProcess performs processing within the
@@ -280,8 +290,7 @@ library InvestorLedger {
     // - if loan is fully funded, send out the investments to the borrower and
     //   advance to the Payback state
     // - if timeout is reached, advance to the Canceled state
-    function fundraisingProcess(Ledger storage ledger, address caller) public {
-        processTimeouts(ledger);
+    function fundraisingProcess(Ledger storage ledger, address caller) processTimeouts(ledger) public {
         require(ledger.state == State.Fundraising);
 
         uint256 amountNeeded = ledger.amountWanted - ledger.totalAmountInvested;
@@ -338,8 +347,7 @@ library InvestorLedger {
     // - collect a full payback from the borrower and advance to the Paidback
     //   state
     // - if timeout is reached, advance to the Paidback state
-    function paybackProcess(Ledger storage ledger, address caller) public {
-        processTimeouts(ledger);
+    function paybackProcess(Ledger storage ledger, address caller) processTimeouts(ledger) public {
         require(ledger.state == State.Payback);
 
         if (caller != ledger.borrower) {
@@ -363,9 +371,7 @@ library InvestorLedger {
     // canWithdrawLoanToken performs processing to see if a given address can
     // withdraw loan tokens in one of the final states (Paidback, Canceled,
     // Defaulted)
-    function canWithdrawLoanToken(Ledger storage ledger, address caller) public returns (uint256 _amount) {
-        processTimeouts(ledger);
-
+    function canWithdrawLoanToken(Ledger storage ledger, address caller) processTimeouts(ledger) public returns (uint256 _amount) {
         if (ledger.state == State.Paidback) {
             // In Paidback, investors can withdraw investment with interest.
             uint256 invested = ledger.investorData[caller].amountInvested;
@@ -388,8 +394,7 @@ library InvestorLedger {
     // canWithdrawCollateralToken performs processing to see if a given address
     // can withdraw collateral tokens in one of the final states (Paidback,
     // Canceled, Defaulted)
-    function canWithdrawCollateralToken(Ledger storage ledger, address caller) public returns (uint256 _amount) {
-        processTimeouts(ledger);
+    function canWithdrawCollateralToken(Ledger storage ledger, address caller) processTimeouts(ledger) public returns (uint256 _amount) {
 
         if (ledger.state == State.Paidback && caller == ledger.borrower) {
             // In Paidback, the borrower can withdraw their collateral fully.
