@@ -8,7 +8,7 @@ library InvestorLedger {
     /// Events
 
     // A state transition in the loan FSM occured.
-    event StateTransistion(
+    event StateTransition(
         address indexed loan,
         State from,
         State to
@@ -104,6 +104,7 @@ library InvestorLedger {
     // legal.
     function newState(Ledger storage ledger, State next) private {
         require(legalTransition(ledger.state, next));
+        StateTransition(this, ledger.state, next);
         ledger.state = next;
     }
 

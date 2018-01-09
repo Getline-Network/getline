@@ -186,7 +186,7 @@
       "absolutePath": "/home/q3k/Work/getline/getline/dapp/contracts/tokens/IToken.sol",
       "exportedSymbols": {
         "IToken": [
-          1813
+          1126
         ]
       }
     },
@@ -200,42 +200,42 @@
             ".11"
           ]
         },
-        "id": 1809,
+        "id": 1122,
         "name": "PragmaDirective",
-        "src": "0:24:7"
+        "src": "0:24:3"
       },
       {
         "attributes": {
-          "SourceUnit": 1808,
+          "SourceUnit": 1121,
           "absolutePath": "/home/q3k/Work/getline/getline/dapp/contracts/tokens/ERC/IERC20Token.sol",
           "file": "./ERC/IERC20Token.sol",
-          "scope": 1814,
+          "scope": 1127,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 1810,
+        "id": 1123,
         "name": "ImportDirective",
-        "src": "26:31:7"
+        "src": "26:31:3"
       },
       {
         "attributes": {
           "contractDependencies": [
-            1807
+            1120
           ],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": false,
           "linearizedBaseContracts": [
-            1813,
-            1807
+            1126,
+            1120
           ],
           "name": "IToken",
           "nodes": [
             null
           ],
-          "scope": 1814
+          "scope": 1127
         },
         "children": [
           {
@@ -249,27 +249,27 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "IERC20Token",
-                  "referencedDeclaration": 1807,
+                  "referencedDeclaration": 1120,
                   "type": "contract IERC20Token"
                 },
-                "id": 1811,
+                "id": 1124,
                 "name": "UserDefinedTypeName",
-                "src": "79:11:7"
+                "src": "79:11:3"
               }
             ],
-            "id": 1812,
+            "id": 1125,
             "name": "InheritanceSpecifier",
-            "src": "79:11:7"
+            "src": "79:11:3"
           }
         ],
-        "id": 1813,
+        "id": 1126,
         "name": "ContractDefinition",
-        "src": "60:33:7"
+        "src": "60:33:3"
       }
     ],
-    "id": 1814,
+    "id": 1127,
     "name": "SourceUnit",
-    "src": "0:94:7"
+    "src": "0:94:3"
   },
   "compiler": {
     "name": "solc",
@@ -277,5 +277,5 @@
   },
   "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-01-06T18:17:17.424Z"
+  "updatedAt": "2018-01-09T12:00:33.070Z"
 }
