@@ -3,7 +3,7 @@
   <div v-else class="balance">
     <div class="ba-text">
       <div class="ba-my-account"> My balance: </div>
-      <div class="ba-text-settings"> {{ account.balance }} {{ account.balanceTokenName }} </div>
+      <div class="ba-text-settings"> {{ account.balance.balance.toNumber() }} {{ account.balance.tokenSymbol }} ({{ account.balance.tokenName }}) </div>
     </div>
   </div>
 </template>

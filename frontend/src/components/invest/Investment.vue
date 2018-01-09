@@ -52,7 +52,7 @@
             <div class="li-input-text">{{ loan.currency }}</div>
             <span class="md-error">{{ validators.nonNegativeNumber(this.amount).getErrorMsg() }}</span>
           </md-input-container>
-          <div class="li-amount-left"> {{ account.balance }} {{ account.balanceTokenName }} available </div>
+          <div class="li-amount-left"> {{ account.balance.balance.toNumber() }} {{ account.balance.tokenSymbol }} available </div>
         </div>
         <div class="li-action">
           <div class="li-invested" v-if="invested">

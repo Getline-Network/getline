@@ -41,7 +41,7 @@ const Component = Vue.extend({
     };
   },
   computed: mapState({
-    printValue: (state:StateT) => state.account.demoPrintValue
+    printValue: (state:StateT) => state.account.balance.demoPrintValue
   }),
   methods: {
     isLoading: function isLoading():string {
