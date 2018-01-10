@@ -6,7 +6,7 @@
           <div class="mit-fundraising-percentage">{{formatPercentage(countPercentageGathered(loan.amountInvested, loan.amountWanted))}}%</div>
         </div>
         <fundraising-bar :percentage="countPercentageGathered(loan.amountInvested, loan.amountWanted)" barHeight="8px"/>
-        <div class="mit-fundraising-amount"> Remaining: {{ formatBigNumber(loan.amountWanted.sub(loan.amountInvested))}} {{ loan.tokenSymbol }} </div>
+        <div class="mit-fundraising-amount"> Remaining: {{ formatBigNumber(loan.amountWanted.sub(loan.amountInvested))}} {{ loan.loanTokenSymbol }} </div>
       </div>
     </div>
 </template>

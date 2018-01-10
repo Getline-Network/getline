@@ -30,7 +30,7 @@ export interface MyLoanT {
   //finished
   isFinished?: boolean;
 
-  tokenSymbol?: string;
+  loanTokenSymbol?: string;
 };
 
 import { LoanState } from '../../../../getline.ts';

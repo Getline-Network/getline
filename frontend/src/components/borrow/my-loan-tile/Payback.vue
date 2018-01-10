@@ -3,7 +3,7 @@
     <div class="mlt-financial-data">
       <div>
         <div class="mlt-fin-line-a"> AMOUNT PAID BACK </div>
-        <div class="mlt-fin-line-b">0 {{ loan.tokenSymbol }}</div>
+        <div class="mlt-fin-line-b">0 {{ loan.loanTokenSymbol }}</div>
       </div>
       <div>
       </div>
@@ -12,7 +12,7 @@
     <div :class="transferingPaybakcClass(loan.isTransferingPayback)" >
       <div class="mlt-payback-amount">
         <div class="mlt-payback-left"> NEED TO PAY BACK: </div>
-        <div class="mlt-payback-right"> {{ formatBigNumber(loan.paybackAmount) }} {{ loan.tokenSymbol }} </div>
+        <div class="mlt-payback-right"> {{ formatBigNumber(loan.paybackAmount) }} {{ loan.loanTokenSymbol }} </div>
       </div>
       <green-button
         class="mlt-send-payback-button"
@@ -50,7 +50,7 @@ export default {
   },
   data() {
     return {
-      payBackAmount: this.getLoan().amountGathered,
+      payBackAmount: this.getLoan().amountInvested,
     };
   },
   methods: {

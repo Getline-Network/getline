@@ -11,16 +11,18 @@ const mockLoan1: LoanToInvestT = {
   userName: 'Rodney WrightB',
   interestPermil: 500,
   fundraisingDeadline: moment().add(1, 'days'),
-  amountGathered: new BigNumber("30"),
+  amountInvested: new BigNumber("30"),
   amountWanted: new BigNumber("50"),
-  tokenSymbol: "BTC",
+  collateralReceived: new BigNumber("30"),
+  loanTokenSymbol: "BTC",
+  collateralTokenSymbol: "BTC",
   loanState: LoanState.Payback
 };
 
 const mockLoan2: LoanToInvestT = {
   ...mockLoan1,
   id: '2',
-  loanState: LoanState.Finished
+  loanState: LoanState.Paidback
 };
 
 const mockLoan3: LoanToInvestT = {
