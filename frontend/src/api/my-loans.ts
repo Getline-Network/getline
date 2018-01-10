@@ -25,7 +25,7 @@ export async function getMyLoans(): Promise<MyLoanT[]> {
       loanState,
       amountWanted: amountsWanted[index],
       amountInvested: amountsInvested[index],
-      tokenSymbol: loanTokenSymbols[index],
+      loanTokenSymbol: loanTokenSymbols[index],
       paybackAmount: paybackAmounts[index],
       isCollateralCollection: (loanState === LoanState.CollateralCollection),
       isFundraising: (loanState === LoanState.Fundraising),

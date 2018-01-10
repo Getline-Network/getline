@@ -7,7 +7,7 @@
       >
         <label> AMOUNT </label>
         <md-input v-model="collateralAmount" type="number" />
-        <div class="rl-input-right-text"> {{ loan.tokenSymbol }} </div>
+        <div class="rl-input-right-text"> {{ loan.loanTokenSymbol }} </div>
         <span class="md-error">{{ validators.nonNegativeNumber(this.collateralAmount).getErrorMsg() }}</span>
       </md-input-container>
       <purple-button

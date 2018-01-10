@@ -29,7 +29,7 @@ export const mutations = {
     state.pendingInvestments = loans.filter(loan => loan.loanState == LoanState.Fundraising);
     state.activeInvestments = loans.filter(loan => loan.loanState == LoanState.Payback);
     state.finishedInvestments = loans.filter((loan) => {
-      [LoanState.Canceled, LoanState.Paidback, LoanState.Defaulted].includes(loan.loanState);
+      return ([LoanState.Canceled, LoanState.Paidback, LoanState.Defaulted].includes(loan.loanState));
     });
   }
 }

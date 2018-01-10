@@ -14,11 +14,11 @@
       </div>
       <div>
         <div class="mit-fin-line-a"> <div> AMOUNT </div> <div> WANTED </div> </div>
-        <div class="mit-fin-line-b">{{ investment.amountWanted.toString() }} {{ investment.tokenSymbol }}</div>
+        <div class="mit-fin-line-b">{{ investment.amountWanted.toString() }} {{ investment.loanTokenSymbol }}</div>
       </div>
       <div>
         <div class="mit-fin-line-a"> <div> AMOUNT </div> <div> GATHERED </div> </div>
-        <div class="mit-fin-line-b">{{ investment.amountInvested.toString() }} {{ investment.tokenSymbol }} </div>
+        <div class="mit-fin-line-b">{{ investment.amountInvested.toString() }} {{ investment.loanTokenSymbol }} </div>
       </div>
     </div>
   </div>
