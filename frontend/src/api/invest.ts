@@ -51,7 +51,7 @@ export async function investInLoan(shortId: string, amount: number): Promise<voi
 export async function getMyInvestments(): Promise<LoanToInvestT[]> {
   const api = await API.instance();
   let user = await api.currentUser();
-  let libraryLoans = await api.loansByOwner(user);
+  let libraryLoans = await api.loansByInvestor(user);
   await Promise.all(libraryLoans.map(loan => loan.updateStateFromBlockchain()));
   return await Promise.all(libraryLoans.map(libraryLoanToViewLoan));
 }

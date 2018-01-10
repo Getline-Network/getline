@@ -75,6 +75,13 @@ func (s *Server) GetLoans(ctx context.Context, req *pb.GetLoansRequest) (*pb.Get
 		}
 		query.Borrower = &owner
 	}
+	if req.GetInvestor() != nil {
+		investor, err := util.ProtoAddressDecode(req.GetInvestor())
+		if err != nil {
+			return nil, fmt.Errorf("invalid investor specified: %v", err)
+		}
+		query.Investor = &investor
+	}
 
 	query.ShortID = req.GetShortId()
 	query.State = req.GetState()

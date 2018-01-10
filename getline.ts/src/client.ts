@@ -184,6 +184,21 @@ export class Client {
         return this.loadLoans(res);
     }
 
+    /**
+     * Returns all loans that have been invested into by a given address.
+     * @param investor Address of the investor.
+     * @returns Loans invested into by `investor`.
+     */
+    public async loansByInvestor(investor: Address): Promise<Loan[]> {
+        await this.initializeIfNeeded();
+
+        const req = new pb.GetLoansRequest();
+        req.setNetworkId(this.network);
+        req.setInvestor(investor.proto());
+        const res = await this.metabackend.invoke(MetabackendService.GetLoans, req);
+        return this.loadLoans(res);
+    }
+
     private async loadLoans(res: pb.GetLoansResponse): Promise<Loan[]> {
         if (res.getNetworkId() !== this.network) {
             throw new Error("Invalid network ID in response.");

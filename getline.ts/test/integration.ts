@@ -172,6 +172,33 @@ class EndToEndTests {
 
     }
 
+    @test(timeout(50000), slow(25000)) async loanInvestIndex() {
+        const c = await this.createClient();
+        const loan = await this.createSampleLoan(c);
+        const user = await c.currentUser();
+
+        await c.testToken.print(user);
+        await loan.sendCollateral(new BigNumber(5000));
+
+        let loansInvested = await c.loansByInvestor(user);
+        for (const l of loansInvested) {
+            assert(!l.address.eq(loan.address), "newly created loan found in invested-by data");
+        }
+
+        await loan.invest(new BigNumber(1000));
+
+        loansInvested = await c.loansByInvestor(user);
+        let found = false;
+        for (const l of loansInvested) {
+            if (l.address.eq(loan.address)) {
+                found = true;
+                break;
+            }
+        }
+        assert(found, "loan not found in invested-by data");
+    }
+
+
     /**
      * Checks if a loan is indexed correctly.
      */

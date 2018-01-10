@@ -187,6 +187,7 @@ type LoanQuery struct {
 	Borrower        *ethcommon.Address
 	DeployedAddress *ethcommon.Address
 	State           pb.LoanLifetimeState
+	Investor        *ethcommon.Address
 }
 
 func buildWhere(keys []string) string {
@@ -259,6 +260,35 @@ func (q LoanQuery) Run(ctx context.Context, m *Model) ([]Loan, error) {
 				if l.State.CurrentState != q.State {
 					return
 				}
+				loansFiltered <- &l
+			}(loan)
+		}
+		wg.Wait()
+		close(loansFiltered)
+
+		res = make([]Loan, 0, len(res))
+		for l := range loansFiltered {
+			res = append(res, *l)
+		}
+	}
+
+	if q.Investor != nil {
+		// TODO(q3k): Cache this when you cache the state query.
+		wg := sync.WaitGroup{}
+		wg.Add(len(res))
+		loansFiltered := make(chan *Loan, len(res))
+		for _, loan := range res {
+			go func(l Loan) {
+				defer wg.Done()
+				err, investment := l.GetInvestmentAmountFromBlockchain(ctx, q.Investor)
+				if err != nil {
+					glog.Errorf("When getting investment data from blockchain: %v", err)
+					return
+				}
+				if investment.Cmp(big.NewInt(0)) != 1 {
+					return
+				}
+
 				loansFiltered <- &l
 			}(loan)
 		}
@@ -395,6 +425,19 @@ func (l *Loan) LoadParametersFromBlockchain(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+func (l *Loan) GetInvestmentAmountFromBlockchain(ctx context.Context, address *ethcommon.Address) (error, *big.Int) {
+	loanContract, err := l.model.blockchain.get(ctx, l.Metadata.NetworkID, "Loan", l.Metadata.DeployedAddress)
+	if err != nil {
+		return fmt.Errorf("getting Loan contract failed: %v", err), nil
+	}
+	var res *big.Int
+	err = loanContract.Call(nil, &res, "amountInvested", address)
+	if err != nil {
+		return fmt.Errorf("calling amountInvested failed: %v", err), nil
+	}
+	return nil, res
 }
 
 func (l *Loan) LoadStateFromBlockchain(ctx context.Context) error {
