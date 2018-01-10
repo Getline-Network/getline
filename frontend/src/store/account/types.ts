@@ -1,9 +1,7 @@
 import { BigNumber } from 'api';
 
 export interface AccountStateT {
-  balance: string,
-  balanceTokenName: string,
-  demoPrintValue: string,
+  balance: BalanceT,
   isLoading: boolean;
   loggedIn: boolean;
 }
@@ -11,5 +9,6 @@ export interface AccountStateT {
 export interface BalanceT {
   balance: BigNumber;
   tokenName: string;
+  tokenSymbol: string;
   demoPrintValue: BigNumber;
 }

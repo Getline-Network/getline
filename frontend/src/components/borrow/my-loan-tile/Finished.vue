@@ -1,7 +1,7 @@
 <template>
   <div class="mit-finished">
     <div class="mit-finished-text"> You have successfully paid back: </div>
-    <div class="mit-finished-percentage">{{formatBigNumber(loan.paybackAmount)}} {{loan.tokenSymbol}}</div>
+    <div class="mit-finished-percentage">{{formatBigNumber(loan.paybackAmount)}} {{loan.loanTokenSymbol}}</div>
   </div>
 </template>
 

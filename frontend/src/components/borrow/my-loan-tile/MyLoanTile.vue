@@ -6,7 +6,7 @@
     <div class="mlt-financial-data">
       <div>
         <div class="mlt-fin-line-a"> AMOUNT WANTED </div>
-        <div class="mlt-fin-line-b">{{ formatBigNumber(loan.amountWanted) }} {{ loan.tokenSymbol }}</div>
+        <div class="mlt-fin-line-b">{{ formatBigNumber(loan.amountWanted) }} {{ loan.loanTokenSymbol }}</div>
       </div>
       <div>
         <div class="mlt-fin-line-a"> RATE </div>
@@ -14,7 +14,7 @@
       </div>
       <div>
         <div class="mlt-fin-line-a"> AMOUNT GATHERED </div>
-        <div class="mlt-fin-line-b mlt-fin-line-right"> {{ formatBigNumber(loan.amountInvested) }} {{ loan.tokenSymbol }}</div>
+        <div class="mlt-fin-line-b mlt-fin-line-right"> {{ formatBigNumber(loan.amountInvested) }} {{ loan.loanTokenSymbol }}</div>
       </div>
     </div>
     <fundraising-section v-if="loan.isFundraising" :loan="loan" />
