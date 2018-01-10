@@ -5,5 +5,5 @@ export async function gatherCollateral(shortId: string, amount) {
   const token = api.testToken;
   const user = await api.currentUser();
   const loan = await api.loan(shortId);
-  await loan.sendCollateral(new BigNumber(amount));
+  await loan.sendCollateral(await token.integerize(new BigNumber(amount)));
 }
