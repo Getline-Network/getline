@@ -174,7 +174,10 @@ message GetLoansRequest {
     Address owner = 2;
     // If set, filter by contract short ID.
     string short_id = 3;
+    // If set, filter by the state of a contract.
     LoanLifetimeState state = 4;
+    // If set, filter by contracts into which given address has invested.
+    Address investor = 5;
 }
 
 message GetLoansResponse {
