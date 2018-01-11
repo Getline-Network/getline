@@ -151,8 +151,8 @@ export class Contract {
             };
             method.estimateGas(...params, opts, (err: Error, cost: number) => {
                 if (err !== null) {
-                    logger(`Failed to estimate mutation gas consumption, falling back to default gas `
-                           + `(${fallback}): ${err}`);
+                    console.error(`Failed to estimate mutation gas consumption, falling back to default gas `
+                                  + `(${fallback}): ${err}`);
                     resolve(fallback);
                     return;
                 }
@@ -284,8 +284,8 @@ export class GetlineBlockchain {
             const data = contract.getData(...params, { data: bytecode });
             this.web3.eth.estimateGas({data}, (err: Error, cost: number) => {
                 if (err !== null) {
-                    logger(`Failed to estimate deployment gas consumption, falling back to default gas `
-                           + `(${fallback}): ${err}`);
+                    console.error(`Failed to estimate deployment gas consumption, falling back to default gas `
+                                  + `(${fallback}): ${err}`);
                     resolve(fallback);
                     return;
                 }
