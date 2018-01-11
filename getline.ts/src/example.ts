@@ -32,17 +32,17 @@ const main = async () => {
         await loan.updateStateFromBlockchain();
         console.log("Loan " + loan.shortId);
 
-        const {loanToken, interestPermil, paybackDeadline, fundraisingDeadline} = loan.parameters;
+        const {loanToken, interestPermil, paybackDelta, fundraisingDelta} = loan.parameters;
         const amountWanted = await loan.parameters.loanToken.humanize(loan.parameters.amountWanted);
         const symbol = await loanToken.symbol();
-        const {loanState, amountGathered} = loan.blockchainState;
+        const {loanState, amountInvested} = loan.blockchainState;
 
-        console.log("  amount wanted:        " + amountWanted.toString() + " " + symbol);
-        console.log("  interest     :        " + interestPermil / 10 + "%");
-        console.log("  fundraising deadline: " + fundraisingDeadline.format());
-        console.log("  payback deadline:     " + paybackDeadline.format());
-        console.log("  state:                " + LoanState[loanState]);
-        console.log("  gathered funds:       " + amountGathered.toString());
+        console.log("  amount wanted:    " + amountWanted.toString() + " " + symbol);
+        console.log("  interest     :    " + interestPermil / 10 + "%");
+        console.log("  fundraising time: " + fundraisingDelta);
+        console.log("  payback time:     " + paybackDelta);
+        console.log("  state:            " + LoanState[loanState]);
+        console.log("  gathered funds:   " + amountInvested.toString());
 
         if (loanState === LoanState.CollateralCollection) {
             console.log("  sending collateral...");
@@ -53,9 +53,7 @@ const main = async () => {
         console.log("\n");
     }
 
-    const fundraising = moment().add(7, "days");
-    const payback = moment().add(1, "month");
-    const newLoan = await c.newLoan("test loan please ignore", new BigNumber(10000), 50, fundraising, payback);
+    const newLoan = await c.newLoan("test loan please ignore", new BigNumber(10000), 50, 7 * 86400, 7 * 86400);
     console.log("Created loan: " + newLoan.shortId);
 };
 

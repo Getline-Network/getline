@@ -8,7 +8,7 @@
           <md-input-container :class="validators.nonNegativeNumber(this.amount).getClass()">
             <label> AMOUNT </label>
             <md-input v-model="amount" type="number" />
-            <div class="rl-input-right-text"> {{ account.balanceTokenName }} </div>
+            <div class="rl-input-right-text"> {{ account.balance.tokenSymbol }} </div>
             <span class="md-error">{{ validators.nonNegativeNumber(this.amount).getErrorMsg() }}</span>
           </md-input-container>
         </div>

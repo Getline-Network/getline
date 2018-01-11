@@ -14,7 +14,7 @@ export interface MyLoanT {
   loanState: LoanState;
 
   // Data from promises.
-  amountGathered?: BigNumber;
+  amountInvested?: BigNumber;
   amountWanted?: BigNumber;
   paybackAmount?: BigNumber;
 
@@ -31,7 +31,7 @@ export interface MyLoanT {
   //finished
   isFinished?: boolean;
 
-  tokenSymbol?: string;
+  loanTokenSymbol?: string;
 };
 
 import { LoanState } from '../../../../getline.ts';

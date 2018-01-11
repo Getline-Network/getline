@@ -1,11 +1,9 @@
 import Vue from 'vue'
-import { AccountStateT } from './types';
+import { AccountStateT, BalanceT } from './types';
 
 export const mutations = {
-  'RECEIVE_MY_BALANCE': function (state: AccountStateT, { balance, tokenName, demoPrintValue }: { balance: string, tokenName: string, demoPrintValue: string }): void {
+  'RECEIVE_MY_BALANCE': function (state: AccountStateT, balance: BalanceT): void {
     state.balance = balance;
-    state.balanceTokenName = tokenName;
-    state.demoPrintValue = demoPrintValue;
     state.isLoading = false;
     state.errorReceivingBalance = false;
   },

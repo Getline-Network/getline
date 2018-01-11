@@ -11,9 +11,11 @@ const mockLoan1: LoanToInvestT = {
   userName: 'Rodney WrightB',
   interestPermil: 500,
   fundraisingDeadline: moment().add(1, 'days'),
-  amountGathered: new BigNumber("30"),
+  amountInvested: new BigNumber("30"),
   amountWanted: new BigNumber("50"),
-  tokenSymbol: "BTC"
+  collateralReceived: new BigNumber("30"),
+  loanTokenSymbol: "BTC",
+  collateralTokenSymbol: "BTC",
 };
 
 const mockLoan2: LoanToInvestT = {
@@ -21,7 +23,7 @@ const mockLoan2: LoanToInvestT = {
   id: '2',
   userName: 'Rodney WrightA',
   fundraisingDeadline: moment().add(2, 'days'),
-  amountGathered: new BigNumber("40"),
+  amountInvested: new BigNumber("40"),
   amountWanted: new BigNumber("51"),
 }
 
@@ -30,7 +32,7 @@ const mockLoan3: LoanToInvestT = {
   id: '3',
   userName: 'Rodney WrightC',
   fundraisingDeadline: moment().add(3, 'days'),
-  amountGathered: new BigNumber("1"),
+  amountInvested: new BigNumber("1"),
   amountWanted: new BigNumber("10"),
 }
 

@@ -33,7 +33,9 @@ export const mutations = {
     state.isLoading = false;
     state.pendingInvestments = loans.filter(loan => loan.loanState == LoanState.Fundraising);
     state.activeInvestments = loans.filter(loan => loan.loanState == LoanState.Payback);
-    state.finishedInvestments = loans.filter(loan => loan.loanState == LoanState.Finished);
+    state.finishedInvestments = loans.filter((loan) => {
+      return ([LoanState.Canceled, LoanState.Paidback, LoanState.Defaulted].includes(loan.loanState));
+    });
   }
 }
 
@@ -94,14 +96,14 @@ function getSortCmp(column: sortColumnT): sorterT {
 function extendLoan(loan: LoanToInvestT): LoanToInvestT {
   return {
     ...loan,
-    amountWantedWithToken: loan.amountWanted.toString() + " " + loan.tokenSymbol,
-    percentageFunded: countPercentageGathered(loan.amountGathered, loan.amountWanted)
+    amountWantedWithToken: loan.amountWanted.toString() + " " + loan.loanTokenSymbol,
+    percentageFunded: countPercentageGathered(loan.amountInvested, loan.amountWanted)
   }
 }
 
 function getLoanPercentageWanted(loan: LoanToInvestT) {
-  return countPercentageWanted(loan.amountGathered, loan.amountWanted);
+  return countPercentageWanted(loan.amountInvested, loan.amountWanted);
 }
 function getLoanPercentageFunded(loan: LoanToInvestT) {
-  return countPercentageGathered(loan.amountGathered, loan.amountWanted);
+  return countPercentageGathered(loan.amountInvested, loan.amountWanted);
 }

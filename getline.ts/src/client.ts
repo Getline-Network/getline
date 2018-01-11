@@ -95,7 +95,7 @@ export class Client {
      * @returns Newly created loan.
      */
     public async newLoan(description: string, amount: BigNumber, interestPermil: number,
-                         fundraisingEnd: moment.Moment, paybackEnd: moment.Moment): Promise<Loan> {
+                         fundraisingDelta: number, paybackDelta: number): Promise<Loan> {
         await this.initializeIfNeeded();
 
         // TODO(q3k) change this when we're not on rinkeby and we have a better loan SC
@@ -103,32 +103,14 @@ export class Client {
             throw new Error("cannot place loan on non-rinkeby chains");
         }
 
-        const now = moment();
-        if (fundraisingEnd.isBefore(now)) {
-            throw new Error("cannot place loan with fundraising deadline in the past");
-        }
-        if (paybackEnd.isBefore(now)) {
-            throw new Error("cannot place loan with payback deadline in the past");
-        }
-        if (paybackEnd.isBefore(fundraisingEnd)) {
-            throw new Error("cannot place loan with payback deadline before fundraising deadline");
-        }
         if (amount.lte(0)) {
             throw new Error("cannot place loan for non-positive amount");
         }
 
-        const currentBlock = (await this.blockchain.currentBlock()).toNumber();
-        const blocksPerSecond = (1.0) / 15;
-
-        const fundraisingDelta = fundraisingEnd.diff(now, "seconds");
-        const paybackDelta = paybackEnd.diff(now, "seconds");
-        const fundraisingEndBlocks = currentBlock + blocksPerSecond * fundraisingDelta;
-        const paybackEndBlocks = currentBlock + blocksPerSecond * paybackDelta;
-
         const loan = await this.blockchain.deploy(LOAN_CONTRACT,
             this.testToken.ascii, this.testToken.ascii,
             (await this.currentUser()).ascii,
-            amount, interestPermil, fundraisingEndBlocks, paybackEndBlocks);
+            amount, interestPermil, fundraisingDelta, paybackDelta);
 
         const req = new pb.IndexLoanRequest();
         req.setNetworkId(this.network);
@@ -158,9 +140,9 @@ export class Client {
             throw new Error("Invalid network ID in response.");
         }
 
-        const loan = new Loan(this.blockchain);
-        await loan.loadFromProto(res.getLoanCacheList()[0]);
-        return loan;
+        return this.loadLoans(res).then((loans) => {
+            return loans[0];
+        });
     }
 
     /**
@@ -191,11 +173,28 @@ export class Client {
         stateMap[LoanState.CollateralCollection] = pb.LoanLifetimeState.COLLATERAL_COLLECTION;
         stateMap[LoanState.Fundraising] = pb.LoanLifetimeState.FUNDRAISING;
         stateMap[LoanState.Payback] = pb.LoanLifetimeState.PAYBACK;
-        stateMap[LoanState.Finished] = pb.LoanLifetimeState.FINISHED;
+        stateMap[LoanState.Paidback] = pb.LoanLifetimeState.PAIDBACK;
+        stateMap[LoanState.Canceled] = pb.LoanLifetimeState.CANCELED;
+        stateMap[LoanState.Defaulted] = pb.LoanLifetimeState.DEFAULTED;
 
         const req = new pb.GetLoansRequest();
         req.setNetworkId(this.network);
         req.setState(stateMap[state]);
+        const res = await this.metabackend.invoke(MetabackendService.GetLoans, req);
+        return this.loadLoans(res);
+    }
+
+    /**
+     * Returns all loans that have been invested into by a given address.
+     * @param investor Address of the investor.
+     * @returns Loans invested into by `investor`.
+     */
+    public async loansByInvestor(investor: Address): Promise<Loan[]> {
+        await this.initializeIfNeeded();
+
+        const req = new pb.GetLoansRequest();
+        req.setNetworkId(this.network);
+        req.setInvestor(investor.proto());
         const res = await this.metabackend.invoke(MetabackendService.GetLoans, req);
         return this.loadLoans(res);
     }
@@ -208,7 +207,8 @@ export class Client {
         const promises: Array<Promise<void>> = [];
         res.getLoanCacheList().forEach((elem) => {
             const loan = new Loan(this.blockchain);
-            promises.push(loan.loadFromProto(elem));
+            promises.push(loan.loadFromProto(elem)
+                          .then(() => loan.updateStateFromBlockchain()));
             loans.push(loan);
         });
         await Promise.all(promises);

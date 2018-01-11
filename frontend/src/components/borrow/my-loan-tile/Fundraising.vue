@@ -3,10 +3,10 @@
       <div class="mit-fundraising">
         <div class="mit-fundraising-line-a">
           <div class="mit-fundraising-text"> This loan is looking for investors </div>
-          <div class="mit-fundraising-percentage">{{formatPercentage(countPercentageGathered(loan.amountGathered, loan.amountWanted))}}%</div>
+          <div class="mit-fundraising-percentage">{{formatPercentage(countPercentageGathered(loan.amountInvested, loan.amountWanted))}}%</div>
         </div>
-        <fundraising-bar :percentage="countPercentageGathered(loan.amountGathered, loan.amountWanted)" barHeight="8px"/>
-        <div class="mit-fundraising-amount"> Remaining: {{ formatBigNumber(loan.amountWanted.sub(loan.amountGathered))}} {{ loan.tokenSymbol }} </div>
+        <fundraising-bar :percentage="countPercentageGathered(loan.amountInvested, loan.amountWanted)" barHeight="8px"/>
+        <div class="mit-fundraising-amount"> Remaining: {{ formatBigNumber(loan.amountWanted.sub(loan.amountInvested))}} {{ loan.loanTokenSymbol }} </div>
       </div>
     </div>
 </template>

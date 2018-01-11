@@ -8,8 +8,8 @@ const mockLoan: MyLoanT = {
   shortId: "123",
   description: "desc",
   interestPermil: 12,
-  loanState: LoanState.Finished,
-  amountGathered: new BigNumber(1),
+  loanState: LoanState.Paidback,
+  amountInvested: new BigNumber("30"),
   amountWanted: new BigNumber(2),
   isCollateralCollection: false,
   isFundraising: true

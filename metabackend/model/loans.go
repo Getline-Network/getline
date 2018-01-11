@@ -33,13 +33,13 @@ type Loan struct {
 	model *Model
 
 	Parameters struct {
-		BorrowedToken          ethcommon.Address
-		CollateralToken        ethcommon.Address
-		AmountWanted           *big.Int
-		Borrower               ethcommon.Address
-		InterestPermil         uint16
-		FundraisingBlocksCount *big.Int
-		PaybackBlocksCount     *big.Int
+		LoanToken        ethcommon.Address
+		CollateralToken  ethcommon.Address
+		AmountWanted     *big.Int
+		Borrower         ethcommon.Address
+		InterestPermil   uint16
+		FundraisingDelta uint64
+		PaybackDelta     uint64
 	}
 	Metadata struct {
 		NetworkID       string
@@ -49,19 +49,30 @@ type Loan struct {
 		DeployedAddress ethcommon.Address
 	}
 	State struct {
-		CurrentState pb.LoanLifetimeState
+		CurrentState        pb.LoanLifetimeState
+		FundraisingDeadline uint64
+		PaybackDeadline     uint64
 	}
 }
 
 func (d *Loan) ProtoParameters() *pb.LoanParameters {
 	res := pb.LoanParameters{
-		CollateralToken:        util.ProtoAddress(d.Parameters.CollateralToken.Hex()),
-		LoanToken:              util.ProtoAddress(d.Parameters.BorrowedToken.Hex()),
-		Liege:                  util.ProtoAddress(d.Parameters.Borrower.Hex()),
-		AmountWanted:           d.Parameters.AmountWanted.String(),
-		InterestPermil:         uint32(d.Parameters.InterestPermil),
-		FundraisingBlocksCount: d.Parameters.FundraisingBlocksCount.String(),
-		PaybackBlocksCount:     d.Parameters.PaybackBlocksCount.String(),
+		CollateralToken:  util.ProtoAddress(d.Parameters.CollateralToken.Hex()),
+		LoanToken:        util.ProtoAddress(d.Parameters.LoanToken.Hex()),
+		Borrower:         util.ProtoAddress(d.Parameters.Borrower.Hex()),
+		AmountWanted:     d.Parameters.AmountWanted.String(),
+		InterestPermil:   uint32(d.Parameters.InterestPermil),
+		FundraisingDelta: d.Parameters.FundraisingDelta,
+		PaybackDelta:     d.Parameters.PaybackDelta,
+	}
+	return &res
+}
+
+func (d *Loan) ProtoBlockchainState() *pb.LoanState {
+	res := pb.LoanState{
+		LifetimeState:       d.State.CurrentState,
+		FundraisingDeadline: d.State.FundraisingDeadline,
+		PaybackDeadline:     d.State.PaybackDeadline,
 	}
 	return &res
 }
@@ -91,13 +102,13 @@ type fieldsDeployedLoanParameters struct {
 	Address []byte `db:"params_address"`
 
 	// Parameters
-	BorrowedToken          []byte `db:"params_borrowed_token"`
-	CollateralToken        []byte `db:"params_collateral_token"`
-	AmountWanted           string `db:"params_amount_wanted"`
-	Borrower               []byte `db:"params_borrower"`
-	InterestPermil         uint16 `db:"params_interest_permil"`
-	FundraisingBlocksCount string `db:"params_fundraising_blocks_count"`
-	PaybackBlocksCount     string `db:"params_payback_blocks_count"`
+	LoanToken        []byte `db:"params_borrowed_token"`
+	CollateralToken  []byte `db:"params_collateral_token"`
+	AmountWanted     string `db:"params_amount_wanted"`
+	Borrower         []byte `db:"params_borrower"`
+	InterestPermil   uint16 `db:"params_interest_permil"`
+	FundraisingDelta uint64 `db:"params_fundraising_delta"`
+	PaybackDelta     uint64 `db:"params_payback_delta"`
 }
 
 type joinedLoansMetadataParameters struct {
@@ -119,8 +130,8 @@ func (m *Model) selectJoinedLoansMetadataParameters(ctx context.Context, keys []
 			params.collateral_token AS params_collateral_token,
 			params.amount_wanted AS params_amount_wanted,
 			params.interest_permil AS params_interest_permil,
-			params.fundraising_blocks_count AS params_fundraising_blocks_count,
-			params.payback_blocks_count AS params_payback_blocks_count
+			params.fundraising_delta AS params_fundraising_delta,
+			params.payback_delta AS params_payback_delta
 		FROM loan_metadata AS meta
 		JOIN deployed_loan_parameters AS params
 			ON meta.deployed_address = params.address
@@ -131,26 +142,20 @@ func (m *Model) selectJoinedLoansMetadataParameters(ctx context.Context, keys []
 }
 
 func (t *fieldsDeployedLoanParameters) Fill(l *Loan) error {
-	var amountWanted, fundraisingBlocksCount, paybackBlocksCount *big.Int
+	var amountWanted *big.Int
 	var ok bool
 
 	if amountWanted, ok = new(big.Int).SetString(t.AmountWanted, 10); !ok {
 		return fmt.Errorf("invalid amount_wanted value")
 	}
-	if fundraisingBlocksCount, ok = new(big.Int).SetString(t.FundraisingBlocksCount, 10); !ok {
-		return fmt.Errorf("invalid fundraising_blocks_count value")
-	}
-	if paybackBlocksCount, ok = new(big.Int).SetString(t.PaybackBlocksCount, 10); !ok {
-		return fmt.Errorf("invalid payback_blocks_count value")
-	}
 
-	l.Parameters.BorrowedToken = ethcommon.BytesToAddress(t.BorrowedToken)
+	l.Parameters.LoanToken = ethcommon.BytesToAddress(t.LoanToken)
 	l.Parameters.CollateralToken = ethcommon.BytesToAddress(t.CollateralToken)
 	l.Parameters.Borrower = ethcommon.BytesToAddress(t.Borrower)
 	l.Parameters.InterestPermil = t.InterestPermil
 	l.Parameters.AmountWanted = amountWanted
-	l.Parameters.FundraisingBlocksCount = fundraisingBlocksCount
-	l.Parameters.PaybackBlocksCount = paybackBlocksCount
+	l.Parameters.FundraisingDelta = t.FundraisingDelta
+	l.Parameters.PaybackDelta = t.PaybackDelta
 
 	return nil
 }
@@ -182,6 +187,7 @@ type LoanQuery struct {
 	Borrower        *ethcommon.Address
 	DeployedAddress *ethcommon.Address
 	State           pb.LoanLifetimeState
+	Investor        *ethcommon.Address
 }
 
 func buildWhere(keys []string) string {
@@ -266,6 +272,35 @@ func (q LoanQuery) Run(ctx context.Context, m *Model) ([]Loan, error) {
 		}
 	}
 
+	if q.Investor != nil {
+		// TODO(q3k): Cache this when you cache the state query.
+		wg := sync.WaitGroup{}
+		wg.Add(len(res))
+		loansFiltered := make(chan *Loan, len(res))
+		for _, loan := range res {
+			go func(l Loan) {
+				defer wg.Done()
+				err, investment := l.GetInvestmentAmountFromBlockchain(ctx, q.Investor)
+				if err != nil {
+					glog.Errorf("When getting investment data from blockchain: %v", err)
+					return
+				}
+				if investment.Cmp(big.NewInt(0)) != 1 {
+					return
+				}
+
+				loansFiltered <- &l
+			}(loan)
+		}
+		wg.Wait()
+		close(loansFiltered)
+
+		res = make([]Loan, 0, len(res))
+		for l := range loansFiltered {
+			res = append(res, *l)
+		}
+	}
+
 	return res, nil
 }
 
@@ -336,26 +371,26 @@ func (l *Loan) InsertParameters(ctx context.Context, tx *sqlx.Tx) error {
 		INSERT INTO deployed_loan_parameters (
 				network, version, address,
 				borrowed_token, collateral_token, amount_wanted, borrower,
-				interest_permil, fundraising_blocks_count, payback_blocks_count
+				interest_permil, fundraising_delta, payback_delta
 		)
 		VALUES (
 				:params_network, :params_version, :params_address,
 				:params_borrowed_token, :params_collateral_token, :params_amount_wanted, :params_borrower,
-				:params_interest_permil, :params_fundraising_blocks_count, :params_payback_blocks_count
+				:params_interest_permil, :params_fundraising_delta, :params_payback_delta
 		)
 	`
 	_, err := l.model.dbConn.NamedExecContext(ctx, query, fieldsDeployedLoanParameters{
 
-		Network:                l.Metadata.NetworkID,
-		Version:                0,
-		Address:                l.Metadata.DeployedAddress.Bytes(),
-		BorrowedToken:          l.Parameters.BorrowedToken.Bytes(),
-		CollateralToken:        l.Parameters.CollateralToken.Bytes(),
-		AmountWanted:           l.Parameters.AmountWanted.String(),
-		Borrower:               l.Parameters.Borrower.Bytes(),
-		InterestPermil:         l.Parameters.InterestPermil,
-		FundraisingBlocksCount: l.Parameters.FundraisingBlocksCount.String(),
-		PaybackBlocksCount:     l.Parameters.PaybackBlocksCount.String(),
+		Network:          l.Metadata.NetworkID,
+		Version:          0,
+		Address:          l.Metadata.DeployedAddress.Bytes(),
+		LoanToken:        l.Parameters.LoanToken.Bytes(),
+		CollateralToken:  l.Parameters.CollateralToken.Bytes(),
+		AmountWanted:     l.Parameters.AmountWanted.String(),
+		Borrower:         l.Parameters.Borrower.Bytes(),
+		InterestPermil:   l.Parameters.InterestPermil,
+		FundraisingDelta: l.Parameters.FundraisingDelta,
+		PaybackDelta:     l.Parameters.PaybackDelta,
 	})
 	return err
 }
@@ -370,13 +405,13 @@ func (l *Loan) LoadParametersFromBlockchain(ctx context.Context) error {
 		target interface{}
 		name   string
 	}{
-		{&l.Parameters.BorrowedToken, "borrowedToken"},
+		{&l.Parameters.LoanToken, "loanToken"},
 		{&l.Parameters.CollateralToken, "collateralToken"},
 		{&l.Parameters.AmountWanted, "amountWanted"},
 		{&l.Parameters.Borrower, "borrower"},
 		{&l.Parameters.InterestPermil, "interestPermil"},
-		{&l.Parameters.FundraisingBlocksCount, "fundraisingBlocksCount"},
-		{&l.Parameters.PaybackBlocksCount, "paybackBlocksCount"},
+		{&l.Parameters.FundraisingDelta, "fundraisingDelta"},
+		{&l.Parameters.PaybackDelta, "paybackDelta"},
 	}
 	for _, getter := range getters {
 		err = loanContract.Call(nil, getter.target, getter.name)
@@ -392,51 +427,43 @@ func (l *Loan) LoadParametersFromBlockchain(ctx context.Context) error {
 	return nil
 }
 
+func (l *Loan) GetInvestmentAmountFromBlockchain(ctx context.Context, address *ethcommon.Address) (error, *big.Int) {
+	loanContract, err := l.model.blockchain.get(ctx, l.Metadata.NetworkID, "Loan", l.Metadata.DeployedAddress)
+	if err != nil {
+		return fmt.Errorf("getting Loan contract failed: %v", err), nil
+	}
+	var res *big.Int
+	err = loanContract.Call(nil, &res, "amountInvested", address)
+	if err != nil {
+		return fmt.Errorf("calling amountInvested failed: %v", err), nil
+	}
+	return nil, res
+}
+
 func (l *Loan) LoadStateFromBlockchain(ctx context.Context) error {
 	loanContract, err := l.model.blockchain.get(ctx, l.Metadata.NetworkID, "Loan", l.Metadata.DeployedAddress)
 	if err != nil {
 		return fmt.Errorf("getting Loan contract failed: %v", err)
 	}
 
-	var state uint8
+	var state *big.Int
 
-	// Try to first call the `getCurrentState` method that performs a
-	// timedTransitions check. This method is not present on all contracts,
-	// so we need to refresh manually then.
-	needsRefresh := false
-	if err = loanContract.Call(nil, &state, "getCurrentState"); err != nil {
-		needsRefresh = true
+	getters := []struct {
+		target interface{}
+		name   string
+	}{
+		{&state, "state"},
+		{&l.State.FundraisingDeadline, "fundraisingDeadline"},
+		{&l.State.PaybackDeadline, "paybackDeadline"},
 	}
-
-	if needsRefresh {
-		if err = loanContract.Call(nil, &state, "currentState"); err != nil {
-			return fmt.Errorf("calling currentState failed: %v", err)
-		}
-		var fundraising, paidback, defaulted bool
-		errs := []error{}
-		errs = append(errs, loanContract.Call(nil, &fundraising, "isFundraising"))
-		errs = append(errs, loanContract.Call(nil, &paidback, "isPaidback"))
-		errs = append(errs, loanContract.Call(nil, &defaulted, "isDefaulted"))
-		failed := false
-		for _, err := range errs {
-			if err != nil {
-				glog.Warningf("Manual refresh of loan status failed: %v", err)
-				failed = true
-				continue
-			}
-		}
-		// The only state transition that occurs automatically is a loan going
-		// into the finished state -- either because we paidback or defaulted.
-		// All other state transitions occur only when a mutable function is
-		// called.
-		if !failed {
-			if !fundraising && (paidback || defaulted) {
-				state = 3
-			}
+	for _, getter := range getters {
+		err = loanContract.Call(nil, getter.target, getter.name)
+		if err != nil {
+			return fmt.Errorf("calling getter %q failed: %v", getter.name, err)
 		}
 	}
 
-	switch state {
+	switch state.Int64() {
 	case 0:
 		l.State.CurrentState = pb.LoanLifetimeState_COLLATERAL_COLLECTION
 	case 1:
@@ -444,9 +471,13 @@ func (l *Loan) LoadStateFromBlockchain(ctx context.Context) error {
 	case 2:
 		l.State.CurrentState = pb.LoanLifetimeState_PAYBACK
 	case 3:
-		l.State.CurrentState = pb.LoanLifetimeState_FINISHED
+		l.State.CurrentState = pb.LoanLifetimeState_PAIDBACK
+	case 4:
+		l.State.CurrentState = pb.LoanLifetimeState_DEFAULTED
+	case 5:
+		l.State.CurrentState = pb.LoanLifetimeState_CANCELED
 	default:
-		return fmt.Errorf("unexpected currentState: %d", state)
+		return fmt.Errorf("unexpected state: %d", state)
 	}
 
 	return nil

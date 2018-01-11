@@ -1,10 +1,13 @@
 import {BigNumber} from "bignumber.js";
+import * as debug from "debug";
 import * as moment from "moment";
 import * as Web3 from "web3";
 
 import {Blockchain, Contract} from "./blockchain";
 import {Address, Token, waitUntil} from "./common";
 import * as pb from "./generated/metabackend_pb";
+
+const logger = debug("getline.ts:loan");
 
 /**
  * State of a Getline Loan.
@@ -23,9 +26,73 @@ export enum LoanState {
      */
     Payback,
     /**
-     * Loan has been paid back or has defaulted.
+     * Loan has been paid back by borrower and there might be funds to be
+     * transfered back to their respective owners.
      */
-    Finished,
+    Paidback,
+    /**
+     * Loan has defaulted and there might be funds to be transfered back to
+     * their respective owners.
+     */
+    Defaulted,
+    /**
+     * Loan has been canceled and there might be funds to be transfered back to
+     * their respective owners.
+     */
+    Canceled,
+}
+
+/**
+ * Withdrawal possibilities, with their comments showing sample explanations.
+ */
+export enum WithdrawalReason {
+    /**
+     * You are entitled to get tokens from this loan.
+     */
+    Unknown = 0,
+    /**
+     * You have paid back this loan, which entitles you to get the collateral
+     * back.
+     */
+    CollateralBackAfterPayback,
+    /**
+     * You have invested in this loan, which entitles you to get your invesment
+     * back with interest.
+     */
+    LoanBackAfterPayback,
+    /**
+     * The loan has not raised funds on time, but you can get your collateral
+     * back.
+     */
+    CollateralBackAfterCanceled,
+    /**
+     * The loan has not raised funds on time, so you can withdraw your
+     * investment back.
+     */
+    LoanBackAfterCanceled,
+    /**
+     * The loan has defaulted, but you're entitled to your share of the
+     * collateral.
+     */
+    CollateralBackAfterDefaulted,
+}
+
+/**
+ * Possible withdrawals from a loan.
+ */
+export interface Withdrawal {
+    /**
+     * Token that can be withdrawn.
+     */
+    token: Token;
+    /**
+     * Amount that can be withdrawn.
+     */
+    amount: BigNumber;
+    /**
+     * Reason for this withdrawal.
+     */
+    reason: WithdrawalReason;
 }
 
 /**
@@ -47,13 +114,14 @@ export class Loan {
          */
         loanToken: Token,
         /**
-         * Date by which the loan needs to have all investment gathered.
+         * Number of seconds between gathering collateral and fundraising
+         * deadline.
          */
-        fundraisingDeadline: moment.Moment,
+        fundraisingDelta: number,
         /**
-         * Date by which loan needs to be fully repaid.
+         * Number of seconds between fundraising and payback being required.
          */
-        paybackDeadline: moment.Moment,
+        paybackDelta: number,
         /**
          * Amount of loan token wanted.
          */
@@ -94,20 +162,19 @@ export class Loan {
         /**
          * Value of loan token gathered in fundraising.
          */
-        amountGathered: BigNumber,
+        amountInvested: BigNumber,
         /**
-         * Whether the loan is currently raising funds from investors.
+         * Value of the collateral token received as collateral.
          */
-        fundraising: boolean,
+        collateralReceived: BigNumber,
         /**
-         * Whether the loan has been paid back succesfully.
+         * Date by which the loan needs to have all investment gathered.
          */
-        paidback: boolean,
+        fundraisingDeadline: moment.Moment,
         /**
-         * Whether the loan has defaulted, ie. the liege has not paid back in
-         * time.
+         * Date by which loan needs to be fully repaid.
          */
-        defaulted: boolean,
+        paybackDeadline: moment.Moment,
     };
 
     private blockchain: Blockchain;
@@ -140,19 +207,14 @@ export class Loan {
         this.address = new Address(this.blockchain, proto.getDeploymentAddress()!.getAscii());
         this.owner = new Address(this.blockchain, proto.getOwner()!.getAscii());
 
-        const currentBlock = await this.blockchain.currentBlock();
-        const blockToTime = (count: string) => {
-            return this.blockchain.blockToTime(currentBlock, new BigNumber(count));
-        };
-
         const params = proto.getParameters()!;
         this.parameters = {
             amountWanted: new BigNumber(params.getAmountWanted()),
             collateralToken: new Token(this.blockchain, params.getCollateralToken()!.getAscii()),
-            fundraisingDeadline: blockToTime(params.getFundraisingBlocksCount()),
+            fundraisingDelta: params.getFundraisingDelta(),
             interestPermil: params.getInterestPermil(),
             loanToken: new Token(this.blockchain, params.getLoanToken()!.getAscii()),
-            paybackDeadline: blockToTime(params.getPaybackBlocksCount()),
+            paybackDelta: params.getPaybackDelta(),
         };
 
         this.contract = await this.blockchain.existing("Loan", this.address);
@@ -162,13 +224,16 @@ export class Loan {
      * Loads the newest state of the loan from the blockchain.
      */
     public async updateStateFromBlockchain(): Promise<void> {
+        logger("Loan.updateStateFromBlockchain() starting...");
         this.blockchainState = {
-            amountGathered: await this.contract.call<BigNumber>("amountGathered"),
-            defaulted: await this.contract.call<boolean>("isDefaulted"),
-            fundraising: await this.contract.call<boolean>("isFundraising"),
-            loanState: (await this.contract.call<BigNumber>("currentState")).toNumber(),
-            paidback: await this.contract.call<boolean>("isPaidback"),
+            amountInvested: await this.contract.call<BigNumber>("totalAmountInvested"),
+            collateralReceived: await this.contract.call<BigNumber>("receivedCollateral"),
+            fundraisingDeadline: moment.unix(await this.contract.call<number>("fundraisingDeadline")),
+            loanState: (await this.contract.call<BigNumber>("state")).toNumber(),
+            paybackDeadline: moment.unix(await this.contract.call<number>("paybackDeadline")),
         };
+
+        logger("Loan.updateStateFromBlockchain() done.");
     }
 
     /**
@@ -179,6 +244,7 @@ export class Loan {
      *
      */
     public async sendCollateral(amount: BigNumber): Promise<void> {
+        logger(`Loan.sendCollateral(${amount.toNumber()}) starting...`);
         if (this.blockchainState === undefined) {
             await this.updateStateFromBlockchain();
         }
@@ -198,6 +264,7 @@ export class Loan {
         // Now, call gatherCollateral and wait for state change.
         await this.contract.mutate("gatherCollateral");
         await this.updateStateFromBlockchain();
+        logger(`Loan.sendCollateral(${amount.toNumber()}) done.`);
     }
 
     /**
@@ -207,6 +274,7 @@ export class Loan {
      *
      */
     public async invest(amount: BigNumber): Promise<void> {
+        logger(`Loan.invest(${amount.toNumber()}) starting...`);
         if (this.blockchainState === undefined) {
             await this.updateStateFromBlockchain();
         }
@@ -223,16 +291,17 @@ export class Loan {
         // Now, call invest and wait for state change.
         await this.contract.mutate("invest");
         await this.updateStateFromBlockchain();
+        logger(`Loan.invest(${amount.toNumber()}) done.`);
     }
 
     /**
      * Returns the payback amount required for the loan, in loan token units.
      */
-    public async paybackAmount(): Promise<BigNumber> {
+    public async paybackRequired(): Promise<BigNumber> {
         if (this.blockchainState === undefined) {
             await this.updateStateFromBlockchain();
         }
-        return this.contract.call<BigNumber>("paybackNeeded");
+        return this.contract.call<BigNumber>("paybackRequired");
     }
 
     /**
@@ -242,6 +311,7 @@ export class Loan {
      *
      */
     public async payback(): Promise<void> {
+        logger("Loan.payback() starting...");
         if (this.blockchainState === undefined) {
             await this.updateStateFromBlockchain();
         }
@@ -250,7 +320,7 @@ export class Loan {
             throw new Error("Loan is not currently fundraising");
         }
 
-        const amount = await this.paybackAmount();
+        const amount = await this.paybackRequired();
 
         // First, ensure that payback allowance is set correctly.
         const loan = this.parameters.loanToken;
@@ -260,6 +330,68 @@ export class Loan {
         // Now, call invest and wait for state change.
         await this.contract.mutate("payback");
         await this.updateStateFromBlockchain();
+        logger("Loan.payback() done.");
+    }
+
+    /**
+     * Returns possible withdrawals for a given loan depending on the caller.
+     */
+    public async possibleWithdrawals(): Promise<Withdrawal[]> {
+        const [loanAmount, collateralAmount] = await this.contract.call<BigNumber[]>("withdrawable");
+
+        const state = this.blockchainState.loanState;
+
+        const result: Withdrawal[] = [];
+
+        if (collateralAmount.gt(0)) {
+            let collateralReason = WithdrawalReason.Unknown;
+            if (state === LoanState.Paidback) {
+                collateralReason = WithdrawalReason.CollateralBackAfterPayback;
+            } else if (state === LoanState.Defaulted) {
+                collateralReason = WithdrawalReason.CollateralBackAfterDefaulted;
+            } else if (state === LoanState.Canceled) {
+                collateralReason = WithdrawalReason.CollateralBackAfterCanceled;
+            }
+            result.push({
+                amount: collateralAmount,
+                reason: collateralReason,
+                token: this.parameters.collateralToken,
+            });
+        }
+        if (loanAmount.gt(0)) {
+            let loanReason = WithdrawalReason.Unknown;
+            if (state === LoanState.Paidback) {
+                loanReason = WithdrawalReason.LoanBackAfterPayback;
+            } else if (state === LoanState.Canceled) {
+                loanReason = WithdrawalReason.LoanBackAfterCanceled;
+            }
+            result.push({
+                amount: loanAmount,
+                reason: loanReason,
+                token: this.parameters.loanToken,
+            });
+        }
+
+        return result;
+    }
+
+    /**
+     * Withdraw all available funds from a loan.
+     */
+    public async withdrawAll(): Promise<void> {
+        let [prevLoan, prevCollateral] = [new BigNumber(0), new BigNumber(0)];
+
+        // Continue withdrawing until no change happens in what we can withdraw.
+        while (true) {
+            const amounts = await this.contract.call<BigNumber[]>("withdrawable");
+            const [loan, collateral] = amounts;
+            if (loan.eq(prevLoan) && collateral.eq(prevCollateral)) {
+                break;
+            }
+            [prevLoan, prevCollateral] = [loan, collateral];
+
+            await this.contract.mutate("withdraw");
+        }
     }
 
     /**
