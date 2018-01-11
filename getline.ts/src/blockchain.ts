@@ -281,9 +281,7 @@ export class GetlineBlockchain {
 
         const gas: number = await (new Promise<number>((resolve, reject) => {
             const fallback = 2000000;
-            // TODO(q3k): Typify Contract<A>.getData in upstream.
-            const contractAny: any = contract;
-            const data = contractAny.getData(...params, { data: bytecode });
+            const data = contract.getData(...params, { data: bytecode });
             this.web3.eth.estimateGas({data}, (err: Error, cost: number) => {
                 if (err !== null) {
                     logger(`Failed to estimate deployment gas consumption, falling back to default gas `
