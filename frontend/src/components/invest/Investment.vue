@@ -16,16 +16,16 @@
             <div> {{ formatPercentage(100 - loan.percentageFunded) }}% LEFT </div>
           </div>
         </div>
-        <div class="li-amounts-rate-time">
-          <div class="li-amounts">
-            <div class="li-wanted">
-              <div class="li-title"> AMOUNT </div>
-              <div class="li-value">{{ loan.amountWanted.toString() }} <small>{{loan.loanTokenSymbol}}</small> </div>
-            </div>
-            <div class="li-collateral">
-              <div class="li-title"> COLLATERAL </div>
-              <div class="li-value">{{ loan.collateralReceived.toString() }} <small>{{loan.collateralTokenSymbol}}</small> </div>
-            </div>
+      </div>
+      <div class="li-amounts-rate-time">
+        <div class="li-amounts">
+          <div class="li-wanted">
+            <div class="li-title"> AMOUNT </div>
+            <div class="li-value">{{ loan.amountWanted.toString() }} <small>{{loan.loanTokenSymbol}}</small> </div>
+          </div>
+          <div class="li-collateral">
+            <div class="li-title"> COLLATERAL </div>
+            <div class="li-value">{{ loan.collateralReceived.toString() }} <small>{{loan.collateralTokenSymbol}}</small> </div>
           </div>
         </div>
         <div class="li-rate-time">
@@ -94,7 +94,6 @@ export default {
   },
   created() {
     const { shortId } = this.$route.params;
-    this.$store.dispatch(GET_LOAN_TO_INVEST_ACTION, {shortId});
   },
   computed: mapState({
     account: (state:StateT) => state.account,
