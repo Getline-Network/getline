@@ -117,10 +117,7 @@ export class Contract {
         logger(`Calling ${methodName}...`);
         const method: any = this.instance[methodName];
         return new Promise<T>((resolve, reject) => {
-            const opts = {
-                gas: 1000000,
-            };
-            method.call(...params, opts, (err: Error, object: T) => {
+            method.call(...params, (err: Error, object: T) => {
                 if (err !== null) {
                     logger(`Failed: ${err}`);
                     reject(err);
@@ -146,13 +143,10 @@ export class Contract {
         const method: any = this.instance[methodName];
         const gas: number = await (new Promise<number>((resolve, reject) => {
             const fallback = 300000;
-            const opts = {
-                gas: 1000000,
-            };
-            method.estimateGas(...params, opts, (err: Error, cost: number) => {
+            method.estimateGas(...params, (err: Error, cost: number) => {
                 if (err !== null) {
-                    console.error(`Failed to estimate mutation gas consumption, falling back to default gas `
-                                  + `(${fallback}): ${err}`);
+                    console.error(`Failed to estimate mutation gas consumption when running ${methodName}, `
+                                  + `falling back to default gas limit (${fallback}): ${err}`);
                     resolve(fallback);
                     return;
                 }
@@ -162,7 +156,7 @@ export class Contract {
         }));
         const hash: string = await (new Promise<string>((resolve, reject) => {
             const opts = {
-                gas: Math.floor(gas * 2),
+                gas: gas + 100000,
             };
             method.sendTransaction(...params, opts, (err: Error, object: string) => {
                 if (err !== null) {
@@ -299,7 +293,7 @@ export class GetlineBlockchain {
             const opts = {
                 data: bytecode,
                 from: this.web3.eth.coinbase,
-                gas: Math.floor(gas * 1.1),
+                gas: gas + 1000,
             };
             logger("Deploying contract " + contractName);
             logger("Deploying bytecode " + bytecode.substring(0, 64) + "...");
