@@ -27,15 +27,11 @@ import { mapState } from 'vuex'
 import MyInvestmentTile from './MyInvestmentTile.vue';
 
 import { StateT } from '@/store';
-import { GET_MY_INVESTMENTS_ACTION } from '@/store/invest/actions';
 
 export default {
   name: 'MyInvestments',
   components: {
     'my-investment-tile': MyInvestmentTile,
-  },
-  created() {
-    this.$store.dispatch(GET_MY_INVESTMENTS_ACTION);
   },
   computed: mapState({
     pendingInvestments: (state:StateT) => state.invest.pendingInvestments,
