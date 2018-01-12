@@ -58,7 +58,7 @@
           <div v-if="isInvesting">
             <spinner />
             <div class="rl-metamask-text">
-              Please don't close this window and wait until we process your order. It usually takes about 10 seconds
+              Please don't close this window and wait until we process your order. It usually takes about 10 seconds.
             </div>
           </div>
           <purple-button v-else

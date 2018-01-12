@@ -22,7 +22,7 @@
       <div class="mlt-spinner-container">
         <spinner />
         <div class="mlt-sending-text">
-          Please don't close this window and wait until we process your order. It usually takes about 10 seconds
+          Please don't close this window and wait until we process your order. It usually takes about 10 seconds.
         </div>
       </div>
     </div>

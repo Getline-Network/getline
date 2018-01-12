@@ -43,11 +43,11 @@
       </div>
       <div class="rl-metamask" :class="isLoading()">
         <purple-button class="rl-request-button" text="REQUEST LOAN" :disabled='!isValidForm' @click.native='requestLoanAction' />
-        <div v-if="showErrorMsg" class="rl-error-occured"> Error occured, please try again</div>
+        <div v-if="showErrorMsg" class="rl-error-occured">An error occured, please try again.</div>
         <div class="rl-loader">
           <spinner />
           <div class="rl-metamask-text">
-            Please don't close this window and wait until we process your order. It usually takes about 10 seconds
+            Please don't close this window and wait until we process your order. It usually takes about 10 seconds.
           </div>
         </div>
       </div>
