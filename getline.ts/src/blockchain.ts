@@ -117,10 +117,7 @@ export class Contract {
         logger(`Calling ${methodName}...`);
         const method: any = this.instance[methodName];
         return new Promise<T>((resolve, reject) => {
-            const opts = {
-                gas: 1000000,
-            };
-            method.call(...params, opts, (err: Error, object: T) => {
+            method.call(...params, (err: Error, object: T) => {
                 if (err !== null) {
                     logger(`Failed: ${err}`);
                     reject(err);
@@ -144,9 +141,22 @@ export class Contract {
     public async mutate(methodName: string, ...params: any[]): Promise<void> {
         logger(`Mutating ${methodName}...`);
         const method: any = this.instance[methodName];
+        const gas: number = await (new Promise<number>((resolve, reject) => {
+            const fallback = 300000;
+            method.estimateGas(...params, (err: Error, cost: number) => {
+                if (err !== null) {
+                    console.error(`Failed to estimate mutation gas consumption when running ${methodName}, `
+                                  + `falling back to default gas limit (${fallback}): ${err}`);
+                    resolve(fallback);
+                    return;
+                }
+                logger(`Estimated gas consumption: ${cost}`);
+                resolve(cost);
+            });
+        }));
         const hash: string = await (new Promise<string>((resolve, reject) => {
             const opts = {
-                gas: 1000000,
+                gas: gas + 100000,
             };
             method.sendTransaction(...params, opts, (err: Error, object: string) => {
                 if (err !== null) {
@@ -263,21 +273,34 @@ export class GetlineBlockchain {
         const contract = this.web3.eth.contract(abi);
         const bytecode = await this.metabackend.getBytecode(contractName);
 
+        const gas: number = await (new Promise<number>((resolve, reject) => {
+            const fallback = 2000000;
+            const data = contract.getData(...params, { data: bytecode });
+            this.web3.eth.estimateGas({data}, (err: Error, cost: number) => {
+                if (err !== null) {
+                    console.error(`Failed to estimate deployment gas consumption, falling back to default gas `
+                                  + `(${fallback}): ${err}`);
+                    resolve(fallback);
+                    return;
+                }
+                logger(`Estimated gas consumption for contract deployment: ${cost}`);
+                resolve(cost);
+            });
+        }));
+
         return new Promise<Contract>((resolve, reject) => {
-            // TODO(q3k): Typify Web3.Contract.new
-            const contractAny: any = contract;
 
             const opts = {
                 data: bytecode,
                 from: this.web3.eth.coinbase,
-                gas: 4500000,
+                gas: gas + 1000,
             };
             logger("Deploying contract " + contractName);
             logger("Deploying bytecode " + bytecode.substring(0, 64) + "...");
             logger("With parameters " + params);
 
             let confirmed = false;
-            const instance = contractAny.new(...params, opts, (err: Error, c: Web3.ContractInstance) => {
+            const instance = contract.new(...params, opts, (err: Error, c: Web3.ContractInstance) => {
                 if (err) {
                     console.error("getline.ts: deployment failed: " + err.stack);
                     reject(new Error("deployment failed: " + err));
