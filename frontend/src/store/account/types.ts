@@ -4,6 +4,7 @@ export interface AccountStateT {
   balance: BalanceT,
   isLoading: boolean;
   loggedIn: boolean;
+  errorReceivingBalance: boolean;
 }
 
 export interface BalanceT {

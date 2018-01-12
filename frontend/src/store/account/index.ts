@@ -11,7 +11,8 @@ const state: AccountStateT = {
     demoPrintValue: new BigNumber(0),
   },
   isLoading: false,
-  loggedIn: false
+  loggedIn: false,
+  errorReceivingBalance: false
 }
 
 export default {

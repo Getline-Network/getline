@@ -24,7 +24,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import UserScore from '@/components/common/UserScore';
 import { permilsToPercentage } from 'utils/calc';
 

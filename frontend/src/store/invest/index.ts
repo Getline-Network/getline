@@ -8,7 +8,8 @@ const state: InvestStateT = {
   activeLoan: {},
   pendingInvestments: [],
   activeInvestments: [],
-  finishedInvestments: []
+  finishedInvestments: [],
+  errorReceiving: false
 }
 
 export default {

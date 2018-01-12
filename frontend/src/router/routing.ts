@@ -5,7 +5,7 @@ import MyLoans from '@/components/borrow/MyLoans.vue';
 import InvestBar from '@/components/invest/InvestBar.vue';
 import LoanList from '@/components/invest/LoanList/LoanList.vue';
 import MyInvestments from '@/components/invest/MyInvestments/MyInvestments.vue';
-import Investment from '@/components/invest/Investment.vue';
+import InvestmentWrapper from '@/components/invest/InvestmentWrapper.vue';
 import UnlockMetamask from '@/components/error/UnlockMetamask.vue';
 import BadNetwork from '@/components/error/BadNetwork.vue';
 import UnknownError from '@/components/error/UnknownError.vue';
@@ -37,7 +37,7 @@ const routing: RouterOptions = {
     },
     {
       path: '/invest/loan/:shortId',
-      component: Investment,
+      component: InvestmentWrapper,
       props: { hideInvestBar: true },
       meta: { title: 'Invest in a loan' }
     },

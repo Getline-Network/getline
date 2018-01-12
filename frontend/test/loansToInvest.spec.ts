@@ -44,7 +44,8 @@ const mockState: InvestStateT = {
   activeLoan: {},
   pendingInvestments: [],
   activeInvestments: [],
-  finishedInvestments: []
+  finishedInvestments: [],
+  errorReceiving: false
 }
 
 describe('Loans to invest list', () => {

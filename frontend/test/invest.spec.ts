@@ -37,7 +37,8 @@ const initialState = {
   activeLoan: {},
   pendingInvestments: [],
   activeInvestments: [],
-  finishedInvestments: []
+  finishedInvestments: [],
+  errorReceiving: false
 }
 
 describe('Invest', () => {

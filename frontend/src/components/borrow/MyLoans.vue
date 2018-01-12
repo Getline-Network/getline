@@ -1,10 +1,14 @@
 <template>
-  <div class="my-loans-spinner" v-if="isLoading">
-    <spinner />
-  </div>
-  <div v-else class="my-loans">
-    <div class="ml-loans-container">
-      <loan-tile v-for="loan in myLoans" :key="loan.shortId" :loan="loan" />
+  <error-view v-if="errorReceiving" />
+    <div v-else>
+      <div class="my-loans-spinner" v-if="isLoading">
+        <spinner />
+      </div>
+      <div v-else class="my-loans">
+        <div class="ml-loans-container">
+          <loan-tile v-for="loan in myLoans" :key="loan.shortId" :loan="loan" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -15,6 +19,7 @@ import { mapState } from 'vuex'
 
 import Spinner from 'components/common/Spinner.vue';
 import MyLoanTile from './my-loan-tile/MyLoanTile.vue';
+import ErrorView from 'components/error/UnknownError.vue';
 
 import { GET_MY_LOANS_ACTION } from 'store/my-loans/actions';
 import { StateT } from 'store';
@@ -25,13 +30,15 @@ const Component = Vue.extend({
   components: {
     'loan-tile': MyLoanTile,
     'spinner': Spinner,
+    'error-view' : ErrorView
   },
   created() {
     this.$store.dispatch(GET_MY_LOANS_ACTION);
   },
   computed: mapState({
     myLoans: (state:StateT) => state.myLoans.myLoansList,
-    isLoading: (state:StateT) => state.myLoans.isLoading
+    isLoading: (state:StateT) => state.myLoans.isLoading,
+    errorReceiving: (state:StateT) => state.myLoans.errorReceiving
   })
 });
 export default Component;

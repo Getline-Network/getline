@@ -11,6 +11,10 @@ export const mutations = {
   },
   'REQUEST_LOANS_TO_INVEST': function (state: InvestStateT): void {
     state.isLoading = true;
+    state.errorReceiving = false;
+  },
+  'REJECT_INVEST_REQUEST': function (state: InvestStateT): void {
+    state.errorReceiving = true;
   },
   'SORT_LOANS_TO_INVEST': function (state: InvestStateT, byColumn: sortColumnT): void {
     state.loansToInvest.sort(getSortCmp(byColumn));
@@ -23,6 +27,7 @@ export const mutations = {
   },
   'REQUEST_MY_INVESTMENTS': function (state: InvestStateT) {
     state.isLoading = true;
+    state.errorReceiving = false;
   },
   'RECEIVED_MY_INVESTMENTS': function (state: InvestStateT, { loans }) {
     state.isLoading = false;

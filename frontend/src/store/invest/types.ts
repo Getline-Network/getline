@@ -8,6 +8,7 @@ export interface InvestStateT {
   pendingInvestments: LoanToInvestT[];
   activeInvestments: LoanToInvestT[];
   finishedInvestments: LoanToInvestT[];
+  errorReceiving: boolean;
 }
 
 export interface LoanToInvestT {

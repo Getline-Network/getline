@@ -1,26 +1,10 @@
 <template>
- <spinner v-if="isLoading" class="my-investments-spinner"/>
-  <div v-else class="my-investments">
-    <no-investments v-if="false" />
-    <div v-else>
-      <div v-if="pendingInvestments.length > 0">
-        <div class="mi-title"> Pending investments in fundraising loans:  </div>
-        <div class="mi-completed-container">
-          <my-investment-tile v-for="investment in pendingInvestments" :key="investment.id" :investment="investment" />
-        </div>
-      </div>
-      <div v-if="activeInvestments.length > 0">
-        <div class="mi-title"> Active investements: </div>
-        <div class="mi-not-completed-container">
-          <my-investment-tile v-for="investment in activeInvestments" :key="investment.id" :investment="investment" />
-        </div>
-      </div>
-      <div v-if="finishedInvestments.length > 0">
-        <div class="mi-title"> Completed investements </div>
-        <div class="mi-completed-container">
-          <my-investment-tile v-for="investment in finishedInvestments" :key="investment.id" :investment="investment" />
-        </div>
-      </div>
+  <error-view v-if="errorReceiving" />
+  <div v-else>
+    <spinner v-if="isLoading" class="my-investments-spinner"/>
+    <div v-else class="my-investments">
+      <no-investments v-if="false" />
+      <my-investment-tiles v-else />
     </div>
   </div>
 </template>
@@ -29,29 +13,27 @@
 import { mapState } from 'vuex'
 
 import NoInvestments from './NoInvestments.vue';
-import MyInvestmentTile from './MyInvestmentTile.vue';
-import Summary from '../../common/TilesSummary.vue';
-import Spinner from '@/components/common/Spinner.vue';
+import MyInvestmentTiles from './MyInvestmentTiles.vue';
+import Spinner from 'components/common/Spinner.vue';
+import ErrorView from 'components/error/UnknownError.vue';
 
-import { StateT } from '@/store';
-import { GET_MY_INVESTMENTS_ACTION } from '@/store/invest/actions';
+import { StateT } from 'store';
+import { GET_MY_INVESTMENTS_ACTION } from 'store/invest/actions';
 
 export default {
   name: 'MyInvestments',
   components: {
     'no-investments': NoInvestments,
-    'my-investment-tile': MyInvestmentTile,
-    'tiles-summary': Summary,
     'spinner': Spinner,
+    'my-investment-tiles': MyInvestmentTiles,
+    'error-view': ErrorView
   },
   created() {
     this.$store.dispatch(GET_MY_INVESTMENTS_ACTION);
   },
   computed: mapState({
     isLoading: (state:StateT) => state.invest.isLoading,
-    pendingInvestments: (state:StateT) => state.invest.pendingInvestments,
-    activeInvestments: (state:StateT) => state.invest.activeInvestments,
-    finishedInvestments: (state:StateT) => state.invest.finishedInvestments
+    errorReceiving: (state:StateT) => state.invest.errorReceiving,
   }),
 };
 </script>

@@ -10,15 +10,20 @@ const actions = {
   [GET_MY_LOANS_ACTION]({ commit }) {
     (async function () {
       commit('REQUEST_MY_LOANS');
-      commit('RECEIVE_MY_LOANS', { loans: await api.getMyLoans() });
+      try {
+        commit('RECEIVE_MY_LOANS', { loans: await api.getMyLoans() });
+      } catch (e) {
+        commit('REJECT_MY_LOANS_REQUEST');
+      }
     })();
   },
   [TRANSFER_COLLATERAL]({ commit }, payload: { shortId: string, amount: string, onSuccess: () => void }) {
     (async function () {
       const { shortId, amount, onSuccess } = payload;
       commit('START_TRANSFERING_COLLATERAL', { shortId });
-      await gatherCollateral(shortId, amount);
+      await gatherCollateral(shortId, amount); // TODO(balinskia): handle error
       commit('COLLATERAL_TRANSFERED', { shortId });
+
       onSuccess();
     })();
   },
@@ -26,7 +31,7 @@ const actions = {
     (async function () {
       const { shortId, onSuccess } = payload;
       commit('START_TRANSFERING_PAYBACK', { shortId });
-      await payback(shortId);
+      await payback(shortId); // TODO(balinskia): handle error
       commit('PAYBACK_TRANSFERED', { shortId });
       onSuccess();
     })();
