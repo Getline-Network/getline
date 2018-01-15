@@ -1,7 +1,10 @@
-import API, { BigNumber, LoanState, Loan } from './index';
+import API, { BigNumber, LoanState, Loan, Withdrawal } from './index';
 import { LoanToInvestT } from 'store/invest/types';
-import { getLoanTokenSymbols, getCollateralTokenSymbols, getAmountsWanted, 
-         getAmountsInvested, getCollateralsReceived } from './utils';
+import { libraryWithdrawalsToView } from './withdrawal';
+import {
+  getLoanTokenSymbols, getCollateralTokenSymbols, getAmountsWanted,
+  getAmountsInvested, getCollateralsReceived, getPossibleWithdrawals, getPossibleWithdrawalsAmounts, sum,
+} from './utils';
 
 export async function getLoansToInvest(): Promise<LoanToInvestT[]> {
   const api = await API.instance();
@@ -28,7 +31,7 @@ export async function getLoansToInvest(): Promise<LoanToInvestT[]> {
       collateralReceived: collateralsReceived[index],
       amountWanted: amountsWanted[index],
       loanTokenSymbol: loanTokenSymbols[index],
-      collateralTokenSymbol: collateralTokenSymbols[index],
+      collateralTokenSymbol: collateralTokenSymbols[index]
     }));
 }
 
@@ -37,7 +40,7 @@ export async function getLoanToInvest(shortId: string): Promise<LoanToInvestT> {
   let currentUser = await api.currentUser();
   let blockchainLoan = await api.loan(shortId);
   await blockchainLoan.updateStateFromBlockchain();
-  return await libraryLoanToViewLoan(blockchainLoan);
+  return await libraryLoanToViewLoan(blockchainLoan, [], []);
 }
 
 export async function investInLoan(shortId: string, amount: number): Promise<void> {
@@ -52,10 +55,15 @@ export async function getMyInvestments(): Promise<LoanToInvestT[]> {
   const api = await API.instance();
   let user = await api.currentUser();
   let libraryLoans = await api.loansByInvestor(user);
-  return await Promise.all(libraryLoans.map(libraryLoanToViewLoan));
+
+  // We cane have many possile withdrawals per investemnt
+  const possibleWithdrawals: Withdrawal[][] = await getPossibleWithdrawals(libraryLoans);
+  const possibleWithdrawalsAmount: BigNumber[][] = await getPossibleWithdrawalsAmounts(possibleWithdrawals);
+
+  return await Promise.all(libraryLoans.map((loan, ind) => libraryLoanToViewLoan(loan, possibleWithdrawals[ind], possibleWithdrawalsAmount[ind])));
 }
 
-async function libraryLoanToViewLoan(libraryLoan: Loan): Promise<LoanToInvestT> {
+async function libraryLoanToViewLoan(libraryLoan: Loan, loanWithdrawals: Withdrawal[], loanWithdrawalAmounts: BigNumber[]): Promise<LoanToInvestT> {
   const loanT = libraryLoan.parameters.loanToken;
   const collateralT = libraryLoan.parameters.collateralToken;
 
@@ -74,5 +82,7 @@ async function libraryLoanToViewLoan(libraryLoan: Loan): Promise<LoanToInvestT> 
     loanState: libraryLoan.blockchainState.loanState,
     loanTokenSymbol: await loanT.symbol(),
     collateralTokenSymbol: await collateralT.symbol(),
+    withdrawalAmount: sum(loanWithdrawalAmounts),
+    withdrawals: libraryWithdrawalsToView(loanWithdrawals, loanWithdrawalAmounts)
   }
 }

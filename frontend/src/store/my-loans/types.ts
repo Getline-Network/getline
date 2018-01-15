@@ -29,10 +29,20 @@ export interface MyLoanT {
   isTransferingPayback?: boolean;
 
   //finished
-  isFinished?: boolean;
-
+  withdrawals: withdrawalT[],
+  withdrawalAmount: BigNumber;
   loanTokenSymbol?: string;
+
 };
+
+export interface withdrawalT {
+  isCollateralBackAfterPayback?: boolean;
+  isLoanBackAfterPayback?: boolean;
+  isCollateralBackAfterCanceled?: boolean;
+  isLoanBackAfterCanceled?: boolean;
+  isCollateralBackAfterDefaulted?: boolean;
+  value: BigNumber;
+}
 
 import { LoanState } from '../../../../getline.ts';
 export { LoanState } from '../../../../getline.ts';

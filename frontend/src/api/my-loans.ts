@@ -1,8 +1,12 @@
-import API, { LoanState, BigNumber } from './index';
+import API, { LoanState, BigNumber, WithdrawalReason, Withdrawal } from './index';
 
 import { MyLoanT } from 'store/my-loans';
-import { getLoanTokenSymbols, getAmountsWanted, getAmountsInvested,
-         getPaybackAmounts } from './utils';
+import {
+  getLoanTokenSymbols, getAmountsWanted, getAmountsInvested,
+  getPaybackAmounts, getPossibleWithdrawals, getPossibleWithdrawalsAmounts, sum
+} from './utils';
+
+import { libraryWithdrawalsToView } from './withdrawal';
 
 export async function getMyLoans(): Promise<MyLoanT[]> {
   const api = await API.instance();
@@ -12,6 +16,10 @@ export async function getMyLoans(): Promise<MyLoanT[]> {
   const amountsWanted: BigNumber[] = await getAmountsWanted(libraryLoans);
   const loanTokenSymbols: string[] = await getLoanTokenSymbols(libraryLoans);
   const paybackAmounts: BigNumber[] = await getPaybackAmounts(libraryLoans);
+
+  // We cane have many possile withdrawals per loan
+  const possibleWithdrawals: Withdrawal[][] = await getPossibleWithdrawals(libraryLoans);
+  const possibleWithdrawalsAmount: BigNumber[][] = await getPossibleWithdrawalsAmounts(possibleWithdrawals);
 
   return libraryLoans.map(({
     shortId,
@@ -30,6 +38,7 @@ export async function getMyLoans(): Promise<MyLoanT[]> {
       isCollateralCollection: (loanState === LoanState.CollateralCollection),
       isFundraising: (loanState === LoanState.Fundraising),
       isPayback: (loanState === LoanState.Payback),
-      isFinished: [LoanState.Canceled, LoanState.Defaulted, LoanState.Paidback].includes(loanState)
+      withdrawalAmount: sum(possibleWithdrawalsAmount[index]),
+      withdrawals: libraryWithdrawalsToView(possibleWithdrawals[index], possibleWithdrawalsAmount[index])
     }));
 }

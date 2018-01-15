@@ -1,4 +1,4 @@
-import { BigNumber } from './index';
+import { LoanState, BigNumber, Withdrawal } from './index';
 import { Loan } from 'api';
 
 export async function getAmountsWanted(loans: Loan[]): Promise<BigNumber[]> {
@@ -19,6 +19,21 @@ export async function getLoanTokenSymbols(loans: Loan[]): Promise<string[]> {
 
 export async function getCollateralTokenSymbols(loans: Loan[]): Promise<string[]> {
   return Promise.all(loans.map((l) => l.parameters.collateralToken.symbol()));
+}
+
+export async function getPossibleWithdrawals(loans: Loan[]): Promise<Withdrawal[][]> {
+  return Promise.all(loans.map(loan => loan.possibleWithdrawals()));
+}
+
+export async function getPossibleWithdrawalsAmounts(withdrawals: Withdrawal[][]): Promise<BigNumber[][]> {
+  return Promise.all(
+    withdrawals.map(withdrawalsPerLoan =>
+      Promise.all(withdrawalsPerLoan.map(({ token, amount }) => token.humanize(amount))))
+  );
+}
+
+export function sum(bigNumbers: BigNumber[]): BigNumber {
+  return bigNumbers.reduce((acc, value) => value.add(acc), new BigNumber(0));
 }
 
 export async function getPaybackAmounts(loans: Loan[]): Promise<BigNumber[]> {

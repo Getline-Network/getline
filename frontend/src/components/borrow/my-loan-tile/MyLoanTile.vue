@@ -20,17 +20,40 @@
     <fundraising-section v-if="loan.isFundraising" :loan="loan" />
     <collateral-section v-if="loan.isCollateralCollection" :loan="loan"  />
     <payback-section v-if="loan.isPayback" :loan="loan"  />
-    <finished-section v-if="loan.isFinished" :loan="loan"  />
+    <div v-for="withdrawal in loan.withdrawals">
+      <generic-withdrawal
+        v-if="withdrawal.isCollateralBackAfterPayback" 
+        :withdrawal="withdrawal"
+        :tokenSymbol="loan.loanTokenSymbol"
+        text="COLLATERAL TO RECEIVE " />
+      <generic-withdrawal
+         v-if="withdrawal.isLoanBackAfterPayback"
+         :withdrawal="withdrawal"
+         :tokenSymbol="loan.loanTokenSymbol"
+         text="THE LOAN WAS PAID BACK. GET PAYBACK" />
+      <generic-withdrawal
+         v-if="withdrawal.isCollateralBackAfterDefaulted"
+         :withdrawal="withdrawal"
+         :tokenSymbol="loan.loanTokenSymbol" text="THE LOAN IS DEFAULTED. GET COLLATERAL:" />
+      <generic-withdrawal
+        v-if="withdrawal.isCollateralBackAfterCanceled"
+        :withdrawal="withdrawal"
+        :tokenSymbol="loan.loanTokenSymbol"
+        text="THE LOAN HAS NOT RAISED FUNDS ON TIME. GET YOUR COLLATERAL BACK" />
+    </div>
+    <withdrawal-button v-if="loan.withdrawalAmount.gt(0)" :amount="loan.withdrawalAmount" :loan="loan" />
   </div>
 </template>
 
 <script lang="ts">
 
 import { permilsToPercentage, formatBigNumber } from 'utils/calc';
-import CollateralSection from './Collateral';
-import PaybackSection from './Payback';
-import FundraisingSection from './Fundraising';
-import FinishedSection from './Finished';
+import CollateralSection from './Collateral.vue';
+import PaybackSection from './Payback.vue';
+import FundraisingSection from './Fundraising.vue';
+import FinishedSection from './Finished.vue';
+import GenericWithdrawal from './GenericWithdrawal.vue';
+import WithdrawalButton from './WithdrawalButton.vue';
 
 export default {
   name: 'MyLoanTile',
@@ -39,7 +62,9 @@ export default {
     'payback-section': PaybackSection,
     'collateral-section': CollateralSection,
     'fundraising-section': FundraisingSection,
-    'finished-section': FinishedSection
+    'finished-section': FinishedSection,
+    'generic-withdrawal': GenericWithdrawal,
+    'withdrawal-button': WithdrawalButton
   },
   methods: {
     formatBigNumber,

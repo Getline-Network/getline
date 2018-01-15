@@ -78,6 +78,7 @@ import { mapState } from 'vuex'
 import UserScore from '../common/UserScore.vue';
 import PurpleButton from '../common/PurpleButton.vue';
 import FundraisingBar from '../common/FundraisingBar.vue';
+import Spinner from '../common/Spinner.vue';
 import { StateT } from 'store';
 import validators from 'utils/inputValidators';
 
@@ -89,6 +90,7 @@ export default {
   name: 'LoanInvest',
   components: {
     'user-score': UserScore,
+    'spinner': Spinner,
     'purple-button': PurpleButton,
     'fundraising-bar': FundraisingBar,
   },

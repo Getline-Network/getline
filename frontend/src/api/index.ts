@@ -1,8 +1,8 @@
 import API from './api';
-import { BigNumber, Client, Loan, LoanState, Token } from '../../../getline.ts';
+import { BigNumber, Client, Loan, LoanState, Token, WithdrawalReason, Withdrawal } from '../../../getline.ts';
 
 export { Loan, LoanState, Client, Token };
-export { BigNumber };
+export { BigNumber, WithdrawalReason, Withdrawal };
 export * from './my-loans';
 export * from './demo-tokens';
 export * from './collateral';
