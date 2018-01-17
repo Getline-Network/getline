@@ -20,17 +20,40 @@
     <fundraising-section v-if="loan.isFundraising" :loan="loan" />
     <collateral-section v-if="loan.isCollateralCollection" :loan="loan"  />
     <payback-section v-if="loan.isPayback" :loan="loan"  />
-    <finished-section v-if="loan.isFinished" :loan="loan"  />
+    <div v-for="withdrawal in loan.withdrawals">
+      <generic-withdrawal
+        v-if="withdrawal.isCollateralBackAfterPayback" 
+        :withdrawal="withdrawal"
+        text="Full collateral after payback:" />
+      <generic-withdrawal
+        v-if="withdrawal.isLoanBackAfterPayback"
+        :withdrawal="withdrawal"
+        text="Your investment after payback:" />
+      <generic-withdrawal
+        v-if="withdrawal.isCollateralBackAfterDefaulted"
+        :withdrawal="withdrawal"
+        text="Your collateral allowance after defaulting:" />
+      <generic-withdrawal
+        v-if="withdrawal.isCollateralBackAfterCanceled"
+        :withdrawal="withdrawal"
+        text="Full collateral after fundraising failed:" />
+    </div>
+    <withdrawal-button
+      v-if="loan.withdrawals && loan.withdrawals.length > 0"
+      :loanShortId="loan.shortId"
+      :withdrawals="loan.withdrawals" />
   </div>
 </template>
 
 <script lang="ts">
 
 import { permilsToPercentage, formatBigNumber } from 'utils/calc';
-import CollateralSection from './Collateral';
-import PaybackSection from './Payback';
-import FundraisingSection from './Fundraising';
-import FinishedSection from './Finished';
+import CollateralSection from './Collateral.vue';
+import PaybackSection from './Payback.vue';
+import FundraisingSection from './Fundraising.vue';
+import FinishedSection from './Finished.vue';
+import GenericWithdrawal from 'components/withdrawal/GenericWithdrawal.vue';
+import WithdrawalButton from 'components/withdrawal/WithdrawalButton.vue';
 
 export default {
   name: 'MyLoanTile',
@@ -39,7 +62,9 @@ export default {
     'payback-section': PaybackSection,
     'collateral-section': CollateralSection,
     'fundraising-section': FundraisingSection,
-    'finished-section': FinishedSection
+    'finished-section': FinishedSection,
+    'generic-withdrawal': GenericWithdrawal,
+    'withdrawal-button': WithdrawalButton
   },
   methods: {
     formatBigNumber,

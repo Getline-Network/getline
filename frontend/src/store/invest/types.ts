@@ -1,5 +1,6 @@
 import * as moment from "moment";
 import { BigNumber } from 'api';
+import { withdrawalT } from 'store/my-loans/types';
 
 export interface InvestStateT {
   loansToInvest: LoanToInvestT[];
@@ -27,6 +28,8 @@ export interface LoanToInvestT {
   isLoading?: boolean;
   description?: string;
   loanState?: number;
+  withdrawals?: withdrawalT[];
+  withdrawalAmount?: BigNumber;
 };
 
 export interface sortColumnT {

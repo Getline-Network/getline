@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.user-score { display: flex; width: 32px; height: 32px; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #ffffff; border-radius: 2px; cursor: pointer;
+.user-score { display: flex; min-width: 32px; width: 32px; height: 32px; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #ffffff; border-radius: 2px; cursor: pointer;
   &.style-score-a { background-color: #20be2f; }
   &.style-score-b { background-color: #ffcd00; }
   &.style-score-c { background-color: #ffa438; }
