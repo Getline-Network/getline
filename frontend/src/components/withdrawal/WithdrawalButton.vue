@@ -4,7 +4,7 @@
       <green-button
         class="wb-green-button"
         @click.native='transferWithdrawal'
-        :text="'WITHDRAW ' + formatBigNumber(amount) + ' ' + loan.loanTokenSymbol"
+        :text="'WITHDRAW ' + tokensGroupedByName + ' '"
       />
       <div class="wb-spinner-container">
         <spinner />
@@ -24,13 +24,15 @@ import Spinner from 'components/common/Spinner.vue';
 import { StateT } from 'store';
 import { GET_MY_BALANCE_ACTION } from 'store/account/actions';
 
-import { TRANSFER_PAYBACK_ACTION, GET_MY_LOANS_ACTION } from 'store/my-loans/actions';
+import { GET_MY_LOANS_ACTION } from 'store/my-loans/actions';
+import { GET_MY_INVESTMENTS_ACTION } from 'store/invest/actions';
+
 import { formatBigNumber } from 'utils/calc';
 import { withdrawAll } from 'api/withdrawal';
 
 export default {
   name: 'MyLoanTilePaybackSection',
-  props: ['loan', 'amount'],
+  props: ['loanShortId', 'withdrawals'],
   components: {
     'green-button': GreenButton,
     'spinner': Spinner,
@@ -41,19 +43,49 @@ export default {
       showErrorMsg: false
     };
   },
+  computed: {
+    tokensGroupedByName: function() {
+      const tokenSymbolToAmountSum = this.withdrawals.reduce((acc, withdrawal) => {
+        const { amount, tokenSymbol } = withdrawal;
+        if (tokenSymbol in acc) {
+          acc[tokenSymbol] = acc[tokenSymbol].add(amount);
+        } else {
+          acc[tokenSymbol] = withdrawal.amount;
+        }
+        return acc;
+      }, {});
+
+      const withdrawalsSummaryPerToken = Object.keys(tokenSymbolToAmountSum).map(tokenSymbol => {
+        return {
+          tokenSymbol,
+          amount: tokenSymbolToAmountSum[tokenSymbol]
+        }
+      });
+
+      function format(withdrawal) {
+        return formatBigNumber(withdrawal.amount) + " " + withdrawal.tokenSymbol;
+      }
+
+      let buttonText = format(withdrawalsSummaryPerToken[0]);
+      for (let i = 1; i < withdrawalsSummaryPerToken.length; ++i) {
+        buttonText += " and " + format(withdrawalsSummaryPerToken[i]);
+      }
+      return buttonText;
+    }
+  },
   methods: {
-    formatBigNumber,
-    getLoan: function () {
-      if (!this.loan) return {};
-      return this.loan;
+    getLoanShortId: function () {
+      if (!this.loanShortId) return null;
+      return this.loanShortId;
     },
     transferWithdrawal: async function transferWithdrawal() {
-      const { shortId } = this.getLoan();
+      const shortId = this.getLoanShortId();
       this.isSending = true;
        try {
         await withdrawAll(shortId);
         this.$store.dispatch(GET_MY_BALANCE_ACTION);
         this.$store.dispatch(GET_MY_LOANS_ACTION);
+        this.$store.dispatch(GET_MY_INVESTMENTS_ACTION);
       } catch (e) {
         this.showErrorMsg = true;
         setTimeout(() => this.showErrorMsg = false, 2000);

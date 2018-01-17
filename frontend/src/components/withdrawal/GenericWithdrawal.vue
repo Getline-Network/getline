@@ -3,7 +3,7 @@
     <div>
       <div class="gw-payback">
         <div class="gw-payback-left">{{ text }} </div>
-        <div class="gw-payback-right"> {{ formatBigNumber(withdrawal.value) + ' ' + tokenSymbol }} </div>
+        <div class="gw-payback-right"> {{ formatBigNumber(withdrawal.amount) + ' ' + withdrawal.tokenSymbol }} </div>
       </div>
     </div>
   </div>
@@ -14,7 +14,7 @@ import { formatBigNumber } from 'utils/calc';
 
 export default {
   name: 'GenericWithdrawal',
-  props: ['withdrawal', 'text', 'tokenSymbol'],
+  props: ['withdrawal', 'text'],
   methods: {
     formatBigNumber
   }

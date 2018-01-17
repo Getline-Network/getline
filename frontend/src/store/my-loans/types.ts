@@ -1,4 +1,4 @@
-import { BigNumber } from 'api';
+import { BigNumber, WithdrawalReason } from 'api';
 
 export interface MyLoansStateT {
   myLoansList: MyLoanT[];
@@ -30,9 +30,14 @@ export interface MyLoanT {
 
   //finished
   withdrawals: withdrawalT[],
-  withdrawalAmount: BigNumber;
   loanTokenSymbol?: string;
 
+};
+
+export interface WithdrawalByTokenT {
+  tokenSymbol: string;
+  amount: BigNumber;
+  reason: WithdrawalReason;
 };
 
 export interface withdrawalT {
@@ -41,8 +46,8 @@ export interface withdrawalT {
   isCollateralBackAfterCanceled?: boolean;
   isLoanBackAfterCanceled?: boolean;
   isCollateralBackAfterDefaulted?: boolean;
-  value: BigNumber;
-}
+  withdrawal?: WithdrawalByTokenT;
+};
 
 import { LoanState } from '../../../../getline.ts';
 export { LoanState } from '../../../../getline.ts';

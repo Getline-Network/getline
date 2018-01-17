@@ -24,24 +24,24 @@
       <generic-withdrawal
         v-if="withdrawal.isCollateralBackAfterPayback" 
         :withdrawal="withdrawal"
-        :tokenSymbol="loan.loanTokenSymbol"
-        text="COLLATERAL TO RECEIVE " />
+        text="Full collateral after payback:" />
       <generic-withdrawal
-         v-if="withdrawal.isLoanBackAfterPayback"
-         :withdrawal="withdrawal"
-         :tokenSymbol="loan.loanTokenSymbol"
-         text="THE LOAN WAS PAID BACK. GET PAYBACK" />
+        v-if="withdrawal.isLoanBackAfterPayback"
+        :withdrawal="withdrawal"
+        text="Your investment after payback:" />
       <generic-withdrawal
-         v-if="withdrawal.isCollateralBackAfterDefaulted"
-         :withdrawal="withdrawal"
-         :tokenSymbol="loan.loanTokenSymbol" text="THE LOAN IS DEFAULTED. GET COLLATERAL:" />
+        v-if="withdrawal.isCollateralBackAfterDefaulted"
+        :withdrawal="withdrawal"
+        text="Your collateral allowance after defaulting:" />
       <generic-withdrawal
         v-if="withdrawal.isCollateralBackAfterCanceled"
         :withdrawal="withdrawal"
-        :tokenSymbol="loan.loanTokenSymbol"
-        text="THE LOAN HAS NOT RAISED FUNDS ON TIME. GET YOUR COLLATERAL BACK" />
+        text="Full collateral after fundraising failed:" />
     </div>
-    <withdrawal-button v-if="loan.withdrawalAmount.gt(0)" :amount="loan.withdrawalAmount" :loan="loan" />
+    <withdrawal-button
+      v-if="loan.withdrawals && loan.withdrawals.length > 0"
+      :loanShortId="loan.shortId"
+      :withdrawals="loan.withdrawals" />
   </div>
 </template>
 
@@ -52,8 +52,8 @@ import CollateralSection from './Collateral.vue';
 import PaybackSection from './Payback.vue';
 import FundraisingSection from './Fundraising.vue';
 import FinishedSection from './Finished.vue';
-import GenericWithdrawal from './GenericWithdrawal.vue';
-import WithdrawalButton from './WithdrawalButton.vue';
+import GenericWithdrawal from 'components/withdrawal/GenericWithdrawal.vue';
+import WithdrawalButton from 'components/withdrawal/WithdrawalButton.vue';
 
 export default {
   name: 'MyLoanTile',
