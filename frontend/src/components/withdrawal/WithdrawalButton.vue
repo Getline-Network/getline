@@ -66,11 +66,7 @@ export default {
         return formatBigNumber(withdrawal.amount) + " " + withdrawal.tokenSymbol;
       }
 
-      let buttonText = format(withdrawalsSummaryPerToken[0]);
-      for (let i = 1; i < withdrawalsSummaryPerToken.length; ++i) {
-        buttonText += " and " + format(withdrawalsSummaryPerToken[i]);
-      }
-      return buttonText;
+      return withdrawalsSummaryPerToken.map(format).join(' AND ');
     }
   },
   methods: {

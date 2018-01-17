@@ -57,7 +57,7 @@ export async function getMyInvestments(): Promise<LoanToInvestT[]> {
   let user = await api.currentUser();
   let libraryLoans = await api.loansByInvestor(user);
 
-  // We cane have many possible withdrawals per investemnt
+  // We can have many possible withdrawals per investemnt
   const possibleWithdrawalsAmountsByToken: WithdrawalByTokenT[][] = await getPossibleWithdrawalAmountsByToken(libraryLoans);
 
   return await Promise.all(libraryLoans.map((loan, ind) => libraryLoanToViewLoan(loan, possibleWithdrawalsAmountsByToken[ind])));
